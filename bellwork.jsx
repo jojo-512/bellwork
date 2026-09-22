@@ -766,6 +766,15 @@ function seedFrom(str) {
   return h >>> 0;
 }
 
+/* Local calendar date as YYYY-MM-DD. toISOString() would give UTC, which in
+   Austin flips to tomorrow at 6-7pm and logs the session on the wrong day. */
+function localDate(d = new Date()) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
 function poolFor(mode) {
   return mode === "advanced"
     ? EXERCISES.filter((e) => e.hybrid)
@@ -773,7 +782,7 @@ function poolFor(mode) {
 }
 
 function buildCircuit(focus, mode, salt) {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = localDate();
   const rand = mulberry32(seedFrom(today + focus.join("+") + mode + salt));
   const wantFull = focus.includes("full");
   let pool = poolFor(mode).filter((e) => (wantFull ? true : e.tags.some((t) => focus.includes(t))));
@@ -871,6 +880,8 @@ function Figure({ poses, dur, color, animate, bellFlip }) {
 }
 
 const STORE_KEY = "bellwork-sessions";
+const PREFS_KEY = "bellwork-prefs";
+const RUN_KEY = "bellwork-run";
 
 async function loadSessions() {
   try {
@@ -888,7 +899,7 @@ function exportSessions(list) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `bellwork-log-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `bellwork-log-${localDate()}.json`;
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -916,6 +927,63 @@ function importSessions(onLoad) {
 }
 
 const DURATIONS = [15, 20, 25, 30];
+const WEIGHTS_LB = [25, 30, 35, 40, 45];
+
+function readJSON(key) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+function writeJSON(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
+}
+function clearKey(key) {
+  try { localStorage.removeItem(key); } catch (e) {}
+}
+
+/* A saved run is only worth restoring if it belongs to today and its clock
+   hasn't been done for more than an hour. Anything older is yesterday's ghost. */
+function runIsFresh(run) {
+  if (!run || typeof run !== "object") return false;
+  if (run.date !== localDate()) return false;
+  const endsAt = run.endAt || (run.savedAt || 0) + (run.secondsLeft || 0) * 1000;
+  return Date.now() <= endsAt + 60 * 60 * 1000;
+}
+
+/* ---- beeps ----
+   iOS only lets us make sound from an AudioContext created or resumed inside a
+   real tap, so unlockBeeps() runs in the START / Resume handler. */
+let beepCtx = null;
+
+function unlockBeeps() {
+  try {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    if (!beepCtx) beepCtx = new Ctx();
+    if (beepCtx.state === "suspended") beepCtx.resume();
+  } catch (e) {}
+}
+
+function playBeeps(count) {
+  try {
+    if (!beepCtx) return;
+    if (beepCtx.state === "suspended") beepCtx.resume();
+    for (let i = 0; i < count; i++) {
+      const at = beepCtx.currentTime + i * 0.3;
+      const osc = beepCtx.createOscillator();
+      const gain = beepCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.value = 880;
+      gain.gain.setValueAtTime(0.0001, at);
+      gain.gain.exponentialRampToValueAtTime(0.4, at + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, at + 0.2);
+      osc.connect(gain).connect(beepCtx.destination);
+      osc.start(at);
+      osc.stop(at + 0.22);
+    }
+  } catch (e) {}
+}
 
 function Library({ reduced }) {
   const [tagFilter, setTagFilter] = useState(null);
@@ -1026,20 +1094,26 @@ export default function Bellwork() {
   const [swaps, setSwaps] = useState({});
   const [durationMin, setDurationMin] = useState(20);
   const [secondsLeft, setSecondsLeft] = useState(20 * 60);
+  const [endAt, setEndAt] = useState(null);
   const [running, setRunning] = useState(false);
   const [started, setStarted] = useState(false);
   const [rounds, setRounds] = useState(0);
+  const [weightLb, setWeightLb] = useState(35);
   const [sessions, setSessions] = useState([]);
   const [finished, setFinished] = useState(false);
   const [reduced, setReduced] = useState(false);
   const [warmOpen, setWarmOpen] = useState(false);
-  const tickRef = useRef(null);
+  const [hydrated, setHydrated] = useState(false);
   const savedRef = useRef(false);
   const circuitTopRef = useRef(null);
   const roundsRef = useRef(0);
   roundsRef.current = rounds;
   const secondsRef = useRef(20 * 60);
   secondsRef.current = secondsLeft;
+  const prBeforeRef = useRef(0);
+  const beeped60Ref = useRef(false);
+  const beeped0Ref = useRef(false);
+  const wakeLockRef = useRef(null);
 
   useEffect(() => {
     loadSessions().then(setSessions);
@@ -1051,6 +1125,66 @@ export default function Bellwork() {
       return () => mq.removeEventListener?.("change", fn);
     } catch (e) {}
   }, []);
+
+  /* restore sticky prefs, then an in-progress run if there is a fresh one */
+  useEffect(() => {
+    const prefs = readJSON(PREFS_KEY);
+    if (prefs) {
+      if (prefs.mode === "standard" || prefs.mode === "advanced") setMode(prefs.mode);
+      if (DURATIONS.includes(prefs.durationMin)) {
+        setDurationMin(prefs.durationMin);
+        setSecondsLeft(prefs.durationMin * 60);
+      }
+      if (WEIGHTS_LB.includes(prefs.weightLb)) setWeightLb(prefs.weightLb);
+    }
+
+    const run = readJSON(RUN_KEY);
+    if (runIsFresh(run)) {
+      if (Array.isArray(run.focus) && run.focus.length) setFocus(run.focus);
+      if (run.mode === "standard" || run.mode === "advanced") setMode(run.mode);
+      setSalt(run.salt || "");
+      setSwaps(run.swaps || {});
+      if (DURATIONS.includes(run.durationMin)) setDurationMin(run.durationMin);
+      if (WEIGHTS_LB.includes(run.weightLb)) setWeightLb(run.weightLb);
+      setRounds(run.rounds || 0);
+      setStarted(true);
+      prBeforeRef.current = run.prBefore || 0;
+
+      const remaining = run.endAt
+        ? Math.ceil((run.endAt - Date.now()) / 1000)
+        : run.secondsLeft || 0;
+      setSecondsLeft(Math.max(0, remaining));
+      // a beep already fired if the run was past that point before the reload
+      beeped60Ref.current = remaining <= 60;
+      beeped0Ref.current = remaining <= 0;
+      if (remaining <= 0) setFinished(true);
+      else if (run.running && run.endAt) {
+        setEndAt(run.endAt);
+        setRunning(true);
+      }
+    } else {
+      clearKey(RUN_KEY);
+    }
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    writeJSON(PREFS_KEY, { mode, durationMin, weightLb });
+  }, [hydrated, mode, durationMin, weightLb]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    if (!started || finished) { clearKey(RUN_KEY); return; }
+    writeJSON(RUN_KEY, {
+      date: localDate(),
+      savedAt: Date.now(),
+      focus, mode, salt, swaps, durationMin, weightLb, rounds, running, endAt,
+      // while running the end timestamp is the source of truth for the clock
+      secondsLeft: running ? null : secondsRef.current,
+      prBefore: prBeforeRef.current,
+    });
+  }, [hydrated, started, finished, focus, mode, salt, swaps, durationMin, weightLb, rounds, running, endAt]);
 
   const baseCircuit = useMemo(() => buildCircuit(focus, mode, salt), [focus, mode, salt]);
   const circuit = useMemo(
@@ -1085,20 +1219,73 @@ export default function Bellwork() {
     setSwaps((s) => ({ ...s, [idx]: pick.id }));
   };
 
+  /* The clock is derived from the end timestamp, never counted down, so locking
+     the phone or backgrounding the app can't stall it. The interval only
+     re-renders; visibilitychange catches up after iOS froze our timers. */
   useEffect(() => {
-    if (!running) return;
-    tickRef.current = setInterval(() => {
-      setSecondsLeft((s) => {
-        if (s <= 1) {
-          clearInterval(tickRef.current);
-          setRunning(false);
-          setFinished(true);
-          return 0;
+    if (!running || endAt == null) return;
+
+    const sync = () => {
+      const remaining = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
+      setSecondsLeft(remaining);
+      if (remaining <= 60 && !beeped60Ref.current) {
+        beeped60Ref.current = true;
+        playBeeps(1);
+      }
+      if (remaining <= 0) {
+        if (!beeped0Ref.current) {
+          beeped0Ref.current = true;
+          playBeeps(3);
         }
-        return s - 1;
-      });
-    }, 1000);
-    return () => clearInterval(tickRef.current);
+        setRunning(false);
+        setEndAt(null);
+        setFinished(true);
+      }
+    };
+
+    sync();
+    const id = setInterval(sync, 250);
+    const onVisible = () => {
+      if (document.visibilityState === "visible") sync();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      clearInterval(id);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, [running, endAt]);
+
+  /* Keep the screen on while the clock runs, where the browser supports it. */
+  useEffect(() => {
+    const release = () => {
+      try { wakeLockRef.current?.release(); } catch (e) {}
+      wakeLockRef.current = null;
+    };
+    if (!running) { release(); return; }
+
+    let dropped = false;
+    const acquire = async () => {
+      try {
+        if (dropped || wakeLockRef.current || !("wakeLock" in navigator)) return;
+        const lock = await navigator.wakeLock.request("screen");
+        if (dropped) { lock.release(); return; }
+        wakeLockRef.current = lock;
+        lock.addEventListener?.("release", () => {
+          if (wakeLockRef.current === lock) wakeLockRef.current = null;
+        });
+      } catch (e) {} // unsupported, or the OS said no — the clock still works
+    };
+
+    acquire();
+    const onVisible = () => {
+      if (document.visibilityState === "visible") acquire();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      dropped = true;
+      document.removeEventListener("visibilitychange", onVisible);
+      release();
+    };
   }, [running]);
 
   const persistSession = (roundCount, partial) => {
@@ -1106,9 +1293,10 @@ export default function Bellwork() {
     savedRef.current = true;
     const elapsedMin = Math.max(1, Math.round((durationMin * 60 - secondsRef.current) / 60));
     const entry = {
-      date: new Date().toISOString().slice(0, 10),
+      date: localDate(),
       focus: [...focus],
       mode,
+      weightLb,
       rounds: roundCount,
       minutes: elapsedMin,
       partial: !!partial,
@@ -1123,7 +1311,7 @@ export default function Bellwork() {
 
   const mergeSessions = (incoming) => {
     setSessions((prev) => {
-      const sig = (s) => [s.date, (s.focus || []).join("+"), s.mode, s.rounds, s.minutes].join("|");
+      const sig = (s) => [s.date, (s.focus || []).join("+"), s.mode, s.weightLb || "", s.rounds, s.minutes].join("|");
       const seen = new Set(prev.map(sig));
       const merged = [...prev];
       for (const s of incoming) {
@@ -1149,17 +1337,51 @@ export default function Bellwork() {
     setSecondsLeft(DURATIONS[ni] * 60);
   };
 
+  /* Best rounds at this focus + mode + bell weight. Sessions logged before the
+     app tracked weight have no weightLb, so they sit out of weighted PRs. */
+  const prKey = [...focus].sort().join("+") + "|" + mode + "|" + weightLb;
+  const prRounds = sessions
+    .filter((s) => s.weightLb && [...(s.focus || [])].sort().join("+") + "|" + (s.mode || "standard") + "|" + s.weightLb === prKey)
+    .reduce((m, s) => Math.max(m, s.rounds || 0), 0);
+
   const startTimer = () => {
+    unlockBeeps();
+    // the number to beat, captured before this session gets logged
+    prBeforeRef.current = prRounds;
+    beeped60Ref.current = false;
+    beeped0Ref.current = false;
     setStarted(true);
+    setEndAt(Date.now() + secondsRef.current * 1000);
     setRunning(true);
+  };
+
+  const pauseTimer = () => {
+    if (endAt != null) setSecondsLeft(Math.max(0, Math.ceil((endAt - Date.now()) / 1000)));
+    setEndAt(null);
+    setRunning(false);
+  };
+
+  const resumeTimer = () => {
+    unlockBeeps();
+    setEndAt(Date.now() + secondsRef.current * 1000);
+    setRunning(true);
+  };
+
+  const finishNow = () => {
+    setEndAt(null);
+    setRunning(false);
+    setFinished(true);
   };
 
   const resetTimer = () => {
     if (started && !finished) persistSession(roundsRef.current, true);
     setRunning(false);
+    setEndAt(null);
     setStarted(false);
     setFinished(false);
     savedRef.current = false;
+    beeped60Ref.current = false;
+    beeped0Ref.current = false;
     setSecondsLeft(durationMin * 60);
     setRounds(0);
   };
@@ -1175,10 +1397,8 @@ export default function Bellwork() {
   const ss = String(secondsLeft % 60).padStart(2, "0");
   const accent = focus.includes("full") || focus.length > 1 ? COLORS.full : FOCUS_META[focus[0]].color;
   const focusLabel = focus.includes("full") ? "Full body" : focus.map((f) => FOCUS_META[f].label).join(" + ");
-  const focusKey = [...focus].sort().join("+") + "|" + mode;
-  const prRounds = sessions
-    .filter((s) => [...(s.focus || [])].sort().join("+") + "|" + (s.mode || "standard") === focusKey)
-    .reduce((m, s) => Math.max(m, s.rounds || 0), 0);
+  const prBefore = started || finished ? prBeforeRef.current : prRounds;
+  const newPr = finished && rounds > 0 && rounds > prBefore;
   const lastSessions = [...sessions].slice(-3).reverse();
   const displayFont = "'Big Shoulders Display', 'Arial Narrow', sans-serif";
 
@@ -1259,10 +1479,37 @@ export default function Bellwork() {
             );
           })}
         </div>
-        <div style={{ color: COLORS.chalkDim, fontSize: 14.5, marginBottom: 14 }}>
+        <div style={{ color: COLORS.chalkDim, fontSize: 14.5, marginBottom: 12 }}>
           {mode === "advanced"
             ? "All chained combos. Hybrids punish sloppy reps — cap the set the moment form slips."
             : "Pick up to two, or Full body. Today's circuit is fixed per focus — same picks if you reopen."}
+        </div>
+
+        {/* Bell weight is picked before START: the session saves itself the
+            moment the clock hits 0, so there is no "after" to ask in. */}
+        <div style={{
+          display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap",
+          marginBottom: 14, opacity: started ? 0.55 : 1,
+        }}>
+          <span style={{ color: COLORS.chalkDim, fontSize: 13.5, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+            Bell
+          </span>
+          {WEIGHTS_LB.map((w) => {
+            const active = weightLb === w;
+            return (
+              <button key={w} onClick={() => setWeightLb(w)} disabled={started} aria-pressed={active}
+                style={{
+                  border: `2px solid ${active ? COLORS.chalk : COLORS.panelEdge}`,
+                  background: active ? COLORS.chalk : "transparent",
+                  color: active ? "#111" : COLORS.chalkDim,
+                  borderRadius: 999, padding: "7px 12px", minWidth: 46,
+                  fontSize: 15, fontWeight: 700,
+                }}>
+                {w}
+              </button>
+            );
+          })}
+          <span style={{ color: COLORS.chalkDim, fontSize: 14, fontWeight: 600 }}>lb</span>
         </div>
 
         <div style={{
@@ -1409,7 +1656,7 @@ export default function Bellwork() {
               }}>
                 <span style={{ color: COLORS.chalkDim }}>
                   {s.date} · {(s.focus || []).map((f) => FOCUS_META[f]?.label || f).join(" + ")}
-                  {s.mode === "advanced" ? " · Complex" : ""}{s.partial ? " · partial" : ""}
+                  {s.mode === "advanced" ? " · Complex" : ""}{s.weightLb ? ` · ${s.weightLb} lb` : ""}{s.partial ? " · partial" : ""}
                 </span>
                 <span style={{ fontWeight: 600 }}>{s.rounds} rounds</span>
               </div>
@@ -1430,124 +1677,140 @@ export default function Bellwork() {
         <div style={{
           width: "100%", maxWidth: 560,
           padding: "12px 16px calc(12px + env(safe-area-inset-bottom, 0px))",
-          display: "flex", alignItems: "center", gap: 10,
+          display: "flex", flexDirection: "column", gap: 10,
         }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 96 }}>
-            {!started && !finished && (
-              <button onClick={() => changeDuration(-1)} aria-label="Shorter workout"
-                disabled={durationMin === DURATIONS[0]}
-                style={{
-                  background: "transparent", border: `1.5px solid ${COLORS.panelEdge}`,
-                  color: COLORS.chalkDim, borderRadius: 8, padding: "6px 10px",
-                  fontSize: 17, fontWeight: 600, opacity: durationMin === DURATIONS[0] ? 0.35 : 1,
+          {/* Row 1: clock and score. Row 2: the buttons. Two rows so everything
+              still fits, with big targets, on a 375px phone. */}
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 96 }}>
+              {!started && !finished && (
+                <button onClick={() => changeDuration(-1)} aria-label="Shorter workout"
+                  disabled={durationMin === DURATIONS[0]}
+                  style={{
+                    background: "transparent", border: `1.5px solid ${COLORS.panelEdge}`,
+                    color: COLORS.chalkDim, borderRadius: 8, padding: "6px 10px",
+                    fontSize: 17, fontWeight: 600, opacity: durationMin === DURATIONS[0] ? 0.35 : 1,
+                  }}>
+                  −
+                </button>
+              )}
+              <div>
+                <div style={{
+                  fontFamily: displayFont, fontWeight: 800, fontSize: 32, lineHeight: 1, letterSpacing: "0.02em",
+                  fontVariantNumeric: "tabular-nums",
+                  color: finished || (running && secondsLeft <= 60) ? accent : COLORS.chalk,
                 }}>
-                −
-              </button>
-            )}
-            <div>
-              <div style={{
-                fontFamily: displayFont, fontWeight: 800, fontSize: 32, lineHeight: 1, letterSpacing: "0.02em",
-                fontVariantNumeric: "tabular-nums",
-                color: finished || (running && secondsLeft <= 60) ? accent : COLORS.chalk,
-              }}>
-                {mm}:{ss}
+                  {mm}:{ss}
+                </div>
+                <div style={{ color: COLORS.chalkDim, fontSize: 13, fontWeight: 600, letterSpacing: "0.06em" }}>
+                  {finished ? "TIME" : running ? "RUNNING" : started ? "PAUSED" : "READY"}
+                </div>
               </div>
-              <div style={{ color: COLORS.chalkDim, fontSize: 13, fontWeight: 600, letterSpacing: "0.06em" }}>
-                {finished ? "TIME" : running ? "RUNNING" : started ? "PAUSED" : "READY"}
-              </div>
+              {!started && !finished && (
+                <button onClick={() => changeDuration(1)} aria-label="Longer workout"
+                  disabled={durationMin === DURATIONS[DURATIONS.length - 1]}
+                  style={{
+                    background: "transparent", border: `1.5px solid ${COLORS.panelEdge}`,
+                    color: COLORS.chalkDim, borderRadius: 8, padding: "6px 10px",
+                    fontSize: 17, fontWeight: 600,
+                    opacity: durationMin === DURATIONS[DURATIONS.length - 1] ? 0.35 : 1,
+                  }}>
+                  +
+                </button>
+              )}
             </div>
-            {!started && !finished && (
-              <button onClick={() => changeDuration(1)} aria-label="Longer workout"
-                disabled={durationMin === DURATIONS[DURATIONS.length - 1]}
+
+            <div style={{ flex: 1 }} />
+
+            {!started && !finished ? (
+              <button onClick={startTimer}
                 style={{
-                  background: "transparent", border: `1.5px solid ${COLORS.panelEdge}`,
-                  color: COLORS.chalkDim, borderRadius: 8, padding: "6px 10px",
-                  fontSize: 17, fontWeight: 600,
-                  opacity: durationMin === DURATIONS[DURATIONS.length - 1] ? 0.35 : 1,
+                  background: accent, border: "none", color: "#111",
+                  borderRadius: 12, padding: "14px 28px",
+                  fontFamily: displayFont, fontWeight: 800, fontSize: 20, letterSpacing: "0.05em",
                 }}>
-                +
+                START
               </button>
+            ) : (
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                {newPr && (
+                  <span style={{
+                    background: accent, color: "#111", borderRadius: 8, padding: "5px 9px",
+                    fontFamily: displayFont, fontWeight: 800, fontSize: 16,
+                    letterSpacing: "0.06em", whiteSpace: "nowrap",
+                  }}>
+                    NEW PR
+                  </span>
+                )}
+                <div style={{ textAlign: "right" }}>
+                  <div style={{
+                    fontFamily: displayFont, fontWeight: 800, fontSize: 28, lineHeight: 1,
+                    color: finished ? accent : COLORS.chalk,
+                  }}>
+                    {rounds}
+                  </div>
+                  <div style={{ color: COLORS.chalkDim, fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", whiteSpace: "nowrap" }}>
+                    ROUNDS{prBefore > 0 ? (newPr ? ` · WAS ${prBefore}` : ` · PR ${prBefore}`) : ""}
+                  </div>
+                </div>
+              </div>
             )}
           </div>
 
-          <div style={{ flex: 1 }} />
-
-          {!started && !finished && (
-            <button onClick={startTimer}
-              style={{
-                background: accent, border: "none", color: "#111",
-                borderRadius: 12, padding: "14px 28px",
-                fontFamily: displayFont, fontWeight: 800, fontSize: 20, letterSpacing: "0.05em",
-              }}>
-              START
-            </button>
-          )}
-
-          {started && !finished && (
-            <>
-              <button onClick={() => setRunning((r) => !r)}
-                style={{
-                  border: `2px solid ${COLORS.panelEdge}`, background: "transparent",
-                  color: COLORS.chalkDim, borderRadius: 10, padding: "10px 12px",
-                  fontSize: 14.5, fontWeight: 600,
-                }}>
-                {running ? "Pause" : "Resume"}
-              </button>
-              {!running && (
-                <button onClick={() => { setRunning(false); setFinished(true); }}
+          {(started || finished) && (
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              {finished ? (
+                <button onClick={resetTimer}
                   style={{
-                    border: `2px solid ${accent}`, background: "transparent",
-                    color: COLORS.chalk, borderRadius: 10, padding: "10px 12px",
-                    fontSize: 14.5, fontWeight: 600,
+                    flex: 1, border: `2px solid ${accent}`, background: "transparent", color: COLORS.chalk,
+                    borderRadius: 12, padding: "14px 22px",
+                    fontFamily: displayFont, fontWeight: 800, fontSize: 18, letterSpacing: "0.04em",
                   }}>
-                  Finish
+                  RESET
                 </button>
+              ) : (
+                <>
+                  <button onClick={running ? pauseTimer : resumeTimer}
+                    style={{
+                      flex: "1 1 0", minWidth: 0,
+                      border: `2px solid ${COLORS.panelEdge}`, background: "transparent",
+                      color: COLORS.chalkDim, borderRadius: 10, padding: "14px 6px",
+                      fontSize: 15, fontWeight: 600, whiteSpace: "nowrap",
+                    }}>
+                    {running ? "Pause" : "Resume"}
+                  </button>
+                  {!running && (
+                    <button onClick={finishNow}
+                      style={{
+                        flex: "1 1 0", minWidth: 0,
+                        border: `2px solid ${accent}`, background: "transparent",
+                        color: COLORS.chalk, borderRadius: 10, padding: "14px 6px",
+                        fontSize: 15, fontWeight: 600, whiteSpace: "nowrap",
+                      }}>
+                      Finish
+                    </button>
+                  )}
+                  <button onClick={() => setRounds((r) => Math.max(0, r - 1))} aria-label="Undo round"
+                    style={{
+                      flex: "0 0 54px",
+                      background: "transparent", border: `1.5px solid ${COLORS.panelEdge}`,
+                      color: COLORS.chalkDim, borderRadius: 10, padding: "14px 6px", fontSize: 15, fontWeight: 600,
+                    }}>
+                    –1
+                  </button>
+                  <button onClick={addRound}
+                    style={{
+                      flex: "1.6 1 0", minWidth: 0,
+                      background: accent, border: "none", color: "#111",
+                      borderRadius: 12, padding: "14px 8px",
+                      fontFamily: displayFont, fontWeight: 800, fontSize: 19, letterSpacing: "0.04em",
+                      whiteSpace: "nowrap",
+                    }}>
+                    +1 ROUND
+                  </button>
+                </>
               )}
-              <div style={{ textAlign: "center" }}>
-                <div style={{ fontFamily: displayFont, fontWeight: 800, fontSize: 28, lineHeight: 1 }}>
-                  {rounds}
-                </div>
-                <div style={{ color: COLORS.chalkDim, fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", whiteSpace: "nowrap" }}>
-                  ROUNDS{prRounds > 0 ? ` · PR ${prRounds}` : ""}
-                </div>
-              </div>
-              <button onClick={addRound}
-                style={{
-                  background: accent, border: "none", color: "#111",
-                  borderRadius: 12, padding: "14px 18px",
-                  fontFamily: displayFont, fontWeight: 800, fontSize: 19, letterSpacing: "0.04em",
-                }}>
-                +1 ROUND
-              </button>
-              <button onClick={() => setRounds((r) => Math.max(0, r - 1))} aria-label="Undo round"
-                style={{
-                  background: "transparent", border: `1.5px solid ${COLORS.panelEdge}`,
-                  color: COLORS.chalkDim, borderRadius: 10, padding: "12px 10px", fontSize: 15, fontWeight: 600,
-                }}>
-                –1
-              </button>
-            </>
-          )}
-
-          {finished && (
-            <>
-              <div style={{ textAlign: "center" }}>
-                <div style={{ fontFamily: displayFont, fontWeight: 800, fontSize: 28, lineHeight: 1, color: accent }}>
-                  {rounds}
-                </div>
-                <div style={{ color: COLORS.chalkDim, fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", whiteSpace: "nowrap" }}>
-                  ROUNDS{prRounds > 0 ? ` · PR ${prRounds}` : ""}
-                </div>
-              </div>
-              <button onClick={resetTimer}
-                style={{
-                  border: `2px solid ${accent}`, background: "transparent", color: COLORS.chalk,
-                  borderRadius: 12, padding: "12px 22px",
-                  fontFamily: displayFont, fontWeight: 800, fontSize: 18, letterSpacing: "0.04em",
-                }}>
-                RESET
-              </button>
-            </>
+            </div>
           )}
         </div>
       </div>
