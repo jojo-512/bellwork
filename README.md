@@ -11,6 +11,10 @@ npm run build
 
 Open `index.html` locally (any static server), or deploy by pushing `main` to GitHub Pages when a remote exists.
 
+## Docs
+
+Product vision, punchlist, and session notes live in [`docs/`](./docs/) (`vision-roadmap.md`, `punchlist.md`, `session.md`).
+
 ## Layout
 
 | File | Role |
