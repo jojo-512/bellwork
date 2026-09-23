@@ -14,7 +14,7 @@ Shipped 2026-09-23 except the slot template, which was deferred.
 - [x] New PR state on the finish bar.
 - [x] Check timer bar fit on a 375px-wide screen while running.
 
-Still open on iPhone: beeps with the silent switch on, and Wake Lock from the Home Screen icon.
+iPhone Batch 1 checks done (Joe OK 2026-09-23): lock/timer, beeps + silent switch, Wake Lock, bar height.
 
 ## Batch 2 — the 90-day layer
 

@@ -4,26 +4,24 @@ Where we left off. Update at the end of each working session (or ask the Project
 
 ## Next
 
-1. Confirm Batch 1 on iPhone (Home Screen) — see [punchlist.md](./punchlist.md)
-2. Approve **Batch 2** scope from [vision-roadmap.md](./vision-roadmap.md) (movement loop + canon fill) when ready — or knock out punchlist items first
-3. Optional: sync these `docs/` files into the GitHub repo so Claude Code / clones see them
+1. **Plan Batch 2** from [vision-roadmap.md](./vision-roadmap.md) — movement ingestion loop + canon fill (carries, pulls, etc.). Approve a build plan before any code.
+2. Slot template (whole-body guarantee) — after the pool has more pulls, per the roadmap
+3. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
 
 ## Last session (2026-09-23)
 
-- **Shipped Batch 1** to `main` (`2cec3bb`) → live on https://jojo-512.github.io/bellwork/
-  - Local dates, timestamp countdown + lock resilience, beeps, Wake Lock, prefs / mid-run persistence
-  - Weight chips before START (25–45 lb, last-used), per-weight PRs, NEW PR finish state
-- Vision roadmap locked at **v1.2**; Batch 1 handoff closed
-- Created this docs trio (roadmap / punchlist / session) in Project Context — repo copy pending push OK
+- Joe confirmed Batch 1 **iPhone Home Screen** checks: lock/timer, beeps + silent switch, Wake Lock, taller bar OK
+- Punchlist cleared; docs synced to repo `main`
 
-## Earlier (compressed)
+## Earlier (2026-09-23)
 
-- Project setup: JSX + esbuild single-file build, GitHub Pages public repo `jojo-512/bellwork`
-- Vision/roadmap planning agent → v1.0 decisions (bell-only Phase 1, ingestion loop, pools rename planned, etc.)
+- **Shipped Batch 1** to `main` (`2cec3bb`) → https://jojo-512.github.io/bellwork/
+- Docs trio pushed to repo (`d53e729`): vision-roadmap · punchlist · session
+- Vision roadmap locked at **v1.2**
 
 ## Open questions
 
-- None blocking. Punchlist iPhone checks are verification, not product decisions.
+- None. Ready to scope Batch 2 when Joe says go.
 
 ## Pointers
 
