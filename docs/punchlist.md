@@ -7,14 +7,14 @@ Add items anytime after a workout. Keep each line one concrete thing.
 
 ## Open
 
-- [ ] iPhone Home Screen: lock phone ~2 min mid-run — confirm remaining time is still correct
-- [ ] iPhone Home Screen: beeps at 1:00 and 0:00 **with silent switch on**
-- [ ] iPhone Home Screen: Wake Lock — screen stays awake while running (standalone)
-- [ ] Two-row timer bar is taller (~134px vs ~77px) — check whether too much circuit is hidden while running on a small phone
+_(none)_
 
 ## Done
 
-_(move items here when shipped; newest first)_
+- [x] iPhone Home Screen: lock phone ~2 min mid-run — remaining time still correct (Joe OK 2026-09-23)
+- [x] iPhone Home Screen: beeps at 1:00 and 0:00 with silent switch on (Joe OK 2026-09-23)
+- [x] iPhone Home Screen: Wake Lock — screen stays awake while running standalone (Joe OK 2026-09-23)
+- [x] Two-row timer bar height — OK on small phone while running (Joe OK 2026-09-23)
 
 ---
 
