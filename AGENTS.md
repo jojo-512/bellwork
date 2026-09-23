@@ -6,6 +6,8 @@ Bellwork is my kettlebell AMRAP workout timer, built for real gym use on my iPho
 
 The product promise: an easy 20 to 30 minute workout you can do day after day, working the whole body, and end up in a much better place 90 days later. Judge changes against that.
 
+Product context: [`docs/vision-roadmap.md`](./docs/vision-roadmap.md), [`docs/punchlist.md`](./docs/punchlist.md), [`docs/session.md`](./docs/session.md).
+
 ## HOW I WORK
 
 - Plan before building. Propose a plan with honest tradeoffs, then wait for my approval. Don't build until I approve.
