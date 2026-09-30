@@ -41,15 +41,15 @@ them.
 | `frontOnly` | optional | `true` when the side view doesn't help (e.g. floor work shown head-on) |
 | `bellFlip` | optional | `true` when the bell is bottoms-up — the figure draws the handle below the mass |
 
-`PATTERN_ORDER` today (Carry joins this list when the first carry ships):
+`PATTERN_ORDER` (Carry is on the list — add any new pattern here **before** the entry):
 
 ```
-Hinge, Squat, Push, Pull, Lunge, Rotation, Anti-rotation, Anti-extension, Anti-lean, Flexion
+Hinge, Squat, Push, Pull, Lunge, Rotation, Anti-rotation, Anti-extension, Anti-lean, Flexion, Carry
 ```
 
-If you introduce a pattern not on that list (including `Carry`), add it to
-`PATTERN_ORDER` in `movements.js` **before** shipping the entry — unknown
-patterns sort to the front of every circuit (`indexOf` returns -1).
+If you introduce a pattern not on that list, add it to `PATTERN_ORDER` in
+`movements.js` **before** shipping the entry — unknown patterns sort to the
+front of every circuit (`indexOf` returns -1).
 
 ---
 
