@@ -71,9 +71,10 @@ Same pattern and same basic shape as an existing movement → share its
 `variantGroup` so they never land in one circuit. The picker enforces **at
 most one per group per circuit**, including on Swap.
 
-Groups already in use: `swing`, `press`, `goblet_squat`, `march`, `row`.
-New families get a new snake_case group id (e.g. `racked_carry`). Leave the
-field off when the movement has no near-sibling.
+Groups already in use: `swing`, `press`, `goblet_squat`, `march`, `row`,
+`racked_carry`, `oh_carry`. New families get a new snake_case group id. Leave
+the field off when the movement has no near-sibling. Carries do **not** share
+the `march` group — a day can hand both a march and a carry.
 
 ---
 
@@ -190,6 +191,26 @@ true` so a wrong figure can't ruin a session.
 - [ ] `reps` is a plain string; `dur` is set if there are poses
 - [ ] Every pose has the required keys and a `bell: [x, y]`
 - [ ] Side and front pose counts match (unless `frontOnly`)
+- [ ] Prefer composing from `S_*` / `F_*` primitives over inventing coordinates
 - [ ] `pending: true` on every new entry
 - [ ] `npm run build` and `npm run check` both pass
 - [ ] You have **not** pushed — waiting on Joe's go-ahead
+
+## 10. Lessons from canon pass 1
+
+Things that bit once, so they shouldn't bite again:
+
+1. **Add the pattern to `PATTERN_ORDER` before the first entry that uses it.**
+   Carry went in first; without it, every carry sorted to the front of every
+   circuit.
+2. **Pose count mismatch fails `npm run check`.** Side and front arrays must
+   be the same length (unless `frontOnly`). Pad by repeating a hold pose if
+   the front view needs more frames.
+3. **Travel vs march is a cue line**, not a new card. The suitcase and racked
+   marches already say "Room to walk? Travel instead of marching in place."
+4. **Compose from the vocabulary.** The `clean_carry` example and the rest of
+   pass 1 are almost entirely `S_HINGE` / `S_RACK` / `S_OH` / march `kn2`/`an2`
+   extras. If you need a shape that isn't there, ship text-only (`poses`
+   omitted) with `pending: true` rather than inventing a bad figure.
+5. **Carries get their own variant groups** (`racked_carry`, `oh_carry`), not
+   `march`. Marches stay Anti-lean.
