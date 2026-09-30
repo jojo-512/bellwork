@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "description": "Kettlebell AMRAP workout timer for gym use",
   "scripts": {
-    "build": "node build.mjs"
+    "build": "node build.mjs",
+    "check": "node check.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",

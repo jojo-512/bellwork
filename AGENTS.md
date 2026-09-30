@@ -21,10 +21,14 @@ Product context: [`docs/vision-roadmap.md`](./docs/vision-roadmap.md), [`docs/pu
 ```bash
 npm i
 npm run build
+npm run check
 ```
 
 - `bellwork.jsx` is the app source of truth. Movement data lives in `movements.js` (pose vocabulary in `poses.js`).
+- `INGEST.md` is the authority for adding movements. `INBOX.md` is the agent's drop queue.
+- Mode strings are `standard` / `complex` (older `"advanced"` is normalized on read).
 - `npm run build` compiles with esbuild and writes a single self-contained `index.html` (Pages entry).
+- `npm run check` validates movement data (ids, pools, poses, patterns) with no extra dependencies.
 - Google Fonts stay as `<link>` tags in the HTML shell (do not self-host unless asked).
 - Default workout mode is `standard`.
 - When a GitHub remote exists, push to `main` deploys via GitHub Pages — only with explicit go-ahead.
