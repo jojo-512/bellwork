@@ -12,6 +12,7 @@ const STANDARD = [
   {
     id: "swing", name: "Kettlebell swing", tags: ["lower", "full"], pattern: "Hinge",
     reps: "15 reps", twoBell: true, dur: 1.5,
+    pools: ["standard"],
     cue: "Hips back, snap forward. Arms are just ropes — the hips throw the bell.",
     grip: "Both hands hooked on the handle, thumbs loose.",
     poses: [S_HINGE, S_SWTOP],
@@ -23,6 +24,7 @@ const STANDARD = [
   {
     id: "goblet_squat", name: "Goblet squat", tags: ["lower"], pattern: "Squat",
     reps: "10 reps", twoBell: true, dur: 1.8,
+    pools: ["standard"],
     cue: "Bell tight to chest, elbows track inside knees, stand tall through the heels.",
     grip: "Hold the horns (sides of the handle), bell hanging below your hands.",
     poses: [S_GOBLET, S_SQUAT],
@@ -31,6 +33,7 @@ const STANDARD = [
   {
     id: "ohp", name: "Overhead press", tags: ["upper"], pattern: "Push",
     reps: "8 / side", twoBell: true, dur: 1.7,
+    pools: ["standard"],
     cue: "Ribs down, glutes tight. Press to a locked-out arm by your ear — no lean-back.",
     grip: "Rack grip — handle diagonal across the palm, bell resting on the back of the forearm.",
     poses: [S_RACK, P([100, 106], [100, 68], [103, 50], [102, 32], [100, 141], [100, 176], { bell: [106, 26] })],
@@ -39,6 +42,7 @@ const STANDARD = [
   {
     id: "push_press", name: "Push press", tags: ["upper", "full"], pattern: "Push",
     reps: "8 / side", twoBell: true, dur: 1.9,
+    pools: ["standard"],
     cue: "Shallow knee dip, drive up, let the legs launch the bell past the sticking point.",
     grip: "Rack grip — bell on the forearm, wrist straight, knuckles to the ceiling at lockout.",
     poses: [
@@ -55,6 +59,7 @@ const STANDARD = [
   {
     id: "row", name: "Bent-over row", tags: ["upper"], pattern: "Pull",
     reps: "10 / side", twoBell: true, dur: 1.5,
+    pools: ["standard"],
     cue: "Flat back, pull the bell to your hip pocket, squeeze the shoulder blade.",
     grip: "One hand on the handle, knuckles down, wrist neutral.",
     poses: [
@@ -69,6 +74,7 @@ const STANDARD = [
   {
     id: "gorilla_row", name: "Gorilla row", tags: ["upper"], pattern: "Pull",
     reps: "8 / side", twoBell: true, dur: 1.6,
+    pools: ["standard"],
     cue: "Deep hinge, bell on the floor between your feet. Row to the hip, switch hands each rep.",
     grip: "Handle grip, alternating hands rep to rep. Free hand can brace on your knee.",
     poses: [
@@ -83,6 +89,7 @@ const STANDARD = [
   {
     id: "high_pull", name: "High pull", tags: ["upper", "full"], pattern: "Pull",
     reps: "12 reps", dur: 1.4,
+    pools: ["standard"],
     cue: "Hip snap first, then elbow high and outside. Bell floats to chin height.",
     grip: "Both hands on the handle, loose hook grip.",
     poses: [
@@ -97,6 +104,7 @@ const STANDARD = [
   {
     id: "floor_press", name: "Floor press", tags: ["upper"], pattern: "Push",
     reps: "10 / side", twoBell: true, dur: 1.7,
+    pools: ["standard"],
     cue: "Lying down, elbow stops at the floor, press straight up over the chest.",
     grip: "Rack grip — bell rests on the forearm, wrist straight, press from the chest.",
     poses: [
@@ -111,6 +119,7 @@ const STANDARD = [
   {
     id: "tall_kneel_press", name: "Tall-kneeling press", tags: ["upper", "core"], pattern: "Push",
     reps: "8 / side", dur: 1.8,
+    pools: ["standard"],
     cue: "Both knees down, glutes squeezed, press without leaning. Kills the cheat.",
     grip: "Rack grip — handle diagonal in the palm, bell on the forearm.",
     poses: [
@@ -125,6 +134,7 @@ const STANDARD = [
   {
     id: "pushup_on_bell", name: "Push-up on the bell", tags: ["upper"], pattern: "Push",
     reps: "10 reps", dur: 1.7,
+    pools: ["standard"],
     cue: "Bell dead-center under your chest. Unstable on purpose — brace hard.",
     grip: "Both hands stacked on the handle, wrists locked straight.",
     poses: [
@@ -139,6 +149,7 @@ const STANDARD = [
   {
     id: "halo", name: "Halo", tags: ["upper", "core"], pattern: "Rotation",
     reps: "8 / dir", dur: 2.4,
+    pools: ["standard"],
     cue: "Bell orbits the head, ribs stay stacked. Small circles, no arching.",
     grip: "Bell upside down — hands on the horns, ball on top.",
     poses: [
@@ -157,6 +168,7 @@ const STANDARD = [
   {
     id: "rev_lunge", name: "Reverse lunge", tags: ["lower"], pattern: "Lunge",
     reps: "8 / side", twoBell: true, dur: 1.9,
+    pools: ["standard"],
     cue: "Step back, drop the rear knee, drive through the front heel to stand.",
     grip: "Goblet grip at the chest — hands on the horns.",
     poses: [
@@ -168,6 +180,7 @@ const STANDARD = [
   {
     id: "lateral_lunge", name: "Lateral lunge", tags: ["lower"], pattern: "Lunge",
     reps: "8 / side", dur: 1.9,
+    pools: ["standard"],
     cue: "Big step sideways, sit into that hip, other leg stays straight. Push back to center.",
     grip: "Goblet grip at the chest — hands on the horns.",
     poses: [
@@ -182,6 +195,7 @@ const STANDARD = [
   {
     id: "rdl", name: "Romanian deadlift", tags: ["lower"], pattern: "Hinge",
     reps: "12 reps", twoBell: true, dur: 1.9,
+    pools: ["standard"],
     cue: "Soft knees, push the hips back until the hamstrings bite. Bell rides the legs.",
     grip: "Both hands on the handle, bell hanging in front of your thighs.",
     poses: [
@@ -196,6 +210,7 @@ const STANDARD = [
   {
     id: "single_leg_rdl", name: "Single-leg RDL", tags: ["lower"], pattern: "Hinge",
     reps: "6 / side", dur: 2.2,
+    pools: ["standard"],
     cue: "Hinge on one leg, back leg reaches behind like a counterweight. Slow beats sloppy.",
     grip: "Handle grip in the hand opposite the standing leg.",
     poses: [
@@ -210,6 +225,7 @@ const STANDARD = [
   {
     id: "sumo_deadlift", name: "Sumo deadlift", tags: ["lower"], pattern: "Hinge",
     reps: "12 reps", dur: 1.7,
+    pools: ["standard"],
     cue: "Wide stance, bell between your feet. Chest up, drive the floor away.",
     grip: "Both hands on the handle between your feet.",
     poses: [
@@ -224,6 +240,7 @@ const STANDARD = [
   {
     id: "clean", name: "Kettlebell clean", tags: ["upper", "full"], pattern: "Hinge",
     reps: "8 / side", twoBell: true, dur: 1.6,
+    pools: ["standard"],
     cue: "Hike it back, keep the bell close, and let it roll softly around the wrist into the rack.",
     grip: "One hand, loose hook on the handle — grip firms up only when it lands in the rack.",
     poses: [
@@ -234,7 +251,7 @@ const STANDARD = [
   },
   {
     id: "clean_press", name: "Clean & press", tags: ["upper", "full"], pattern: "Push",
-    reps: "6 / side", twoBell: true, dur: 2.4, hybrid: true,
+    reps: "6 / side", twoBell: true, dur: 2.4, pools: ["standard", "complex"],
     cue: "Clean it soft to the rack, then press. Reset your breath at the rack each rep.",
     grip: "Loose hook on the clean, then rack grip — handle diagonal, bell on the forearm — for the press.",
     poses: [
@@ -245,7 +262,7 @@ const STANDARD = [
   },
   {
     id: "thruster", name: "Thruster", tags: ["lower", "full"], pattern: "Squat",
-    reps: "8 reps", twoBell: true, dur: 2.1, hybrid: true,
+    reps: "8 reps", twoBell: true, dur: 2.1, pools: ["standard", "complex"],
     cue: "Front squat straight into a press — one motion. The squat drive throws the bell up.",
     grip: "Goblet grip on the horns; press the bell straight up from the chest.",
     poses: [
@@ -264,6 +281,7 @@ const STANDARD = [
   {
     id: "snatch", name: "Snatch", tags: ["full"], pattern: "Hinge",
     reps: "6 / side", dur: 1.9,
+    pools: ["standard"],
     cue: "One pull from hinge to overhead. Punch through at the top so the bell lands soft.",
     grip: "One hand, loose hook — let the handle rotate in your palm as you punch through the top.",
     poses: [
@@ -280,6 +298,7 @@ const STANDARD = [
   {
     id: "russian_twist", name: "Russian twist", tags: ["core"], pattern: "Rotation",
     reps: "10 / side", dur: 1.5,
+    pools: ["standard"],
     cue: "Lean back, chest proud, rotate from the ribcage — the bell taps each side.",
     grip: "Hands on the horns, bell held at the chest.",
     poses: [
@@ -293,7 +312,8 @@ const STANDARD = [
   },
   {
     id: "windmill", name: "Windmill", tags: ["core"], pattern: "Hinge",
-    reps: "5 / side", dur: 3.0, frontOnly: true,
+    reps: "5 / side", dur: 3.0,
+    pools: ["standard"], frontOnly: true,
     cue: "Bell locked overhead in one arm the whole time. Hips push toward the bell side, free hand slides down its own leg. Eyes on the bell.",
     grip: "Rack-style grip locked overhead — handle diagonal in the palm, wrist straight.",
     poses: [S_OH, P([90, 112], [118, 122], [120, 100], [122, 80], [96, 146], [100, 176], { bell: [126, 74] })],
@@ -307,6 +327,7 @@ const STANDARD = [
   {
     id: "around_world", name: "Around the world", tags: ["core"], pattern: "Rotation",
     reps: "8 / dir", dur: 2.2,
+    pools: ["standard"],
     cue: "Pass the bell in a circle around your hips. Hips stay square — no swaying.",
     grip: "Handle grip, passing hand to hand behind your back and in front.",
     poses: [
@@ -324,7 +345,8 @@ const STANDARD = [
   },
   {
     id: "pull_through", name: "Plank pull-through", tags: ["core"], pattern: "Anti-rotation",
-    reps: "8 / side", dur: 2.2, frontOnly: true,
+    reps: "8 / side", dur: 2.2,
+    pools: ["standard"], frontOnly: true,
     cue: "Rigid plank, hips dead still. Drag the bell under you without twisting.",
     grip: "Grab the handle with the reaching hand, drag it across, release, re-plant.",
     poses: [
@@ -340,6 +362,7 @@ const STANDARD = [
   {
     id: "dead_bug", name: "Dead bug pullover", tags: ["core"], pattern: "Anti-extension",
     reps: "10 reps", dur: 2.2,
+    pools: ["standard"],
     cue: "Bell over your chest. Lower it overhead as one leg extends, other leg holds at 90. Alternate legs, low back glued down.",
     grip: "Hold the horns, or cradle the ball in both palms.",
     poses: [
@@ -353,7 +376,7 @@ const STANDARD = [
   },
   {
     id: "situp_press", name: "Sit-up to press", tags: ["core"], pattern: "Flexion",
-    reps: "10 reps", dur: 2.2, hybrid: true,
+    reps: "10 reps", dur: 2.2, pools: ["standard", "complex"],
     cue: "Curl up with the bell at your chest, press overhead at the top, control back down.",
     grip: "Hands on the horns at the chest; press with both hands on the way up.",
     poses: [
@@ -370,6 +393,7 @@ const STANDARD = [
   {
     id: "suitcase_march", name: "Suitcase march", tags: ["core"], pattern: "Anti-lean",
     reps: "10 / side", twoBell: true, dur: 1.3,
+    pools: ["standard"],
     cue: "Bell in one hand at your side, march tall. Don't let the loaded side pull you over.",
     grip: "Handle grip at your side, like carrying a suitcase.",
     poses: [
@@ -384,6 +408,7 @@ const STANDARD = [
   {
     id: "racked_march", name: "Racked march", tags: ["core"], pattern: "Anti-lean",
     reps: "20 steps", twoBell: true, dur: 1.3,
+    pools: ["standard"],
     cue: "Bell in the rack at your chest, march in place. Ribs down, no arching around the load.",
     grip: "Rack grip — handle diagonal in the palm, bell resting on the forearm.",
     poses: [
@@ -398,6 +423,7 @@ const STANDARD = [
   {
     id: "standing_pullover", name: "Standing pullover", tags: ["upper", "core"], pattern: "Anti-extension",
     reps: "10 reps", dur: 2.6,
+    pools: ["standard"],
     cue: "Like a soccer throw-in: long arms, bell from chest to overhead and just behind your head. Ribs down so the low back doesn't arch.",
     grip: "Both hands on the horns, arms long with a soft elbow bend.",
     poses: [
@@ -416,6 +442,7 @@ const STANDARD = [
   {
     id: "tricep_ext", name: "Overhead tricep extension", tags: ["upper"], pattern: "Push",
     reps: "10 reps", dur: 2.0,
+    pools: ["standard"],
     cue: "Elbows point at the ceiling and stay narrow. Bell dips behind your head, then extend all the way to lockout.",
     grip: "Hands on the horns, reverse grip, ball hanging behind your head at the bottom.",
     poses: [
@@ -430,6 +457,7 @@ const STANDARD = [
   {
     id: "throw_over", name: "Throw over", tags: ["upper", "core"], pattern: "Rotation",
     reps: "5 / side", dur: 2.6,
+    pools: ["standard"],
     cue: "Scoop from chest height up and over one shoulder, tipping the top of the bell behind you like dumping a shovel. Back to center, then the other side.",
     grip: "Hands on the horns; wrists tip the bell over the shoulder at the top.",
     poses: [
@@ -446,6 +474,7 @@ const STANDARD = [
   {
     id: "slow_curl", name: "Super slow curl", tags: ["upper"], pattern: "Pull",
     reps: "10 slow reps", dur: 5.0,
+    pools: ["standard"],
     cue: "Three to four seconds up, three to four down, no swing. The slow negative is the exercise.",
     grip: "Hands on the horns, elbows pinned to your ribs.",
     poses: [
@@ -463,7 +492,7 @@ const STANDARD = [
 const HYBRIDS = [
   {
     id: "halo_press", name: "Halo + chest press-out", tags: ["upper", "core"], pattern: "Rotation",
-    reps: "6 / dir", dur: 3.2, advancedOnly: true, hybrid: true,
+    reps: "6 / dir", dur: 3.2, pools: ["complex"],
     cue: "Full halo around the head, then when the bell comes back to the front, press it straight out at chest height. Ribs stay down through both.",
     grip: "Bell upside down on the horns for the halo; keep the horns grip for the press-out.",
     poses: [
@@ -485,7 +514,7 @@ const HYBRIDS = [
   },
   {
     id: "lunge_twist", name: "Reverse lunge + twist", tags: ["lower", "core"], pattern: "Lunge",
-    reps: "6 / side", dur: 2.8, advancedOnly: true, hybrid: true,
+    reps: "6 / side", dur: 2.8, pools: ["complex"],
     cue: "Step back into the lunge, then rotate the bell over your front leg. Twist from the ribcage, hips stay square. Untwist before you stand.",
     grip: "Goblet grip on the horns, elbows tucked through the twist.",
     poses: [
@@ -503,7 +532,7 @@ const HYBRIDS = [
   },
   {
     id: "swing_squat", name: "Swing + goblet squat", tags: ["lower", "full"], pattern: "Hinge",
-    reps: "8 reps", twoBell: true, dur: 3.0, advancedOnly: true, hybrid: true,
+    reps: "8 reps", twoBell: true, dur: 3.0, pools: ["complex"],
     cue: "Swing to chest height, catch the bell in the goblet at the top, squat, stand, drop back into the swing. One catch, one squat, every rep.",
     grip: "Handle for the swing, catch onto the horns for the squat, back to the handle on the drop.",
     poses: [S_HINGE, S_SWTOP, S_GOBLET, S_SQUAT, S_GOBLET],
@@ -515,7 +544,7 @@ const HYBRIDS = [
   },
   {
     id: "clean_lunge", name: "Clean + reverse lunge", tags: ["lower", "full"], pattern: "Lunge",
-    reps: "6 / side", twoBell: true, dur: 2.8, advancedOnly: true, hybrid: true,
+    reps: "6 / side", twoBell: true, dur: 2.8, pools: ["complex"],
     cue: "Clean to the rack, lunge back on the same-side leg, stand, drop and repeat. The rack position has to survive the lunge.",
     grip: "Loose hook on the clean, rack grip — bell on the forearm — through the lunge.",
     poses: [
@@ -530,7 +559,7 @@ const HYBRIDS = [
   },
   {
     id: "clean_squat_press", name: "Clean + squat + press", tags: ["upper", "full"], pattern: "Squat",
-    reps: "5 / side", twoBell: true, dur: 3.4, advancedOnly: true, hybrid: true,
+    reps: "5 / side", twoBell: true, dur: 3.4, pools: ["complex"],
     cue: "Clean, front squat, then press on the way up — the squat drive feeds the press. The whole chain is one breath cycle.",
     grip: "Loose hook to the clean, rack grip through the squat and press.",
     poses: [
@@ -541,7 +570,7 @@ const HYBRIDS = [
   },
   {
     id: "lat_lunge_press", name: "Lateral lunge + press", tags: ["lower", "upper"], pattern: "Lunge",
-    reps: "6 / side", dur: 3.0, advancedOnly: true, hybrid: true,
+    reps: "6 / side", dur: 3.0, pools: ["complex"],
     cue: "Lateral lunge, drive back to standing, and press overhead as you arrive. Two planes of motion in one rep.",
     grip: "Goblet grip through the lunge, press from the chest with both hands on the horns.",
     poses: [
@@ -561,7 +590,7 @@ const HYBRIDS = [
   },
   {
     id: "snatch_lunge", name: "Snatch + overhead lunge", tags: ["full"], pattern: "Hinge",
-    reps: "5 / side", dur: 3.2, advancedOnly: true, hybrid: true,
+    reps: "5 / side", dur: 3.2, pools: ["complex"],
     cue: "Snatch to lockout, then reverse lunge with the bell still overhead. If the arm bends, the set is over.",
     grip: "Loose hook through the snatch; locked-out rack-style grip overhead for the lunge.",
     poses: [
@@ -579,7 +608,7 @@ const HYBRIDS = [
   },
   {
     id: "renegade", name: "Push-up + row", tags: ["upper", "core"], pattern: "Pull",
-    reps: "8 reps", twoBell: true, dur: 2.8, advancedOnly: true, hybrid: true,
+    reps: "8 reps", twoBell: true, dur: 2.8, pools: ["complex"],
     cue: "Push-up with one hand on the bell, then row it to your ribs without the hips rotating. Feet wide for a stable base.",
     grip: "One hand on the handle, one flat on the floor. Swap sides each rep or halfway.",
     poses: [
@@ -599,7 +628,7 @@ const HYBRIDS = [
   },
   {
     id: "bottoms_up_press", name: "Bottoms-up press", tags: ["upper"], pattern: "Push",
-    reps: "5 / side", dur: 2.4, advancedOnly: true, hybrid: true, bellFlip: true,
+    reps: "5 / side", dur: 2.4, pools: ["complex"], bellFlip: true,
     cue: "Bell balanced upside down — ball on top, handle in your fist. Crush the grip and press slow. If it tips, guide it down and reset.",
     grip: "Crush grip on the handle, bell inverted. Wrist dead straight or it falls.",
     poses: [
@@ -613,7 +642,7 @@ const HYBRIDS = [
   },
   {
     id: "squat_pressout", name: "Squat + press-out", tags: ["lower", "core"], pattern: "Squat",
-    reps: "8 reps", dur: 2.8, advancedOnly: true, hybrid: true,
+    reps: "8 reps", dur: 2.8, pools: ["complex"],
     cue: "Squat to the bottom, hold, press the bell straight out at arm's length, pull it back, then stand. The press-out is a core exercise wearing a squat costume.",
     grip: "Goblet grip on the horns; press out and pull back with control.",
     poses: [
@@ -629,7 +658,7 @@ const HYBRIDS = [
   },
   {
     id: "figure8_hold", name: "Figure 8 to hold", tags: ["core"], pattern: "Rotation",
-    reps: "8 reps", dur: 3.0, advancedOnly: true, hybrid: true, frontOnly: true,
+    reps: "8 reps", dur: 3.0, pools: ["complex"], frontOnly: true,
     cue: "Weave the bell in a figure 8 between your legs, then pop it up and catch it at your chest with both hands. Stay low in a quarter squat throughout.",
     grip: "Handle grip, passing hand to hand between the legs; catch on the ball at the chest.",
     poses: [
@@ -645,7 +674,7 @@ const HYBRIDS = [
   },
   {
     id: "rdl_row", name: "RDL + row", tags: ["lower", "upper"], pattern: "Hinge",
-    reps: "6 / side", twoBell: true, dur: 3.0, advancedOnly: true, hybrid: true,
+    reps: "6 / side", twoBell: true, dur: 3.0, pools: ["complex"],
     cue: "Hinge down, hold the bottom, row the bell to your ribs, lower it, then stand. The hold is where the hamstrings earn it.",
     grip: "One hand on the handle; keep the lat tight so the bell doesn't drift forward.",
     poses: [
@@ -663,7 +692,7 @@ const HYBRIDS = [
   },
   {
     id: "atw_squat", name: "Around the world + squat", tags: ["core", "lower"], pattern: "Rotation",
-    reps: "6 / dir", dur: 3.4, advancedOnly: true, hybrid: true,
+    reps: "6 / dir", dur: 3.4, pools: ["complex"],
     cue: "One full pass around the hips, catch the bell in the goblet, squat, stand, release into the next pass. Hips square on the pass, heels down in the squat.",
     grip: "Handle hand-to-hand around the body, then the horns for the squat.",
     poses: [
@@ -679,7 +708,7 @@ const HYBRIDS = [
   },
   {
     id: "curl_halo", name: "Curl + halo", tags: ["upper", "core"], pattern: "Rotation",
-    reps: "5 / dir", dur: 3.4, advancedOnly: true, hybrid: true,
+    reps: "5 / dir", dur: 3.4, pools: ["complex"],
     cue: "Curl the bell to your chest, flow straight into a halo around the head, back to the chest, lower. Alternate halo direction each rep.",
     grip: "Hands on the horns for the curl; keep the horns grip through the halo.",
     poses: [

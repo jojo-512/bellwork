@@ -55,14 +55,22 @@ function localDate(d = new Date()) {
 }
 
 function poolFor(mode) {
-  return mode === "advanced"
-    ? EXERCISES.filter((e) => e.hybrid)
-    : EXERCISES.filter((e) => !e.advancedOnly);
+  return EXERCISES.filter((e) => e.pools.includes(mode));
+}
+
+/* Old builds stored mode as "advanced". Map it so prefs, runs, and the
+   session log keep matching Complex PRs after the rename. */
+function normalizeMode(m) {
+  if (m === "advanced") return "complex";
+  return m === "complex" ? "complex" : "standard";
 }
 
 function buildCircuit(focus, mode, salt) {
   const today = localDate();
-  const rand = mulberry32(seedFrom(today + focus.join("+") + mode + salt));
+  // Seed with the pre-rename mode string so Complex days don't reshuffle
+  // under everyone who already knows today's picks.
+  const seedMode = mode === "complex" ? "advanced" : mode;
+  const rand = mulberry32(seedFrom(today + focus.join("+") + seedMode + salt));
   const wantFull = focus.includes("full");
   let pool = poolFor(mode).filter((e) => (wantFull ? true : e.tags.some((t) => focus.includes(t))));
   pool = [...pool].sort(() => rand() - 0.5);
@@ -165,7 +173,22 @@ const RUN_KEY = "bellwork-run";
 async function loadSessions() {
   try {
     const raw = localStorage.getItem(STORE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) return [];
+    const list = JSON.parse(raw);
+    if (!Array.isArray(list)) return [];
+    let dirty = false;
+    const normalized = list.map((s) => {
+      if (!s || typeof s !== "object") return s;
+      if (s.mode === "advanced") {
+        dirty = true;
+        return { ...s, mode: "complex" };
+      }
+      return s;
+    });
+    if (dirty) {
+      try { localStorage.setItem(STORE_KEY, JSON.stringify(normalized.slice(-200))); } catch (e) {}
+    }
+    return normalized;
   } catch { return []; }
 }
 async function saveSessions(list) {
@@ -197,7 +220,13 @@ function importSessions(onLoad) {
     reader.onload = () => {
       try {
         const incoming = JSON.parse(String(reader.result));
-        if (Array.isArray(incoming)) onLoad(incoming);
+        if (Array.isArray(incoming)) {
+          onLoad(incoming.map((s) => {
+            if (!s || typeof s !== "object") return s;
+            if (s.mode === "advanced") return { ...s, mode: "complex" };
+            return s;
+          }));
+        }
       } catch (e) {}
     };
     reader.readAsText(file);
@@ -269,15 +298,15 @@ function Library({ reduced }) {
   const [showSide, setShowSide] = useState(true);
   const displayFont = "'Big Shoulders Display', 'Arial Narrow', sans-serif";
   const groups = [
-    { title: "Standard", items: EXERCISES.filter((e) => !e.advancedOnly) },
-    { title: "Complex", items: EXERCISES.filter((e) => e.hybrid) },
+    { title: "Standard", items: EXERCISES.filter((e) => e.pools.includes("standard")) },
+    { title: "Complex", items: EXERCISES.filter((e) => e.pools.includes("complex")) },
   ];
   const uniqueCount = EXERCISES.length;
   return (
     <div>
       <div style={{ color: COLORS.chalkDim, fontSize: 15, marginBottom: 12, lineHeight: 1.5 }}>
         {uniqueCount} movements total: {groups[0].items.length} in Standard, {groups[1].items.length} in Complex
-        (a few hybrids live in both pools). Tap a focus to filter.
+        (a few live in both pools). Tap a focus to filter.
       </div>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
         {Object.entries(FOCUS_META).filter(([k]) => k !== "full").map(([key, meta]) => {
@@ -409,7 +438,9 @@ export default function Bellwork() {
   useEffect(() => {
     const prefs = readJSON(PREFS_KEY);
     if (prefs) {
-      if (prefs.mode === "standard" || prefs.mode === "advanced") setMode(prefs.mode);
+      if (prefs.mode === "standard" || prefs.mode === "advanced" || prefs.mode === "complex") {
+        setMode(normalizeMode(prefs.mode));
+      }
       if (DURATIONS.includes(prefs.durationMin)) {
         setDurationMin(prefs.durationMin);
         setSecondsLeft(prefs.durationMin * 60);
@@ -420,7 +451,9 @@ export default function Bellwork() {
     const run = readJSON(RUN_KEY);
     if (runIsFresh(run)) {
       if (Array.isArray(run.focus) && run.focus.length) setFocus(run.focus);
-      if (run.mode === "standard" || run.mode === "advanced") setMode(run.mode);
+      if (run.mode === "standard" || run.mode === "advanced" || run.mode === "complex") {
+        setMode(normalizeMode(run.mode));
+      }
       setSalt(run.salt || "");
       setSwaps(run.swaps || {});
       if (DURATIONS.includes(run.durationMin)) setDurationMin(run.durationMin);
@@ -724,7 +757,7 @@ export default function Bellwork() {
           display: "flex", border: `1.5px solid ${COLORS.panelEdge}`, borderRadius: 10,
           overflow: "hidden", marginBottom: 12,
         }}>
-          {[["standard", "STANDARD"], ["advanced", "COMPLEX"]].map(([key, label]) => {
+          {[["standard", "STANDARD"], ["complex", "COMPLEX"]].map(([key, label]) => {
             const active = mode === key;
             return (
               <button key={key} onClick={() => setModeSafe(key)} aria-pressed={active}
@@ -759,7 +792,7 @@ export default function Bellwork() {
           })}
         </div>
         <div style={{ color: COLORS.chalkDim, fontSize: 14.5, marginBottom: 12 }}>
-          {mode === "advanced"
+          {mode === "complex"
             ? "All chained combos. Hybrids punish sloppy reps — cap the set the moment form slips."
             : "Pick up to two, or Full body. Today's circuit is fixed per focus — same picks if you reopen."}
         </div>
@@ -935,7 +968,7 @@ export default function Bellwork() {
               }}>
                 <span style={{ color: COLORS.chalkDim }}>
                   {s.date} · {(s.focus || []).map((f) => FOCUS_META[f]?.label || f).join(" + ")}
-                  {s.mode === "advanced" ? " · Complex" : ""}{s.weightLb ? ` · ${s.weightLb} lb` : ""}{s.partial ? " · partial" : ""}
+                  {normalizeMode(s.mode) === "complex" ? " · Complex" : ""}{s.weightLb ? ` · ${s.weightLb} lb` : ""}{s.partial ? " · partial" : ""}
                 </span>
                 <span style={{ fontWeight: 600 }}>{s.rounds} rounds</span>
               </div>
