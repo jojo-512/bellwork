@@ -13,6 +13,7 @@ const STANDARD = [
     id: "swing", name: "Kettlebell swing", tags: ["lower", "full"], pattern: "Hinge",
     reps: "15 reps", twoBell: true, dur: 1.5,
     pools: ["standard"],
+    variantGroup: "swing",
     cue: "Hips back, snap forward. Arms are just ropes — the hips throw the bell.",
     grip: "Both hands hooked on the handle, thumbs loose.",
     poses: [S_HINGE, S_SWTOP],
@@ -25,6 +26,7 @@ const STANDARD = [
     id: "goblet_squat", name: "Goblet squat", tags: ["lower"], pattern: "Squat",
     reps: "10 reps", twoBell: true, dur: 1.8,
     pools: ["standard"],
+    variantGroup: "goblet_squat",
     cue: "Bell tight to chest, elbows track inside knees, stand tall through the heels.",
     grip: "Hold the horns (sides of the handle), bell hanging below your hands.",
     poses: [S_GOBLET, S_SQUAT],
@@ -34,6 +36,7 @@ const STANDARD = [
     id: "ohp", name: "Overhead press", tags: ["upper"], pattern: "Push",
     reps: "8 / side", twoBell: true, dur: 1.7,
     pools: ["standard"],
+    variantGroup: "press",
     cue: "Ribs down, glutes tight. Press to a locked-out arm by your ear — no lean-back.",
     grip: "Rack grip — handle diagonal across the palm, bell resting on the back of the forearm.",
     poses: [S_RACK, P([100, 106], [100, 68], [103, 50], [102, 32], [100, 141], [100, 176], { bell: [106, 26] })],
@@ -43,6 +46,7 @@ const STANDARD = [
     id: "push_press", name: "Push press", tags: ["upper", "full"], pattern: "Push",
     reps: "8 / side", twoBell: true, dur: 1.9,
     pools: ["standard"],
+    variantGroup: "press",
     cue: "Shallow knee dip, drive up, let the legs launch the bell past the sticking point.",
     grip: "Rack grip — bell on the forearm, wrist straight, knuckles to the ceiling at lockout.",
     poses: [
@@ -60,6 +64,7 @@ const STANDARD = [
     id: "row", name: "Bent-over row", tags: ["upper"], pattern: "Pull",
     reps: "10 / side", twoBell: true, dur: 1.5,
     pools: ["standard"],
+    variantGroup: "row",
     cue: "Flat back, pull the bell to your hip pocket, squeeze the shoulder blade.",
     grip: "One hand on the handle, knuckles down, wrist neutral.",
     poses: [
@@ -75,6 +80,7 @@ const STANDARD = [
     id: "gorilla_row", name: "Gorilla row", tags: ["upper"], pattern: "Pull",
     reps: "8 / side", twoBell: true, dur: 1.6,
     pools: ["standard"],
+    variantGroup: "row",
     cue: "Deep hinge, bell on the floor between your feet. Row to the hip, switch hands each rep.",
     grip: "Handle grip, alternating hands rep to rep. Free hand can brace on your knee.",
     poses: [
@@ -394,6 +400,7 @@ const STANDARD = [
     id: "suitcase_march", name: "Suitcase march", tags: ["core"], pattern: "Anti-lean",
     reps: "10 / side", twoBell: true, dur: 1.3,
     pools: ["standard"],
+    variantGroup: "march",
     cue: "Bell in one hand at your side, march tall. Don't let the loaded side pull you over.",
     grip: "Handle grip at your side, like carrying a suitcase.",
     poses: [
@@ -409,6 +416,7 @@ const STANDARD = [
     id: "racked_march", name: "Racked march", tags: ["core"], pattern: "Anti-lean",
     reps: "20 steps", twoBell: true, dur: 1.3,
     pools: ["standard"],
+    variantGroup: "march",
     cue: "Bell in the rack at your chest, march in place. Ribs down, no arching around the load.",
     grip: "Rack grip — handle diagonal in the palm, bell resting on the forearm.",
     poses: [
