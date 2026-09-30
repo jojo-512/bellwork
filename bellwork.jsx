@@ -54,8 +54,12 @@ function localDate(d = new Date()) {
   return `${y}-${m}-${day}`;
 }
 
-function poolFor(mode) {
-  return EXERCISES.filter((e) => e.pools.includes(mode));
+function poolFor(mode, approved = []) {
+  return EXERCISES.filter((e) => {
+    if (!e.pools.includes(mode)) return false;
+    if (e.pending && !approved.includes(e.id)) return false;
+    return true;
+  });
 }
 
 /* Old builds stored mode as "advanced". Map it so prefs, runs, and the
@@ -65,21 +69,42 @@ function normalizeMode(m) {
   return m === "complex" ? "complex" : "standard";
 }
 
-function buildCircuit(focus, mode, salt) {
+function hasPoses(ex) {
+  if (ex.frontOnly) return Array.isArray(ex.posesF) && ex.posesF.length > 0;
+  return Array.isArray(ex.poses) && ex.poses.length > 0 && Array.isArray(ex.posesF) && ex.posesF.length > 0;
+}
+
+function buildCircuit(focus, mode, salt, approved = []) {
   const today = localDate();
   // Seed with the pre-rename mode string so Complex days don't reshuffle
   // under everyone who already knows today's picks.
   const seedMode = mode === "complex" ? "advanced" : mode;
   const rand = mulberry32(seedFrom(today + focus.join("+") + seedMode + salt));
   const wantFull = focus.includes("full");
-  let pool = poolFor(mode).filter((e) => (wantFull ? true : e.tags.some((t) => focus.includes(t))));
+  let pool = poolFor(mode, approved).filter((e) => (wantFull ? true : e.tags.some((t) => focus.includes(t))));
   pool = [...pool].sort(() => rand() - 0.5);
   const picked = [];
   const usedPatterns = new Set();
+  const usedGroups = new Set();
+
+  // Pass 1: unique pattern and unique variant group
   for (const ex of pool) {
     if (picked.length >= 5) break;
-    if (!usedPatterns.has(ex.pattern)) { picked.push(ex); usedPatterns.add(ex.pattern); }
+    if (usedPatterns.has(ex.pattern)) continue;
+    if (ex.variantGroup && usedGroups.has(ex.variantGroup)) continue;
+    picked.push(ex);
+    usedPatterns.add(ex.pattern);
+    if (ex.variantGroup) usedGroups.add(ex.variantGroup);
   }
+  // Pass 2: unique group only (pattern may repeat)
+  for (const ex of pool) {
+    if (picked.length >= 5) break;
+    if (picked.includes(ex)) continue;
+    if (ex.variantGroup && usedGroups.has(ex.variantGroup)) continue;
+    picked.push(ex);
+    if (ex.variantGroup) usedGroups.add(ex.variantGroup);
+  }
+  // Pass 3: anything not already picked — always return five when the pool can
   for (const ex of pool) {
     if (picked.length >= 5) break;
     if (!picked.includes(ex)) picked.push(ex);
@@ -169,6 +194,15 @@ function Figure({ poses, dur, color, animate, bellFlip }) {
 const STORE_KEY = "bellwork-sessions";
 const PREFS_KEY = "bellwork-prefs";
 const RUN_KEY = "bellwork-run";
+const APPROVED_KEY = "bellwork-approved";
+
+function readApproved() {
+  const raw = readJSON(APPROVED_KEY);
+  return Array.isArray(raw) ? raw.filter((id) => typeof id === "string") : [];
+}
+function writeApproved(ids) {
+  writeJSON(APPROVED_KEY, ids);
+}
 
 async function loadSessions() {
   try {
@@ -293,20 +327,26 @@ function playBeeps(count) {
   } catch (e) {}
 }
 
-function Library({ reduced }) {
+function Library({ reduced, approved, onApprove }) {
   const [tagFilter, setTagFilter] = useState(null);
   const [showSide, setShowSide] = useState(true);
   const displayFont = "'Big Shoulders Display', 'Arial Narrow', sans-serif";
+  const isPending = (e) => e.pending && !approved.includes(e.id);
+  const pendingItems = EXERCISES.filter(isPending);
+  const rotation = EXERCISES.filter((e) => !isPending(e));
   const groups = [
-    { title: "Standard", items: EXERCISES.filter((e) => e.pools.includes("standard")) },
-    { title: "Complex", items: EXERCISES.filter((e) => e.pools.includes("complex")) },
+    { title: "Pending", items: pendingItems, pending: true },
+    { title: "Standard", items: rotation.filter((e) => e.pools.includes("standard")) },
+    { title: "Complex", items: rotation.filter((e) => e.pools.includes("complex")) },
   ];
-  const uniqueCount = EXERCISES.length;
+  const waitingFigures = EXERCISES.filter((e) => !hasPoses(e)).length;
   return (
     <div>
       <div style={{ color: COLORS.chalkDim, fontSize: 15, marginBottom: 12, lineHeight: 1.5 }}>
-        {uniqueCount} movements total: {groups[0].items.length} in Standard, {groups[1].items.length} in Complex
-        (a few live in both pools). Tap a focus to filter.
+        {rotation.length} movements in rotation
+        {pendingItems.length ? ` · ${pendingItems.length} pending` : ""}
+        {waitingFigures ? ` · ${waitingFigures} waiting on figures` : ""}
+        . A few live in both Standard and Complex. Tap a focus to filter.
       </div>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
         {Object.entries(FOCUS_META).filter(([k]) => k !== "full").map(([key, meta]) => {
@@ -344,6 +384,7 @@ function Library({ reduced }) {
         })}
       </div>
       {groups.map((g) => {
+        if (g.pending && !g.items.length) return null;
         const items = tagFilter ? g.items.filter((e) => e.tags.includes(tagFilter)) : g.items;
         if (!items.length) return null;
         return (
@@ -357,15 +398,27 @@ function Library({ reduced }) {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               {items.map((ex) => {
                 const exColor = FOCUS_META[ex.tags[0]].color;
-                const poses = ex.frontOnly ? ex.posesF : (showSide ? ex.poses : ex.posesF);
+                const figured = hasPoses(ex);
+                const poses = figured
+                  ? (ex.frontOnly ? ex.posesF : (showSide ? ex.poses : ex.posesF))
+                  : null;
                 return (
                   <div key={g.title + ex.id} style={{
                     background: COLORS.panel, border: `1px solid ${COLORS.panelEdge}`,
                     borderRadius: 12, padding: 10,
                   }}>
-                    <div style={{ background: COLORS.bg, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 8, overflow: "hidden", marginBottom: 8 }}>
-                      <Figure poses={poses} dur={ex.dur} color={exColor} animate={!reduced} bellFlip={ex.bellFlip} />
-                    </div>
+                    {figured && poses ? (
+                      <div style={{ background: COLORS.bg, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 8, overflow: "hidden", marginBottom: 8 }}>
+                        <Figure poses={poses} dur={ex.dur} color={exColor} animate={!reduced} bellFlip={ex.bellFlip} />
+                      </div>
+                    ) : (
+                      <div style={{
+                        background: COLORS.bg, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 8,
+                        padding: "14px 10px", marginBottom: 8, color: COLORS.chalkDim, fontSize: 13, lineHeight: 1.4,
+                      }}>
+                        No figure yet — cue and grip below once you open it in a circuit.
+                      </div>
+                    )}
                     <div style={{ fontFamily: displayFont, fontWeight: 800, fontSize: 16, letterSpacing: "0.03em", textTransform: "uppercase", lineHeight: 1.15 }}>
                       {ex.name}
                     </div>
@@ -383,6 +436,17 @@ function Library({ reduced }) {
                         <span style={{ color: COLORS.chalkDim, fontSize: 12.5, fontWeight: 600, marginLeft: 2 }}>2-bell opt.</span>
                       )}
                     </div>
+                    {g.pending && (
+                      <button onClick={() => onApprove(ex.id)}
+                        style={{
+                          marginTop: 10, width: "100%",
+                          background: COLORS.chalk, color: "#111", border: "none",
+                          borderRadius: 8, padding: "8px 10px",
+                          fontSize: 13.5, fontWeight: 700, letterSpacing: "0.04em",
+                        }}>
+                        Add to rotation
+                      </button>
+                    )}
                   </div>
                 );
               })}
@@ -412,6 +476,8 @@ export default function Bellwork() {
   const [reduced, setReduced] = useState(false);
   const [warmOpen, setWarmOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const [approved, setApproved] = useState([]);
+  const [frozenIds, setFrozenIds] = useState(null);
   const savedRef = useRef(false);
   const circuitTopRef = useRef(null);
   const roundsRef = useRef(0);
@@ -436,6 +502,8 @@ export default function Bellwork() {
 
   /* restore sticky prefs, then an in-progress run if there is a fresh one */
   useEffect(() => {
+    setApproved(readApproved());
+
     const prefs = readJSON(PREFS_KEY);
     if (prefs) {
       if (prefs.mode === "standard" || prefs.mode === "advanced" || prefs.mode === "complex") {
@@ -456,6 +524,7 @@ export default function Bellwork() {
       }
       setSalt(run.salt || "");
       setSwaps(run.swaps || {});
+      if (Array.isArray(run.circuitIds) && run.circuitIds.length) setFrozenIds(run.circuitIds);
       if (DURATIONS.includes(run.durationMin)) setDurationMin(run.durationMin);
       if (WEIGHTS_LB.includes(run.weightLb)) setWeightLb(run.weightLb);
       setRounds(run.rounds || 0);
@@ -492,20 +561,38 @@ export default function Bellwork() {
       date: localDate(),
       savedAt: Date.now(),
       focus, mode, salt, swaps, durationMin, weightLb, rounds, running, endAt,
+      circuitIds: frozenIds || undefined,
       // while running the end timestamp is the source of truth for the clock
       secondsLeft: running ? null : secondsRef.current,
       prBefore: prBeforeRef.current,
     });
-  }, [hydrated, started, finished, focus, mode, salt, swaps, durationMin, weightLb, rounds, running, endAt]);
+  }, [hydrated, started, finished, focus, mode, salt, swaps, durationMin, weightLb, rounds, running, endAt, frozenIds]);
 
-  const baseCircuit = useMemo(() => buildCircuit(focus, mode, salt), [focus, mode, salt]);
+  const baseCircuit = useMemo(() => {
+    if (frozenIds && frozenIds.length) {
+      const resolved = frozenIds.map((id) => EXERCISES.find((e) => e.id === id)).filter(Boolean);
+      if (resolved.length === frozenIds.length && resolved.length > 0) return resolved;
+    }
+    return buildCircuit(focus, mode, salt, approved);
+  }, [focus, mode, salt, approved, frozenIds]);
   const circuit = useMemo(
     () => baseCircuit.map((ex, i) => (swaps[i] ? EXERCISES.find((e) => e.id === swaps[i]) || ex : ex)),
     [baseCircuit, swaps]
   );
 
+  const approveMovement = (id) => {
+    setApproved((cur) => {
+      if (cur.includes(id)) return cur;
+      const next = [...cur, id];
+      writeApproved(next);
+      return next;
+    });
+  };
+
   const toggleFocus = (key) => {
+    if (started) return;
     setSwaps({});
+    setFrozenIds(null);
     setFocus((cur) => {
       if (key === "full") return ["full"];
       let next = cur.filter((k) => k !== "full");
@@ -516,16 +603,24 @@ export default function Bellwork() {
   };
 
   const setModeSafe = (m) => {
+    if (started) return;
     setMode(m);
     setSwaps({});
+    setFrozenIds(null);
   };
 
   const swapExercise = (idx) => {
     const currentIds = circuit.map((e) => e.id);
     const wantFull = focus.includes("full");
-    const eligible = poolFor(mode).filter(
-      (e) => !currentIds.includes(e.id) && (wantFull ? true : e.tags.some((t) => focus.includes(t)))
+    const otherGroups = new Set(
+      circuit.filter((_, i) => i !== idx).map((e) => e.variantGroup).filter(Boolean)
     );
+    const tagOk = (e) => (wantFull ? true : e.tags.some((t) => focus.includes(t)));
+    const base = poolFor(mode, approved).filter(
+      (e) => !currentIds.includes(e.id) && tagOk(e)
+    );
+    let eligible = base.filter((e) => !(e.variantGroup && otherGroups.has(e.variantGroup)));
+    if (!eligible.length) eligible = base;
     if (!eligible.length) return;
     const pick = eligible[Math.floor(Math.random() * eligible.length)];
     setSwaps((s) => ({ ...s, [idx]: pick.id }));
@@ -662,6 +757,8 @@ export default function Bellwork() {
     prBeforeRef.current = prRounds;
     beeped60Ref.current = false;
     beeped0Ref.current = false;
+    // Freeze today's five so approving a pending mid-run can't reshuffle them.
+    setFrozenIds(baseCircuit.map((e) => e.id));
     setStarted(true);
     setEndAt(Date.now() + secondsRef.current * 1000);
     setRunning(true);
@@ -691,6 +788,7 @@ export default function Bellwork() {
     setEndAt(null);
     setStarted(false);
     setFinished(false);
+    setFrozenIds(null);
     savedRef.current = false;
     beeped60Ref.current = false;
     beeped0Ref.current = false;
@@ -748,7 +846,7 @@ export default function Bellwork() {
         </header>
 
         {view === "library" ? (
-          <Library reduced={reduced} />
+          <Library reduced={reduced} approved={approved} onApprove={approveMovement} />
         ) : (
         <>
 
@@ -851,10 +949,11 @@ export default function Bellwork() {
             <div style={{ fontFamily: displayFont, fontWeight: 600, fontSize: 22, letterSpacing: "0.05em", textTransform: "uppercase" }}>
               Today · <span style={{ color: accent }}>{focusLabel}</span>
             </div>
-            <button onClick={() => { setSalt(String(Math.random())); setSwaps({}); }}
+            <button onClick={() => { if (started) return; setSalt(String(Math.random())); setSwaps({}); setFrozenIds(null); }}
               style={{
                 background: "transparent", border: `1.5px solid ${COLORS.panelEdge}`,
                 color: COLORS.chalkDim, borderRadius: 8, padding: "6px 12px", fontSize: 14, fontWeight: 600,
+                opacity: started ? 0.4 : 1,
               }}>
               Reshuffle
             </button>
@@ -893,18 +992,20 @@ export default function Bellwork() {
                     </span>
                   )}
                 </div>
-                <div style={{ display: "flex", gap: 10 }}>
-                  {!ex.frontOnly && (
-                    <div style={{ flex: 1, background: COLORS.bg, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 10, overflow: "hidden" }}>
-                      <div style={{ textAlign: "center", color: COLORS.chalkDim, fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", paddingTop: 6 }}>SIDE</div>
-                      <Figure poses={ex.poses} dur={ex.dur} color={exColor} animate={!reduced} bellFlip={ex.bellFlip} />
+                {hasPoses(ex) ? (
+                  <div style={{ display: "flex", gap: 10 }}>
+                    {!ex.frontOnly && (
+                      <div style={{ flex: 1, background: COLORS.bg, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 10, overflow: "hidden" }}>
+                        <div style={{ textAlign: "center", color: COLORS.chalkDim, fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", paddingTop: 6 }}>SIDE</div>
+                        <Figure poses={ex.poses} dur={ex.dur} color={exColor} animate={!reduced} bellFlip={ex.bellFlip} />
+                      </div>
+                    )}
+                    <div style={{ flex: ex.frontOnly ? "0 1 62%" : 1, margin: ex.frontOnly ? "0 auto" : 0, background: COLORS.bg, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 10, overflow: "hidden" }}>
+                      <div style={{ textAlign: "center", color: COLORS.chalkDim, fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", paddingTop: 6 }}>FRONT</div>
+                      <Figure poses={ex.posesF} dur={ex.dur} color={exColor} animate={!reduced} bellFlip={ex.bellFlip} />
                     </div>
-                  )}
-                  <div style={{ flex: ex.frontOnly ? "0 1 62%" : 1, margin: ex.frontOnly ? "0 auto" : 0, background: COLORS.bg, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 10, overflow: "hidden" }}>
-                    <div style={{ textAlign: "center", color: COLORS.chalkDim, fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", paddingTop: 6 }}>FRONT</div>
-                    <Figure poses={ex.posesF} dur={ex.dur} color={exColor} animate={!reduced} bellFlip={ex.bellFlip} />
                   </div>
-                </div>
+                ) : null}
                 <div style={{ fontSize: 17, lineHeight: 1.5, marginTop: 10, color: COLORS.chalk }}>
                   {ex.cue}
                 </div>
