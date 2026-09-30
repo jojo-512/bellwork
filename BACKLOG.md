@@ -16,11 +16,19 @@ Shipped 2026-09-23 except the slot template, which was deferred.
 
 iPhone Batch 1 checks done (Joe OK 2026-09-23): lock/timer, beeps + silent switch, Wake Lock, bar height.
 
-## Batch 2 — the 90-day layer
+## Batch 2 — open the ingestion loop, then fill the canon
 
-- [x] Log bell weight per session (one-tap chip). Rounds PRs are meaningless across weight changes. This is logging, not a progression nudge. Pulled into Batch 1; PRs are scoped per weight.
-- Consistency view: 13-week dot grid plus rounds over time per focus.
-- Default focus based on the last two sessions so consecutive days rotate, still overridable.
+Shipped on branch `cursor/batch-2-movement-loop-c1db` (awaiting Joe's push go-ahead).
+
+- [x] Move `EXERCISES` out of `bellwork.jsx` into `movements.js` (+ `poses.js`).
+- [x] `hybrid` + `advancedOnly` → one `pools` field; internal mode `advanced` → `complex`, with storage migration.
+- [x] `INGEST.md` — standalone authority for adding movements. `INBOX.md` at repo root. `npm run check`.
+- [x] `pending: true` staging + Library "Add to rotation"; freeze circuit ids in a live run.
+- [x] `variantGroup` in the draw and in Swap (conservative groups on the existing 46).
+- [x] Optional `poses` — text cards when un-illustrated.
+- [x] Canon pass 1 (~12 pending): Complex pull hybrids, carries, anti-lean chain, knee-dominant, Standard pull depth. Half get-up deferred to the first post-loop drop.
+- Consistency view: 13-week dot grid plus rounds over time per focus. (Batch 3+)
+- Default focus based on the last two sessions so consecutive days rotate, still overridable. (Batch 3+)
 
 ## Batch 3 — deployment
 
@@ -28,5 +36,5 @@ iPhone Batch 1 checks done (Joe OK 2026-09-23): lock/timer, beeps + silent switc
 
 ## Batch 4 — content and layout
 
-- Complex pool is press-heavy and pull-light. Add 2 to 3 pull-dominant hybrids (e.g. swing + high pull, gorilla row + sumo deadlift, clean + bent row). Each needs hand-authored side and front pose coordinates.
+- [x] Complex pool is press-heavy and pull-light. Add pull-dominant hybrids (swing + high pull, gorilla row + sumo deadlift, clean + bent row). Landed in Batch 2 canon pass 1 as `pending: true`.
 - Compact in-workout mode: once the timer starts, cards collapse to name and reps, tap to expand.
