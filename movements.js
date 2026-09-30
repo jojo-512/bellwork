@@ -401,7 +401,7 @@ const STANDARD = [
     reps: "10 / side", twoBell: true, dur: 1.3,
     pools: ["standard"],
     variantGroup: "march",
-    cue: "Bell in one hand at your side, march tall. Don't let the loaded side pull you over.",
+    cue: "Bell in one hand at your side, march tall. Don't let the loaded side pull you over. Room to walk? Travel instead of marching in place.",
     grip: "Handle grip at your side, like carrying a suitcase.",
     poses: [
       P([100, 106], [100, 68], [104, 90], [106, 112], [116, 124], [116, 148], { bell: [106, 120], kn2: [100, 141], an2: [100, 176] }),
@@ -417,7 +417,7 @@ const STANDARD = [
     reps: "20 steps", twoBell: true, dur: 1.3,
     pools: ["standard"],
     variantGroup: "march",
-    cue: "Bell in the rack at your chest, march in place. Ribs down, no arching around the load.",
+    cue: "Bell in the rack at your chest, march in place. Ribs down, no arching around the load. Room to walk? Travel instead of marching in place.",
     grip: "Rack grip — handle diagonal in the palm, bell resting on the forearm.",
     poses: [
       P([100, 106], [100, 68], [110, 86], [110, 70], [116, 124], [116, 148], { bell: [115, 66], kn2: [100, 141], an2: [100, 176] }),
@@ -494,6 +494,103 @@ const STANDARD = [
     posesF: [
       FS({ elR: [110, 92], haR: [106, 112], elL: [90, 92], haL: [94, 112], bell: [100, 118] }),
       FS({ elR: [112, 88], haR: [106, 74], elL: [88, 88], haL: [94, 74], bell: [100, 70] }),
+    ],
+  },
+
+  {
+    id: "front_squat", name: "Front rack squat", tags: ["lower"], pattern: "Squat",
+    reps: "8 / side", twoBell: true, dur: 2.0,
+    pools: ["standard"],
+    variantGroup: "goblet_squat",
+    pending: true,
+    cue: "Bell in the rack on one side. Elbow high, ribs down, sit between the hips. The rack side wants to collapse — don't let it.",
+    grip: "Rack grip — handle diagonal across the palm, bell resting on the forearm.",
+    poses: [S_RACK, S_RACKSQ],
+    posesF: [F_RACK, F_RACKSQ],
+  },
+  {
+    id: "split_squat", name: "Split squat", tags: ["lower"], pattern: "Lunge",
+    reps: "8 / side", twoBell: true, dur: 2.0,
+    pools: ["standard"],
+    pending: true,
+    cue: "Feet stay planted. Drop the rear knee, drive through the front heel to stand. Same stance the whole set.",
+    grip: "Goblet grip at the chest — hands on the horns.",
+    poses: [
+      P([100, 106], [100, 68], [112, 84], [114, 72], [112, 141], [118, 176], { bell: [119, 72], kn2: [86, 150], an2: [78, 176] }),
+      P([98, 134], [100, 96], [112, 110], [114, 98], [118, 152], [118, 176], { bell: [119, 98], kn2: [80, 162], an2: [70, 176] }),
+    ],
+    posesF: [
+      F_GOBLET,
+      FS({ hip: [100, 134], sh: [100, 96], elR: [114, 112], haR: [106, 102], elL: [86, 112], haL: [94, 102], knR: [110, 154], anR: [112, 176], knL: [88, 160], anL: [84, 176], bell: [100, 100] }),
+    ],
+  },
+  {
+    id: "overhead_lunge", name: "Overhead lunge", tags: ["lower", "full"], pattern: "Lunge",
+    reps: "6 / side", dur: 2.2,
+    pools: ["standard"],
+    pending: true,
+    cue: "Bell locked out overhead before you step. Reverse lunge without letting the arm bend. Eyes forward, ribs down.",
+    grip: "Rack-style grip locked overhead — handle diagonal in the palm, wrist straight.",
+    poses: [
+      S_OH,
+      P([98, 130], [100, 92], [103, 70], [102, 50], [112, 150], [112, 176], { bell: [106, 44], kn2: [80, 162], an2: [66, 176] }),
+      S_OH,
+    ],
+    posesF: [
+      F_OH,
+      FS({ hip: [100, 134], sh: [100, 96], elR: [110, 70], haR: [108, 48], elL: [86, 114], haL: [84, 130], knR: [108, 153], anR: [108, 176], knL: [90, 165], anL: [84, 175], bell: [110, 42] }),
+      F_OH,
+    ],
+  },
+  {
+    id: "dead_stop_row", name: "Dead-stop row", tags: ["upper"], pattern: "Pull",
+    reps: "8 / side", twoBell: true, dur: 1.8,
+    pools: ["standard"],
+    variantGroup: "row",
+    pending: true,
+    cue: "Each rep starts from a dead stop on the floor. Row to the hip, lower all the way, pause, repeat. No bounce.",
+    grip: "One hand on the handle, knuckles down, wrist neutral.",
+    poses: [
+      P([94, 118], [128, 94], [132, 118], [128, 148], [102, 148], [100, 176], { bell: [128, 156] }),
+      P([94, 116], [128, 92], [116, 102], [122, 114], [102, 148], [100, 176], { bell: [122, 120] }),
+      P([94, 118], [128, 94], [132, 118], [128, 148], [102, 148], [100, 176], { bell: [128, 156] }),
+    ],
+    posesF: [
+      FS({ sh: [100, 82], hip: [100, 114], elR: [114, 108], haR: [112, 136], knR: [108, 144], knL: [92, 144], bell: [112, 144] }),
+      FS({ sh: [100, 82], hip: [100, 112], elR: [124, 94], haR: [112, 100], knR: [108, 144], knL: [92, 144], bell: [112, 106] }),
+      FS({ sh: [100, 82], hip: [100, 114], elR: [114, 108], haR: [112, 136], knR: [108, 144], knL: [92, 144], bell: [112, 144] }),
+    ],
+  },
+  {
+    id: "upright_row", name: "Upright row", tags: ["upper"], pattern: "Pull",
+    reps: "10 reps", twoBell: true, dur: 1.6,
+    pools: ["standard"],
+    pending: true,
+    cue: "Bell stays close to the body. Elbows lead up and out to about shoulder height — don't chase your chin.",
+    grip: "Both hands on the handle, knuckles forward, narrow grip.",
+    poses: [
+      P([100, 106], [100, 68], [108, 90], [106, 112], [100, 141], [100, 176], { bell: [108, 118] }),
+      P([100, 106], [100, 68], [118, 70], [108, 62], [100, 141], [100, 176], { bell: [108, 70] }),
+    ],
+    posesF: [
+      FS({ elR: [110, 92], haR: [106, 112], elL: [90, 92], haL: [94, 112], bell: [100, 118] }),
+      FS({ elR: [126, 72], haR: [112, 68], elL: [74, 72], haL: [88, 68], bell: [100, 74] }),
+    ],
+  },
+  {
+    id: "reverse_fly", name: "Bent-over reverse fly", tags: ["upper"], pattern: "Pull",
+    reps: "10 reps", dur: 1.8,
+    pools: ["standard"],
+    pending: true,
+    cue: "Hinge flat, soft elbows. Open the arms out to the sides until you feel the rear delts — don't shrug the traps.",
+    grip: "Both hands on the horns, or cradle the ball; arms open wide.",
+    poses: [
+      P([96, 120], [124, 96], [118, 118], [110, 136], [104, 150], [100, 176], { bell: [108, 142] }),
+      P([96, 120], [124, 96], [136, 100], [148, 98], [104, 150], [100, 176], { bell: [152, 100] }),
+    ],
+    posesF: [
+      FS({ hip: [100, 114], sh: [100, 78], elR: [108, 100], haR: [104, 122], elL: [92, 100], haL: [96, 122], knR: [110, 146], knL: [90, 146], bell: [100, 130] }),
+      FS({ hip: [100, 114], sh: [100, 78], elR: [130, 86], haR: [148, 88], elL: [70, 86], haL: [52, 88], knR: [110, 146], knL: [90, 146], bell: [100, 92] }),
     ],
   },
 ];
@@ -736,10 +833,133 @@ const HYBRIDS = [
       FS({ elR: [112, 88], haR: [106, 74], elL: [88, 88], haL: [94, 74], bell: [100, 70] }),
     ],
   },
+
+  {
+    id: "swing_high_pull", name: "Swing + high pull", tags: ["upper", "full"], pattern: "Pull",
+    reps: "8 reps", twoBell: true, dur: 2.6,
+    pools: ["complex"],
+    pending: true,
+    cue: "Swing to chest height, then high-pull — elbows high and outside — and drop straight back into the next hike. Hip snap first, arms second.",
+    grip: "Both hands on the handle, loose hook through the swing and the pull.",
+    poses: [
+      S_HINGE,
+      S_SWTOP,
+      P([100, 104], [100, 68], [116, 62], [104, 70], [100, 141], [100, 176], { bell: [104, 78] }),
+      S_HINGE,
+    ],
+    posesF: [
+      FS({ hip: [100, 118], sh: [100, 82], elR: [108, 104], haR: [104, 126], elL: [92, 104], haL: [96, 126], knR: [112, 148], knL: [88, 148], bell: [100, 134] }),
+      FS({ elR: [110, 76], haR: [104, 82], elL: [90, 76], haL: [96, 82], bell: [100, 90] }),
+      FS({ elR: [126, 64], haR: [108, 68], elL: [74, 64], haL: [92, 68], bell: [100, 76] }),
+      FS({ hip: [100, 118], sh: [100, 82], elR: [108, 104], haR: [104, 126], elL: [92, 104], haL: [96, 126], knR: [112, 148], knL: [88, 148], bell: [100, 134] }),
+    ],
+  },
+  {
+    id: "clean_row", name: "Clean + bent row", tags: ["upper", "full"], pattern: "Pull",
+    reps: "6 / side", twoBell: true, dur: 2.8,
+    pools: ["complex"],
+    pending: true,
+    cue: "Clean to the rack, hinge and row to the hip, stand and drop. The rack is a pause, not a rest — keep the lat set.",
+    grip: "Loose hook on the clean; knuckles-down handle grip for the row.",
+    poses: [
+      P([96, 122], [124, 98], [116, 118], [104, 138], [104, 150], [100, 176], { bell: [100, 145] }),
+      S_RACK,
+      P([94, 116], [128, 92], [116, 102], [122, 114], [102, 148], [100, 176], { bell: [122, 120] }),
+      S_RACK,
+    ],
+    posesF: [
+      F_HINGE,
+      F_RACK,
+      FS({ sh: [100, 82], hip: [100, 112], elR: [124, 94], haR: [112, 100], knR: [108, 144], knL: [92, 144], bell: [112, 106] }),
+      F_RACK,
+    ],
+  },
+  {
+    id: "gorilla_sumo", name: "Gorilla row + sumo deadlift", tags: ["upper", "lower"], pattern: "Pull",
+    reps: "6 / side", dur: 3.0,
+    pools: ["complex"],
+    pending: true,
+    cue: "Wide stance. Row to the hip, park the bell, then sumo-deadlift it to stand. Alternate the rowing hand each rep.",
+    grip: "Handle grip between the feet — same grip for the row and the deadlift.",
+    poses: [
+      P([96, 130], [118, 102], [118, 126], [112, 150], [110, 152], [106, 176], { bell: [110, 158] }),
+      P([94, 122], [120, 96], [108, 100], [118, 108], [108, 150], [104, 176], { bell: [118, 114] }),
+      P([96, 130], [118, 102], [118, 126], [112, 150], [110, 152], [106, 176], { bell: [110, 158] }),
+      P([100, 106], [100, 68], [108, 90], [106, 112], [108, 141], [106, 176], { bell: [108, 118] }),
+    ],
+    posesF: [
+      FS({ hip: [100, 124], sh: [100, 88], elR: [114, 110], haR: [108, 136], elL: [86, 110], haL: [92, 136], knR: [120, 148], anR: [124, 176], knL: [80, 148], anL: [76, 176], bell: [100, 144] }),
+      FS({ hip: [100, 120], sh: [100, 84], elR: [124, 96], haR: [112, 102], elL: [86, 110], haL: [84, 128], knR: [118, 148], anR: [122, 176], knL: [82, 148], anL: [78, 176], bell: [112, 108] }),
+      FS({ hip: [100, 124], sh: [100, 88], elR: [114, 110], haR: [108, 136], elL: [86, 110], haL: [92, 136], knR: [120, 148], anR: [124, 176], knL: [80, 148], anL: [76, 176], bell: [100, 144] }),
+      FS({ elR: [110, 88], haR: [106, 108], elL: [90, 88], haL: [94, 108], knR: [114, 141], knL: [86, 141], bell: [100, 114] }),
+    ],
+  },
+  {
+    id: "clean_carry", name: "Clean + racked carry", tags: ["full", "core"], pattern: "Carry",
+    reps: "20 steps", twoBell: true, dur: 2.8,
+    pools: ["complex"],
+    variantGroup: "racked_carry",
+    pending: true,
+    cue: "Clean to the rack, then walk tall. Ribs down — the carry is the work, not the clean.",
+    grip: "Loose hook on the clean, rack grip — bell on the forearm — through the walk.",
+    poses: [
+      P([96, 122], [124, 98], [116, 118], [104, 138], [104, 150], [100, 176], { bell: [100, 145] }),
+      S_RACK,
+      P([100, 106], [100, 68], [110, 86], [110, 70], [116, 124], [116, 148], { bell: [115, 66], kn2: [84, 150], an2: [78, 176] }),
+      P([100, 106], [100, 68], [110, 86], [110, 70], [100, 141], [100, 176], { bell: [115, 66], kn2: [116, 124], an2: [116, 148] }),
+    ],
+    posesF: [
+      F_HINGE,
+      F_RACK,
+      FS({ hip: [100, 106], sh: [100, 68], elR: [114, 84], haR: [110, 68], knR: [112, 128], anR: [112, 156], knL: [90, 141], anL: [90, 176], bell: [113, 62] }),
+      FS({ hip: [100, 106], sh: [100, 68], elR: [114, 84], haR: [110, 68], knR: [108, 141], anR: [110, 176], knL: [88, 128], anL: [88, 156], bell: [113, 62] }),
+    ],
+  },
+  {
+    id: "snatch_oh_carry", name: "Snatch + overhead carry", tags: ["full", "core"], pattern: "Carry",
+    reps: "20 steps", dur: 3.0,
+    pools: ["complex"],
+    variantGroup: "oh_carry",
+    pending: true,
+    cue: "Snatch to lockout, then walk under the bell. If the elbow softens, park it and reset — the carry only counts locked out.",
+    grip: "Loose hook through the snatch; locked-out rack-style grip overhead for the walk.",
+    poses: [
+      P([96, 124], [126, 98], [118, 118], [104, 138], [104, 150], [100, 176], { bell: [98, 145] }),
+      S_OH,
+      P([100, 104], [100, 66], [103, 48], [102, 30], [116, 124], [116, 148], { bell: [106, 24], kn2: [84, 150], an2: [78, 176] }),
+      P([100, 104], [100, 66], [103, 48], [102, 30], [100, 140], [100, 176], { bell: [106, 24], kn2: [116, 124], an2: [116, 148] }),
+    ],
+    posesF: [
+      FS({ hip: [100, 118], sh: [100, 82], elR: [108, 104], haR: [102, 128], knR: [112, 148], knL: [88, 148], bell: [100, 136] }),
+      F_OH,
+      FS({ elR: [110, 44], haR: [108, 26], knR: [112, 128], anR: [112, 156], knL: [90, 141], anL: [90, 176], bell: [110, 20] }),
+      FS({ elR: [110, 44], haR: [108, 26], knR: [108, 141], anR: [110, 176], knL: [88, 128], anL: [88, 156], bell: [110, 20] }),
+    ],
+  },
+  {
+    id: "halo_march", name: "Halo + suitcase march", tags: ["core"], pattern: "Anti-lean",
+    reps: "6 / dir", dur: 3.2,
+    pools: ["complex"],
+    pending: true,
+    cue: "Full halo around the head, then park the bell in a suitcase carry and march tall. Don't lean into the loaded side.",
+    grip: "Horns for the halo; switch to a handle grip at your side for the march.",
+    poses: [
+      P([100, 106], [100, 68], [112, 60], [112, 44], [100, 141], [100, 176], { bell: [116, 40] }),
+      P([100, 106], [100, 68], [100, 52], [98, 30], [100, 141], [100, 176], { bell: [98, 24] }),
+      P([100, 106], [100, 68], [104, 90], [106, 112], [116, 124], [116, 148], { bell: [106, 120], kn2: [100, 141], an2: [100, 176] }),
+      P([100, 106], [100, 68], [104, 90], [106, 112], [100, 141], [100, 176], { bell: [106, 120], kn2: [100, 141], an2: [100, 176] }),
+    ],
+    posesF: [
+      FS({ elR: [114, 58], haR: [110, 44], elL: [92, 64], haL: [96, 52], bell: [112, 40] }),
+      FS({ elR: [106, 48], haR: [100, 32], elL: [94, 48], haL: [98, 34], bell: [100, 26] }),
+      FS({ elR: [118, 100], haR: [120, 122], elL: [88, 88], haL: [86, 108], knR: [112, 128], anR: [112, 156], knL: [90, 141], anL: [90, 176], bell: [122, 128] }),
+      FS({ elR: [118, 100], haR: [120, 122], elL: [88, 88], haL: [86, 108], knR: [108, 141], anR: [110, 176], knL: [88, 128], anL: [88, 156], bell: [122, 128] }),
+    ],
+  },
 ];
 
 const EXERCISES = [...STANDARD, ...HYBRIDS];
 
-const PATTERN_ORDER = ["Hinge", "Squat", "Push", "Pull", "Lunge", "Rotation", "Anti-rotation", "Anti-extension", "Anti-lean", "Flexion"];
+const PATTERN_ORDER = ["Hinge", "Squat", "Push", "Pull", "Lunge", "Rotation", "Anti-rotation", "Anti-extension", "Anti-lean", "Flexion", "Carry"];
 
 export { STANDARD, HYBRIDS, EXERCISES, PATTERN_ORDER };
