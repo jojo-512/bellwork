@@ -23,7 +23,7 @@ npm i
 npm run build
 ```
 
-- `bellwork.jsx` is the app source of truth.
+- `bellwork.jsx` is the app source of truth. Movement data lives in `movements.js` (pose vocabulary in `poses.js`).
 - `npm run build` compiles with esbuild and writes a single self-contained `index.html` (Pages entry).
 - Google Fonts stay as `<link>` tags in the HTML shell (do not self-host unless asked).
 - Default workout mode is `standard`.
