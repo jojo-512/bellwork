@@ -1,8 +1,8 @@
 # Bellwork — vision and roadmap
 
-Status: v1.2 · Batch 1 shipped 2026-09-23 (`main` `2cec3bb`) · Next: iPhone punchlist checks, then Batch 2 when approved
+Status: v1.2 · Batch 1 shipped 2026-09-23 · Batch 2 shipped 2026-09-30 — live at https://jojo-512.github.io/bellwork/
 Live: https://jojo-512.github.io/bellwork/ · Repo: https://github.com/jojo-512/bellwork
-Also see: [session.md](./session.md) (left off / next) · [punchlist.md](./punchlist.md) (small bugs) · repo `BACKLOG.md` (feature batches)
+Also see: [session.md](./session.md) (left off / next) · [punchlist.md](./punchlist.md) (small bugs) · [batch-2-plan.md](./batch-2-plan.md) · repo `BACKLOG.md` (feature batches)
 
 ---
 
