@@ -11,6 +11,7 @@ _(none)_
 
 ## Done
 
+- [x] Library: tap a movement card to view cue + grip (collapse on second tap; Add to rotation stays its own button)
 - [x] iPhone Home Screen: lock phone ~2 min mid-run — remaining time still correct (Joe OK 2026-09-23)
 - [x] iPhone Home Screen: beeps at 1:00 and 0:00 with silent switch on (Joe OK 2026-09-23)
 - [x] iPhone Home Screen: Wake Lock — screen stays awake while running standalone (Joe OK 2026-09-23)
