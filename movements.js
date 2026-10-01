@@ -511,7 +511,6 @@ const STANDARD = [
     id: "split_squat", name: "Split squat", tags: ["lower"], pattern: "Lunge",
     reps: "8 / side", twoBell: true, dur: 2.0,
     pools: ["standard"],
-    pending: true,
     cue: "Feet stay planted. Drop the rear knee, drive through the front heel to stand. Same stance the whole set.",
     grip: "Goblet grip at the chest — hands on the horns.",
     poses: [
@@ -527,7 +526,6 @@ const STANDARD = [
     id: "overhead_lunge", name: "Overhead lunge", tags: ["lower", "full"], pattern: "Lunge",
     reps: "6 / side", dur: 2.6,
     pools: ["standard"],
-    pending: true,
     cue: "Bell locked out overhead before you step. Reverse lunge without letting the arm bend. Eyes forward, ribs down.",
     grip: "Rack-style grip locked overhead — handle diagonal in the palm, wrist straight.",
     poses: [
@@ -546,7 +544,6 @@ const STANDARD = [
     reps: "8 / side", twoBell: true, dur: 2.6,
     pools: ["standard"],
     variantGroup: "row",
-    pending: true,
     cue: "Each rep starts and ends with the bell resting on the floor. Row to the hip, lower all the way, pause, then pull again. No bounce.",
     grip: "One hand on the handle, knuckles down, wrist neutral.",
     poses: [
