@@ -4,7 +4,7 @@ Where we left off. Update at the end of each working session (or ask the Project
 
 ## Next
 
-1. **Push OK** for pose cleanup slice 1 (`cursor/pose-cleanup-slice1-4325`). Diff is local only — not on `main`, not live.
+1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
 4. **Export was recommended before install** — if you haven't, export the session log once, then hard-refresh / re-add Home Screen.
@@ -14,7 +14,7 @@ Where we left off. Update at the end of each working session (or ask the Project
 
 ## Last session (2026-10-01)
 
-- **Pose cleanup slice 1** on `cursor/pose-cleanup-slice1-4325` (not pushed):
+- **Pose cleanup slice 1 shipped** to `main` (`cursor/pose-cleanup-slice1-4325`). Live after Pages deploys: https://jojo-512.github.io/bellwork/
   - Front rack squat and Upright row approved in data (`pending` removed) — they enter the workout draw without a phone tap.
   - Side-view trail leg (`kn2`/`an2`) opacity 0.35 → 0.28 and a slightly thinner stroke, so the rear leg reads behind the stance leg.
   - Split squat, Overhead lunge, and Dead-stop row redrawn, then approved in data (`pending` removed). Split stays planted, overhead lunge steps back with the bell locked out, dead-stop row rests the bell on the floor.
