@@ -11,7 +11,7 @@ _(none)_
 
 ## Done
 
-- [x] Pose cleanup slice 1 (local, not pushed): Front rack squat and Upright row cleared of `pending` so they draw in workouts; rear trail leg (`kn2`/`an2`) drawn at 0.28 opacity; Split squat, Overhead lunge, and Dead-stop row redrawn; Clean + bent row removed
+- [x] Pose cleanup slice 1 (local, not pushed): Front rack squat, Upright row, Split squat, Overhead lunge, and Dead-stop row cleared of `pending` so they draw in workouts; rear trail leg (`kn2`/`an2`) drawn at 0.28 opacity; Clean + bent row removed
 - [x] Library: tap a movement card to view cue + grip (collapse on second tap; Add to rotation stays its own button)
 - [x] iPhone Home Screen: lock phone ~2 min mid-run — remaining time still correct (Joe OK 2026-09-23)
 - [x] iPhone Home Screen: beeps at 1:00 and 0:00 with silent switch on (Joe OK 2026-09-23)
