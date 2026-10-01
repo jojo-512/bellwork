@@ -330,6 +330,7 @@ function playBeeps(count) {
 function Library({ reduced, approved, onApprove }) {
   const [tagFilter, setTagFilter] = useState(null);
   const [showSide, setShowSide] = useState(true);
+  const [expandedId, setExpandedId] = useState(null);
   const displayFont = "'Big Shoulders Display', 'Arial Narrow', sans-serif";
   const isPending = (e) => e.pending && !approved.includes(e.id);
   const pendingItems = EXERCISES.filter(isPending);
@@ -402,11 +403,16 @@ function Library({ reduced, approved, onApprove }) {
                 const poses = figured
                   ? (ex.frontOnly ? ex.posesF : (showSide ? ex.poses : ex.posesF))
                   : null;
+                const open = expandedId === ex.id;
                 return (
-                  <div key={g.title + ex.id} style={{
-                    background: COLORS.panel, border: `1px solid ${COLORS.panelEdge}`,
-                    borderRadius: 12, padding: 10,
-                  }}>
+                  <div
+                    key={g.title + ex.id}
+                    onClick={() => setExpandedId(open ? null : ex.id)}
+                    style={{
+                      background: COLORS.panel, border: `1px solid ${COLORS.panelEdge}`,
+                      borderRadius: 12, padding: 10, cursor: "pointer",
+                    }}
+                  >
                     {figured && poses ? (
                       <div style={{ background: COLORS.bg, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 8, overflow: "hidden", marginBottom: 8 }}>
                         <Figure poses={poses} dur={ex.dur} color={exColor} animate={!reduced} bellFlip={ex.bellFlip} />
@@ -416,7 +422,7 @@ function Library({ reduced, approved, onApprove }) {
                         background: COLORS.bg, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 8,
                         padding: "14px 10px", marginBottom: 8, color: COLORS.chalkDim, fontSize: 13, lineHeight: 1.4,
                       }}>
-                        No figure yet — cue and grip below once you open it in a circuit.
+                        No figure yet — tap for cue and grip.
                       </div>
                     )}
                     <div style={{ fontFamily: displayFont, fontWeight: 800, fontSize: 16, letterSpacing: "0.03em", textTransform: "uppercase", lineHeight: 1.15 }}>
@@ -436,14 +442,29 @@ function Library({ reduced, approved, onApprove }) {
                         <span style={{ color: COLORS.chalkDim, fontSize: 12.5, fontWeight: 600, marginLeft: 2 }}>2-bell opt.</span>
                       )}
                     </div>
+                    {open && (
+                      <>
+                        <div style={{ fontSize: 17, lineHeight: 1.5, marginTop: 10, color: COLORS.chalk }}>
+                          {ex.cue}
+                        </div>
+                        <div style={{ fontSize: 16, lineHeight: 1.5, marginTop: 6, color: COLORS.chalkDim }}>
+                          <span style={{ fontWeight: 600 }}>Grip:</span> {ex.grip}
+                        </div>
+                      </>
+                    )}
                     {g.pending && (
-                      <button onClick={() => onApprove(ex.id)}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onApprove(ex.id);
+                        }}
                         style={{
                           marginTop: 10, width: "100%",
                           background: COLORS.chalk, color: "#111", border: "none",
                           borderRadius: 8, padding: "8px 10px",
                           fontSize: 13.5, fontWeight: 700, letterSpacing: "0.04em",
-                        }}>
+                        }}
+                      >
                         Add to rotation
                       </button>
                     )}

@@ -10,7 +10,11 @@ Where we left off. Update at the end of each working session (or ask the Project
 4. Slot template (whole-body guarantee) — Batch 3, after pending approvals land in rotation
 5. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
 
-## Last session (2026-09-30)
+## Last session (2026-10-01)
+
+- Library expand (cue + grip on card tap) on branch `cursor/library-expand-cue-grip-5d9e` — waiting on Joe push OK.
+
+## Earlier (2026-09-30)
 
 - **Batch 2 shipped** to `main` (see deploy record in Project `internal/batch-2-build-status.md`). Live: https://jojo-512.github.io/bellwork/
 - Branch `cursor/batch-2-movement-loop-c1db`: data split, pools/complex migration, pending + variantGroup + text cards, `INGEST.md` / `npm run check` / `INBOX.md`, canon pass 1 (12 pending).
