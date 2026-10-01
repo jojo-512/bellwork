@@ -12,7 +12,8 @@ Where we left off. Update at the end of each working session (or ask the Project
 
 ## Last session (2026-10-01)
 
-- Library expand (cue + grip on card tap) on branch `cursor/library-expand-cue-grip-5d9e` — waiting on Joe push OK.
+- **Library expand shipped** to `main`: tap a Library card for cue + grip (Add to rotation stays its own button). Live: https://jojo-512.github.io/bellwork/
+- Branch `cursor/library-expand-cue-grip-5d9e`.
 
 ## Earlier (2026-09-30)
 
