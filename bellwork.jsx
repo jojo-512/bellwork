@@ -123,7 +123,8 @@ function headFrom(pose) {
 }
 
 const SIDE_SEGS = [
-  ["hip", "kn2", 3, 0.35], ["kn2", "an2", 3, 0.35],
+  // Trail leg (kn2/an2) sits behind the stance leg. Dim it so a split reads as two legs.
+  ["hip", "kn2", 2.8, 0.28], ["kn2", "an2", 2.8, 0.28],
   ["hip", "sh", 3.8, 1], ["hip", "kn", 3.4, 1], ["kn", "an", 3.4, 1],
   ["sh", "el", 3.2, 1], ["el", "ha", 3.2, 1],
 ];
