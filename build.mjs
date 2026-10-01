@@ -30,3 +30,24 @@ const safeBundle = bundle.replace(/<\/script/gi, "<\\/script");
   const html = template.replace("__BELLWORK_BUNDLE__", () => safeBundle);
 writeFileSync(join(root, "index.html"), html);
 console.log(`Wrote index.html (${html.length} bytes, bundle ${bundle.length} bytes)`);
+
+const contactResult = await esbuild.build({
+  entryPoints: [join(root, "contact.jsx")],
+  bundle: true,
+  write: false,
+  format: "iife",
+  jsx: "automatic",
+  minify: true,
+  target: ["es2018"],
+  define: {
+    "process.env.NODE_ENV": '"production"',
+  },
+});
+const contactBundle = contactResult.outputFiles[0].text.replace(/<\/script/gi, "<\\/script");
+const contactTemplate = readFileSync(join(root, "contact.template.html"), "utf8");
+if (!contactTemplate.includes("__CONTACT_BUNDLE__")) {
+  throw new Error("contact.template.html missing __CONTACT_BUNDLE__ placeholder");
+}
+const contactHtml = contactTemplate.replace("__CONTACT_BUNDLE__", () => contactBundle);
+writeFileSync(join(root, "contact.html"), contactHtml);
+console.log(`Wrote contact.html (${contactHtml.length} bytes, bundle ${contactBundle.length} bytes)`);

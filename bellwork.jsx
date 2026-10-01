@@ -136,7 +136,7 @@ const FRONT_SEGS = [
   ["sh", "elL", 3.2, 1], ["elL", "haL", 3.2, 1],
 ];
 
-function Figure({ poses, dur, color, animate, bellFlip }) {
+export function Figure({ poses, dur, color, animate, bellFlip }) {
   const svgRef = useRef(null);
   useEffect(() => {
     const svg = svgRef.current;

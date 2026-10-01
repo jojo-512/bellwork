@@ -127,19 +127,60 @@ Un-illustrated is a state to drain, not a tier — ship `pending: true` either w
 
 ## 7. The workflow
 
-1. Read Joe's drop (and `INBOX.md` if you're finishing queued work).
-2. Decide: new entry, cue edit on an existing card, or decline (too subtle).
-3. Draft the object in `movements.js`. New movements ship with `pending: true`.
-4. `npm run build` then `npm run check`.
-5. Show Joe the diff. **Wait for an explicit go-ahead before pushing.**
-6. After push, the movement is live with `pending: true` — it appears in the
-   Library Pending section and never enters a workout draw.
-7. Joe approves in the gym ("Add to rotation") or by message. On a later pass,
-   clear `pending` in the data file and fold any device approvals
-   (`bellwork-approved` in localStorage) into that cleanup. Stale approval ids
-   for movements that are no longer pending are ignored on purpose.
+Joe sends one lift. You answer once. He replies once. That reply is the push
+OK for **that lift's commit only** — not a standing approval, and not a push
+OK for an app or schema change.
 
-Never push without Joe's go-ahead. Pushing to `main` deploys the live site.
+1. **Joe sends** `ingest: <name>, <reps>` in Project chat. A link is optional.
+   Screenshots are optional and useful: the start position and the hardest
+   position. Read `INBOX.md` if you are finishing queued work.
+2. **Decide:** new entry, cue edit on an existing card, or decline (too subtle).
+   Draft the object in `movements.js`. A new movement is `pending: true` until
+   he replies **approve**.
+3. **`npm run build` then `npm run check`.** Schema problems fail the check.
+   The three pose checks (bell off the hand, a standing leg that stretches,
+   a foot off the ground line) **warn** on a pending lift and **fail** the
+   check on a lift already in rotation. Fix every warning on the lift you are
+   authoring. Warnings on other pending lifts are the known backlog — do not
+   redraw them in this pass. Thresholds and the skips (floor work, kneeling,
+   wide splits, arm length across frames) are at the top of the pose section
+   in `check.mjs`.
+4. **Look at the contact sheet before you show Joe.** Open
+   `contact.html?id=<id>` (built by `npm run build`; any static server, or
+   the file itself). It is a review page, separate from the workout. One
+   movement, keyframes large, side and front, numbered **1…n**. Screenshot
+   the sheet, compare it to his stills and the cue, and fix the figure
+   yourself — up to about 3 rounds. If you cannot get the shape right, omit
+   `poses` / `posesF` and ship text-only with `pending: true`.
+5. **One message.** Contact sheet image, a short loop of side and front, the
+   classification line (pattern, pools, variant group, reps, cue), and the
+   reply words **push · approve · redo · drop**.
+6. **His reply:**
+   - **approve** — clear `pending` in `movements.js`, commit, push. The lift
+     enters the pool. No phone tap.
+   - **push** — commit with `pending: true`, push. It stays Library-only.
+     Later, `approve <lift>` is a one-line flip and push; that reply is the
+     push OK for the flip.
+   - **redo** — back to step 3 with his note (`redo 3: bell behind the head`).
+     Nothing has been pushed. Frame numbers match the sheet.
+   - **drop** — do not ship it.
+7. The phone **Add to rotation** button stays as a backup. On a later pass,
+   fold device approvals (`bellwork-approved` in localStorage) into
+   `movements.js`. Stale ids for movements that are no longer pending are
+   ignored on purpose.
+
+App and schema changes still need their own plan, diff, and push OK. Pushing
+to `main` deploys the live site.
+
+### Contact sheet
+
+```
+contact.html?id=swing_high_pull
+```
+
+No `id`, or an unknown one, lists every movement. `frontOnly` shows the front
+row only. A text-only card says so. The loop under the frames is for the clip
+in the review message; the numbered frames are what he marks up.
 
 ---
 
@@ -192,9 +233,10 @@ true` so a wrong figure can't ruin a session.
 - [ ] Every pose has the required keys and a `bell: [x, y]`
 - [ ] Side and front pose counts match (unless `frontOnly`)
 - [ ] Prefer composing from `S_*` / `F_*` primitives over inventing coordinates
-- [ ] `pending: true` on every new entry
-- [ ] `npm run build` and `npm run check` both pass
-- [ ] You have **not** pushed — waiting on Joe's go-ahead
+- [ ] `pending: true` on a new entry you have not been told to approve
+- [ ] `npm run build` and `npm run check` — no schema errors; no pose warnings on **this** lift
+- [ ] You opened `contact.html?id=<id>`, and the numbered frames match the cue and his stills
+- [ ] You have **not** pushed — his **approve** or **push** reply is the push OK for this lift
 
 ## 10. Lessons from canon pass 1
 
@@ -214,3 +256,9 @@ Things that bit once, so they shouldn't bite again:
    omitted) with `pending: true` rather than inventing a bad figure.
 5. **Carries get their own variant groups** (`racked_carry`, `oh_carry`), not
    `march`. Marches stay Anti-lean.
+6. **Look at the sheet before Joe does.** `npm run check` does not know whether
+   a figure reads as the lift. Swing + high pull can pass the pose checks and
+   still look like an upright row. The contact sheet is the review.
+7. **Pose warnings on other pending lifts are not your job** during a one-lift
+   ingest. Fix the lift he named. The checks warn on pending and fail on a
+   lift that's already in rotation.
