@@ -4,14 +4,21 @@ Where we left off. Update at the end of each working session (or ask the Project
 
 ## Next
 
-1. **Export was recommended before install** — if you haven't, export the session log once, then hard-refresh / re-add Home Screen.
-2. After install: verify **Complex PR numbers** match pre-migration.
-3. iPhone: Pending section → watch figures → **Add to rotation** (or approve by message). Complex pull/carry show up once approved.
-4. Slot template (whole-body guarantee) — Batch 3, after pending approvals land in rotation
-5. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
+1. **Push OK** for pose cleanup slice 1 (`cursor/pose-cleanup-slice1-4325`). Diff is local only — not on `main`, not live.
+2. Gym look at the three redrawn figures (still pending): Split squat, Overhead lunge, Dead-stop row. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
+3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
+4. **Export was recommended before install** — if you haven't, export the session log once, then hard-refresh / re-add Home Screen.
+5. After install: verify **Complex PR numbers** match pre-migration.
+6. Slot template (whole-body guarantee) — Batch 3, after the remaining pending approvals land in rotation.
+7. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
 
 ## Last session (2026-10-01)
 
+- **Pose cleanup slice 1** on `cursor/pose-cleanup-slice1-4325` (not pushed):
+  - Front rack squat and Upright row approved in data (`pending` removed) — they enter the workout draw without a phone tap.
+  - Side-view trail leg (`kn2`/`an2`) opacity 0.35 → 0.28 and a slightly thinner stroke, so the rear leg reads behind the stance leg.
+  - Split squat redrawn as a static split (both feet planted). Overhead lunge redrawn as a reverse step with the bell staying locked out. Dead-stop row holds the bell on the floor at the start and end of each rep.
+  - Clean + bent row (`clean_row`) removed.
 - **Library expand shipped** to `main`: tap a Library card for cue + grip (Add to rotation stays its own button). Live: https://jojo-512.github.io/bellwork/
 - Branch `cursor/library-expand-cue-grip-5d9e`.
 
