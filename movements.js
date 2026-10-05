@@ -580,14 +580,14 @@ const STANDARD = [
     pools: ["standard"],
     pending: true,
     cue: "Hinge flat, soft elbows. Open the arms out to the sides until you feel the rear delts — don't shrug the traps.",
-    grip: "Both hands on the horns, or cradle the ball; arms open wide.",
+    grip: "One hand on the handle, palm in. Both arms open wide — the bell stays in the working hand.",
     poses: [
-      P([96, 120], [124, 96], [118, 118], [110, 136], [104, 150], [100, 176], { bell: [108, 142] }),
-      P([96, 120], [124, 96], [136, 100], [148, 98], [104, 150], [100, 176], { bell: [152, 100] }),
+      P([88, 128], [128, 116], [136, 136], [124, 154], [102, 154], [104, 176], { bell: [122, 161] }),
+      P([88, 128], [128, 116], [108, 104], [92, 112], [102, 154], [104, 176], { bell: [90, 119] }),
     ],
     posesF: [
-      FS({ hip: [100, 114], sh: [100, 78], elR: [108, 100], haR: [104, 122], elL: [92, 100], haL: [96, 122], knR: [110, 146], knL: [90, 146], bell: [100, 130] }),
-      FS({ hip: [100, 114], sh: [100, 78], elR: [130, 86], haR: [148, 88], elL: [70, 86], haL: [52, 88], knR: [110, 146], knL: [90, 146], bell: [100, 92] }),
+      FS({ hip: [100, 130], sh: [100, 114], head: [100, 104], elR: [112, 134], haR: [116, 152], elL: [88, 134], haL: [84, 152], knR: [108, 154], anR: [110, 176], knL: [92, 154], anL: [90, 176], bell: [118, 159] }),
+      FS({ hip: [100, 130], sh: [100, 114], head: [100, 104], elR: [124, 108], haR: [142, 124], elL: [76, 108], haL: [58, 124], knR: [108, 154], anR: [110, 176], knL: [92, 154], anL: [90, 176], bell: [146, 131] }),
     ],
   },
 ];
