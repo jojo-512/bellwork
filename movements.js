@@ -578,7 +578,6 @@ const STANDARD = [
     id: "reverse_fly", name: "Bent-over reverse fly", tags: ["upper"], pattern: "Pull",
     reps: "10 reps", dur: 1.8,
     pools: ["standard"],
-    pending: true,
     cue: "Hinge flat, soft elbows. Open the arms out to the sides until you feel the rear delts — don't shrug the traps.",
     grip: "One hand on the handle, palm in. Both arms open wide — the bell stays in the working hand.",
     poses: [
