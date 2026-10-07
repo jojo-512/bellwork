@@ -834,7 +834,6 @@ const HYBRIDS = [
     id: "swing_high_pull", name: "Swing + high pull", tags: ["upper", "full"], pattern: "Pull",
     reps: "8 reps", twoBell: true, dur: 2.6,
     pools: ["complex"],
-    pending: true,
     cue: "Swing to chest height, then high-pull — elbows high and outside — and drop straight back into the next hike. Hip snap first, arms second.",
     grip: "Both hands on the handle, loose hook through the swing and the pull.",
     poses: [
