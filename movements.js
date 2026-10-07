@@ -853,7 +853,6 @@ const HYBRIDS = [
     id: "gorilla_sumo", name: "Gorilla row + sumo deadlift", tags: ["upper", "lower"], pattern: "Pull",
     reps: "6 / side", dur: 3.0,
     pools: ["complex"],
-    pending: true,
     cue: "Wide stance. Row to the hip, park the bell, then sumo-deadlift it to stand. Alternate the rowing hand each rep.",
     grip: "Handle grip between the feet — same grip for the row and the deadlift.",
     poses: [
