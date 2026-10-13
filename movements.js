@@ -564,7 +564,6 @@ const STANDARD = [
     reps: "8 / side", dur: 3.4,
     pools: ["standard"],
     variantGroup: "row",
-    pending: true,
     cue: "Flat back. Row the bell to your ribs and let it go — catch it in the other hand, then send it back the same way. The float between the hands is the rep. Don't pass it across.",
     grip: "One hand on the handle, knuckles down. The bell changes hands in the air.",
     poses: [
