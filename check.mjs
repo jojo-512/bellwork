@@ -34,11 +34,23 @@ function isPair(v) {
   return Array.isArray(v) && v.length === 2 && v.every((n) => typeof n === "number" && Number.isFinite(n));
 }
 
+function checkPoseMeta(pose, where, errors) {
+  if ("hold" in pose && pose.hold != null && !HOLDS.has(pose.hold)) {
+    errors.push(`${where}: hold must be R, L, both, air, floor, or none`);
+  }
+  if ("t" in pose && pose.t != null) {
+    if (typeof pose.t !== "number" || !Number.isFinite(pose.t) || pose.t <= 0) {
+      errors.push(`${where}: t must be a positive number`);
+    }
+  }
+}
+
 function checkPoseSide(pose, where, errors) {
   for (const k of SIDE_KEYS) {
     if (!isPair(pose[k])) errors.push(`${where}: side pose missing ${k}`);
   }
   if (!isPair(pose.bell)) errors.push(`${where}: side pose missing bell [x,y]`);
+  checkPoseMeta(pose, where, errors);
 }
 
 function checkPoseFront(pose, where, errors) {
@@ -46,16 +58,25 @@ function checkPoseFront(pose, where, errors) {
     if (!isPair(pose[k])) errors.push(`${where}: front pose missing ${k}`);
   }
   if (!isPair(pose.bell)) errors.push(`${where}: front pose missing bell [x,y]`);
+  checkPoseMeta(pose, where, errors);
 }
 
 /* Pose geometry. Tuned against the 57-lift catalog on 2026-10-01.
    Pending lifts warn; a lift already in rotation fails the check.
 
-   Bell: center within BELL_MAX of the nearer gripping hand.
+   Bell: center within BELL_MAX of the nearer gripping hand, unless the
+   pose sets `hold`.
    Side uses `ha`. Front uses the nearer of `haR` / `haL` — a left-side
    halo parks the bell on haL, and requiring haR flags approved halos.
    18 is past approved upright row (13.4) and plank pull-through (14.6).
    Bent-over reverse fly's open frame is ~48.
+   `hold: "R"` / `"L"` checks that hand (the side view's one arm is the
+   working hand). `"both"` checks each front hand. `"floor"` skips the
+   hand and requires the bell near the ground. `"none"` draws no bell.
+   `"air"` may leave the hand: one frame only, a hand hold on both
+   sides (the loop counts), bell above the hands, and `t` ≤ 0.6.
+   Side and front must name the same `hold` on each frame. Omitted
+   `hold` is still "nearest hand", and two omissions agree.
 
    Legs: thigh/shin (and the trail leg) on a standing pose, capped at
    LEG_MAX. Also flag the same planted segment across frames when it
@@ -83,6 +104,9 @@ function checkPoseFront(pose, where, errors) {
    order, which a length check cannot see. */
 
 const BELL_MAX = 18;
+const HOLDS = new Set(["R", "L", "both", "air", "floor", "none"]);
+const AIR_T_MAX = 0.6;
+const FLOOR_BELL_Y = 160;
 const LEG_MAX = 42;
 const ARM_MAX = 46;
 const LEG_RATIO = 1.75;
@@ -154,6 +178,24 @@ function skipLimbPose(pose) {
 
 function checkBell(pose, view, frame, issues) {
   if (!isPair(pose.bell)) return;
+  if (pose.hold === "none" || pose.hold === "air") return;
+  if (pose.hold === "floor") {
+    if (pose.bell[1] < FLOOR_BELL_Y) {
+      issues.push(`${view} frame ${frame}: hold floor but the bell is not on the ground (y=${Math.round(pose.bell[1])})`);
+    }
+    return;
+  }
+  if (pose.hold === "R" || pose.hold === "L" || pose.hold === "both") {
+    const named = namedHands(pose, view, pose.hold);
+    if (!named.length) return;
+    for (const [label, hand] of named) {
+      const d = len(pose.bell, hand);
+      if (d > BELL_MAX) {
+        issues.push(`${view} frame ${frame}: bell is ${Math.round(d)}u from the ${label} hand (max ${BELL_MAX})`);
+      }
+    }
+    return;
+  }
   const hands = view === "side"
     ? (isPair(pose.ha) ? [pose.ha] : [])
     : [pose.haR, pose.haL].filter(isPair);
@@ -161,6 +203,59 @@ function checkBell(pose, view, frame, issues) {
   const nearest = Math.min(...hands.map((h) => len(pose.bell, h)));
   if (nearest > BELL_MAX) {
     issues.push(`${view} frame ${frame}: bell is ${Math.round(nearest)}u from the nearest hand (max ${BELL_MAX})`);
+  }
+}
+
+/* Side view has one arm, so R and L both mean that arm. Front view names haR / haL. */
+function namedHands(pose, view, hold) {
+  if (view === "side") {
+    return isPair(pose.ha) ? [[hold === "both" ? "working" : hold, pose.ha]] : [];
+  }
+  const out = [];
+  if ((hold === "R" || hold === "both") && isPair(pose.haR)) out.push(["R", pose.haR]);
+  if ((hold === "L" || hold === "both") && isPair(pose.haL)) out.push(["L", pose.haL]);
+  return out;
+}
+
+function isGripHold(hold) {
+  return hold == null || hold === "R" || hold === "L" || hold === "both";
+}
+
+function checkAir(poses, view, issues) {
+  const n = poses.length;
+  for (let i = 0; i < n; i++) {
+    if (poses[i].hold !== "air") continue;
+    const frame = i + 1;
+    const prev = poses[(i - 1 + n) % n];
+    const next = poses[(i + 1) % n];
+    if (prev.hold === "air" || next.hold === "air") {
+      issues.push(`${view} frame ${frame}: hold air can only last one frame`);
+    }
+    if (!isGripHold(prev.hold) || !isGripHold(next.hold)) {
+      issues.push(`${view} frame ${frame}: hold air needs a hand hold on the frames before and after`);
+    }
+    const t = poses[i].t == null ? 1 : poses[i].t;
+    if (!(typeof t === "number" && t <= AIR_T_MAX)) {
+      issues.push(`${view} frame ${frame}: hold air needs a short t (≤ ${AIR_T_MAX})`);
+    }
+    const hands = view === "side"
+      ? [poses[i].ha].filter(isPair)
+      : [poses[i].haR, poses[i].haL].filter(isPair);
+    if (isPair(poses[i].bell) && hands.some((h) => !(poses[i].bell[1] < h[1]))) {
+      issues.push(`${view} frame ${frame}: hold air but the bell is not above the hands`);
+    }
+  }
+}
+
+function checkHoldAgreement(ex, issues) {
+  if (ex.frontOnly || !Array.isArray(ex.poses) || !Array.isArray(ex.posesF)) return;
+  const n = Math.min(ex.poses.length, ex.posesF.length);
+  for (let i = 0; i < n; i++) {
+    const side = ex.poses[i].hold ?? null;
+    const front = ex.posesF[i].hold ?? null;
+    if (side !== front) {
+      issues.push(`frame ${i + 1}: side hold ${side ?? "nearest"} ≠ front hold ${front ?? "nearest"}`);
+    }
   }
 }
 
@@ -224,11 +319,13 @@ function poseGeometry(ex) {
   if (Array.isArray(ex.posesF) && ex.posesF.length) {
     views.push(["front", ex.posesF, FRONT_LEGS, FRONT_ARMS]);
   }
+  checkHoldAgreement(ex, issues);
   for (const [view, poses, legs, arms] of views) {
     poses.forEach((pose, i) => {
       checkBell(pose, view, i + 1, issues);
       checkFeet(pose, view, i + 1, issues);
     });
+    checkAir(poses, view, issues);
     checkLimbs(poses, view, legs, arms, issues);
   }
   return issues;

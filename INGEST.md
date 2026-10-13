@@ -117,6 +117,32 @@ Build with `FS({ ...overrides })`, or compose from:
 You usually don't set `head`. `headFrom` in the app derives it from the hip→shoulder
 vector, 13 units past the shoulder. Only set `pose.head` when that looks wrong.
 
+### Hold and timing (optional)
+
+Leave these off and the figure is unchanged: the bell stays with the nearest
+hand, and the frames are evenly spaced.
+
+`hold` is where the bell is. Set the same value on the side frame and the
+front frame. The check fails (or warns, if the lift is pending) when they
+disagree.
+
+| `hold` | What it draws and what the check allows |
+|---|---|
+| `R` / `L` | Bell within 18 of that hand. The side view has one arm — that arm is the working hand. |
+| `both` | Two-hand grip. On the front view the bell must be within 18 of each hand. |
+| `air` | One weightless frame. The bell may leave the hand. It has to sit above the hands, the frames before and after must be a hand hold (`R`, `L`, `both`, or omitted), and `t` must be ≤ 0.6. Two `air` frames in a row fail. |
+| `floor` | Bell set down, center near the ground (`y` ≥ 160). It does not have to stay in the hand. |
+| `none` | Bell is not drawn on that frame. |
+
+`t` is the relative time from this frame to the next, including the loop back
+to frame 1. The default is `1`, which is today's even spacing. A smaller `t`
+is a snap or a short float; a larger `t` holds. The numbers are weights, not
+seconds — `dur` is still the length of the whole loop. Put the same `t` on
+the side frame and the front frame.
+
+`ballistic_row` is the example: `hold: "air"` on the float, with a short `t`,
+so the bell changes hands instead of sliding from palm to palm.
+
 ### Text-only is fine
 
 If you can't get a figure right in this pass, omit `poses` / `posesF`. The
@@ -138,10 +164,10 @@ OK for an app or schema change.
    Draft the object in `movements.js`. A new movement is `pending: true` until
    he replies **approve**.
 3. **`npm run build` then `npm run check`.** Schema problems fail the check.
-   The three pose checks (bell off the hand, a standing leg that stretches,
-   a foot off the ground line) **warn** on a pending lift and **fail** the
-   check on a lift already in rotation. Fix every warning on the lift you are
-   authoring. Warnings on other pending lifts are the known backlog — do not
+   The pose checks (bell off the hand — or off the hand named by `hold` —
+   a standing leg that stretches, a foot off the ground line, plus the `air`
+   rules in §6) **warn** on a pending lift and **fail** the check on a lift
+   already in rotation. Fix every warning on the lift you are authoring. Warnings on other pending lifts are the known backlog — do not
    redraw them in this pass. Thresholds and the skips (floor work, kneeling,
    wide splits, arm length across frames) are at the top of the pose section
    in `check.mjs`.
@@ -231,6 +257,7 @@ true` so a wrong figure can't ruin a session.
 - [ ] Near-siblings share a `variantGroup`; no group collision you didn't mean
 - [ ] `reps` is a plain string; `dur` is set if there are poses
 - [ ] Every pose has the required keys and a `bell: [x, y]`
+- [ ] If you set `hold` or `t`, the side and front frames agree, and an `air` frame is a single short float above the hands
 - [ ] Side and front pose counts match (unless `frontOnly`)
 - [ ] Prefer composing from `S_*` / `F_*` primitives over inventing coordinates
 - [ ] `pending: true` on a new entry you have not been told to approve

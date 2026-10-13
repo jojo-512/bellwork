@@ -71,6 +71,13 @@ function Sheet({ ex }) {
   );
 }
 
+function poseNote(pose) {
+  const parts = [];
+  if (pose.hold) parts.push(`hold ${pose.hold}`);
+  if (pose.t != null) parts.push(`t ${pose.t}`);
+  return parts.join(" · ");
+}
+
 function FrameRow({ label, poses, color, bellFlip }) {
   return (
     <section style={{ marginBottom: 28 }}>
@@ -78,17 +85,20 @@ function FrameRow({ label, poses, color, bellFlip }) {
         {label}
       </h2>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 12 }}>
-        {poses.map((pose, i) => (
-          <div key={i} data-frame={i + 1} data-view={label.toLowerCase()} style={{ background: COLORS.panel, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 12, overflow: "hidden" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "8px 12px 0" }}>
+        {poses.map((pose, i) => {
+          const note = poseNote(pose);
+          return (
+          <div key={i} data-frame={i + 1} data-view={label.toLowerCase()} data-hold={pose.hold || undefined} data-t={pose.t != null ? String(pose.t) : undefined} style={{ background: COLORS.panel, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 12, overflow: "hidden" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8, padding: "8px 12px 0" }}>
               <span style={{ fontFamily: '"Big Shoulders Display", sans-serif', fontWeight: 800, fontSize: 28, lineHeight: 1 }}>{i + 1}</span>
-              <span style={{ color: COLORS.chalkDim, fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase" }}>{label}</span>
+              <span style={{ color: COLORS.chalkDim, fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase", textAlign: "right" }}>{note ? `${label} · ${note}` : label}</span>
             </div>
             <div style={{ height: 300, background: COLORS.bg }}>
               <Figure poses={[pose]} dur={1} color={color} animate={false} bellFlip={bellFlip} />
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

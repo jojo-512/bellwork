@@ -136,6 +136,28 @@ const FRONT_SEGS = [
   ["sh", "elL", 3.2, 1], ["elL", "haL", 3.2, 1],
 ];
 
+/* Relative time from each frame to the next, including the loop back to frame 1.
+   Omitted `t` weighs 1. Equal weights stay evenly spaced, so the SVG matches
+   a pose that never set `t` (no keyTimes attribute). */
+function keyTimesFor(poses) {
+  const weights = poses.map((p) => (typeof p.t === "number" && p.t > 0 ? p.t : 1));
+  if (weights.every((w) => w === weights[0])) return null;
+  const total = weights.reduce((sum, w) => sum + w, 0);
+  const raw = [0];
+  let acc = 0;
+  for (const w of weights) {
+    acc += w;
+    raw.push(acc / total);
+  }
+  raw[raw.length - 1] = 1;
+  const times = raw.map((t, i) => (i === 0 ? 0 : i === raw.length - 1 ? 1 : Math.round(t * 10000) / 10000));
+  for (let i = 1; i < times.length; i++) {
+    if (times[i] <= times[i - 1]) times[i] = Math.min(1, Math.round((times[i - 1] + 0.0001) * 10000) / 10000);
+  }
+  times[times.length - 1] = 1;
+  return times.join(";");
+}
+
 export function Figure({ poses, dur, color, animate, bellFlip }) {
   const svgRef = useRef(null);
   useEffect(() => {
@@ -152,13 +174,26 @@ export function Figure({ poses, dur, color, animate, bellFlip }) {
     const vals = poses.map(getter);
     return [...vals, vals[0]];
   };
+  const keyTimes = keyTimesFor(poses);
   const anim = (name, vals) => (
-    <animate attributeName={name} values={vals.join(";")} dur={durS} repeatCount="indefinite" calcMode="linear" />
+    <animate
+      attributeName={name}
+      values={vals.join(";")}
+      dur={durS}
+      repeatCount="indefinite"
+      calcMode="linear"
+      {...(keyTimes ? { keyTimes } : {})}
+    />
   );
   const segs = poses[0].elR ? FRONT_SEGS : SIDE_SEGS;
   const heads = cyc(headFrom);
   const bells = cyc((p) => p.bell || p.ha || p.haR);
   const hOff = bellFlip ? 7 : -7;
+  /* hold: "none" hides the bell. Mixed frames fade it. Anything else draws
+     the authored bell point — hold tells the check which hand, not the pixels. */
+  const drawBell = poses.some((p) => p.hold !== "none");
+  const bellFades = drawBell && poses.some((p) => p.hold === "none");
+  const bellOp = bellFades ? cyc((p) => (p.hold === "none" ? 0 : 1)) : null;
   return (
     <svg ref={svgRef} viewBox="0 0 200 200" width="100%" height="100%" role="img" aria-hidden="true">
       <line x1="18" y1="178" x2="182" y2="178" stroke={COLORS.panelEdge} strokeWidth="2" />
@@ -180,14 +215,20 @@ export function Figure({ poses, dur, color, animate, bellFlip }) {
         {anim("cx", heads.map((v) => v[0]))}
         {anim("cy", heads.map((v) => v[1]))}
       </circle>
-      <circle cx={bells[0][0]} cy={bells[0][1]} r="7.5" fill={color}>
-        {anim("cx", bells.map((v) => v[0]))}
-        {anim("cy", bells.map((v) => v[1]))}
-      </circle>
-      <circle cx={bells[0][0]} cy={bells[0][1] + hOff} r="4.5" fill="none" stroke={color} strokeWidth="2.6">
-        {anim("cx", bells.map((v) => v[0]))}
-        {anim("cy", bells.map((v) => v[1] + hOff))}
-      </circle>
+      {drawBell && (
+        <>
+          <circle cx={bells[0][0]} cy={bells[0][1]} r="7.5" fill={color} opacity={bellOp ? bellOp[0] : undefined}>
+            {anim("cx", bells.map((v) => v[0]))}
+            {anim("cy", bells.map((v) => v[1]))}
+            {bellOp && anim("opacity", bellOp)}
+          </circle>
+          <circle cx={bells[0][0]} cy={bells[0][1] + hOff} r="4.5" fill="none" stroke={color} strokeWidth="2.6" opacity={bellOp ? bellOp[0] : undefined}>
+            {anim("cx", bells.map((v) => v[0]))}
+            {anim("cy", bells.map((v) => v[1] + hOff))}
+            {bellOp && anim("opacity", bellOp)}
+          </circle>
+        </>
+      )}
     </svg>
   );
 }
