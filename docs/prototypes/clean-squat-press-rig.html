@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clean + Squat + Press Rig Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the app's current version (side + front) on top, the rig version (side, front, three-quarter) below, one control bar, then what drives each. Bellwork's dark chalk palette, single theme on purpose. */
+:root {
+  --bg: #17181B;
+  --panel: #1F2125;
+  --edge: #2A2D33;
+  --chalk: #EFEBE2;
+  --chalk-dim: #9A968C;
+  --lower: #3E8E5A;
+  --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--chalk); font-family: var(--body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 980px; margin: 0 auto; padding-inline: 16px; padding-block: 24px 48px; display: grid; gap: 20px; }
+header { display: grid; gap: 6px; }
+.eyebrow { font-family: var(--display); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--lower); font-size: 13px; }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(30px, 6vw, 44px); line-height: 1.02; margin: 0; text-wrap: balance; }
+.lede { color: var(--chalk-dim); max-width: 64ch; margin: 0; }
+.block { display: grid; gap: 8px; }
+.block-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.block-title { font-family: var(--display); font-weight: 700; font-size: 20px; text-transform: uppercase; letter-spacing: .02em; }
+.tag { font-family: var(--mono); font-size: 11px; color: var(--chalk-dim); }
+.views { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.view { background: var(--panel); border: 1px solid var(--edge); border-radius: 10px; padding: 8px; display: grid; gap: 4px; min-width: 0; }
+.view-label { font-family: var(--display); font-weight: 600; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--chalk-dim); }
+canvas { width: 100%; max-width: 100%; aspect-ratio: 1 / 1; display: block; }
+.phase { font-family: var(--display); font-weight: 600; font-size: 15px; letter-spacing: .12em; text-transform: uppercase; color: var(--lower); min-height: 1.4em; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; background: var(--panel); border: 1px solid var(--edge); border-radius: 10px; padding: 12px; }
+.group { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.group-label { font-family: var(--display); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: 12px; color: var(--chalk-dim); margin-right: 2px; }
+button { font: 500 13px/1 var(--body); color: var(--chalk); background: transparent; border: 1px solid var(--edge); border-radius: 999px; padding: 8px 12px; cursor: pointer; }
+button[aria-pressed="true"] { background: var(--chalk); color: var(--bg); border-color: var(--chalk); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--lower); outline-offset: 2px; }
+#scrub { flex: 1 1 160px; min-width: 0; accent-color: var(--lower); }
+.notes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 640px) { .notes { grid-template-columns: 1fr; } }
+.note { display: grid; gap: 8px; min-width: 0; align-content: start; }
+.note h2 { font-family: var(--display); font-weight: 700; font-size: 18px; text-transform: uppercase; letter-spacing: .03em; margin: 0; }
+.note p, .note li { color: var(--chalk-dim); max-width: 64ch; margin: 0; }
+.note ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+.note strong { color: var(--chalk); font-weight: 600; }
+pre { margin: 0; background: var(--panel); border: 1px solid var(--edge); border-radius: 8px; padding: 10px 12px; overflow-x: auto; font: 11.5px/1.6 var(--mono); color: var(--chalk); }
+</style>
+</head><body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Bellwork · animation test 5 · complex</div>
+    <h1>Clean + squat + press, two ways</h1>
+    <p class="lede">First standing complex on the rig, one bell in one hand. Cue: clean, front squat, then press on the way up — the squat drive feeds the press. One rep: clean to the rack, front squat with the bell racked, press to lockout as you stand, lower to the rack, return the bell to the hang.</p>
+  </header>
+
+  <section class="block" aria-label="Current app version">
+    <div class="block-head"><span class="block-title">Current app</span><span class="tag">6 hand-placed poses per view · straight-line blends</span></div>
+    <div class="views">
+      <div class="view"><span class="view-label">Side</span><canvas id="oldS" aria-label="Current side view"></canvas></div>
+      <div class="view"><span class="view-label">Front</span><canvas id="oldF" aria-label="Current front view"></canvas></div>
+    </div>
+  </section>
+
+  <section class="block" aria-label="Rig version">
+    <div class="block-head"><span class="block-title">Rig</span><span class="tag">same skeleton as the dead bug page · hands and elbows follow the ribcage</span></div>
+    <div class="views">
+      <div class="view"><span class="view-label">Side (from the right)</span><canvas id="rigS" aria-label="Rig side view"></canvas></div>
+      <div class="view"><span class="view-label">Front</span><canvas id="rigF" aria-label="Rig front view"></canvas></div>
+      <div class="view"><span class="view-label">Three-quarter</span><canvas id="rigQ" aria-label="Rig three-quarter view"></canvas></div>
+    </div>
+    <div class="phase" id="phase"></div>
+  </section>
+
+  <section class="controls" aria-label="Playback">
+    <div class="group"><span class="group-label">Play</span><button id="play" aria-pressed="true">Pause</button></div>
+    <div class="group" role="group" aria-label="Speed"><span class="group-label">Speed</span>
+      <button data-speed="1" aria-pressed="true">1×</button>
+      <button data-speed="0.5" aria-pressed="false">½×</button>
+      <button data-speed="0.25" aria-pressed="false">¼×</button>
+    </div>
+    <div class="group" role="group" aria-label="Side" id="sides"></div>
+    <label class="group" style="flex:1 1 220px; min-width:0" for="scrub"><span class="group-label">Scrub</span><input id="scrub" type="range" min="0" max="1000" value="0"></label>
+  </section>
+
+  <section class="notes">
+    <div class="note">
+      <h2>What worked, what didn't</h2>
+      <ul>
+        <li><strong>Worked: the squat and the rack.</strong> The racked hand is stored relative to the shoulder, so the bell stays on the chest from the catch to the bottom and back up; thighs reach parallel with the trunk upright and the knees over the feet. The side view teaches the clean and squat, the front view teaches the press, and the left hand is a mirror.</li>
+        <li><strong>Needed fixing: the press path.</strong> Going straight from the rack to face height swung the hand out wide with the forearm pointing down. A "hand at the chin, elbow under it" waypoint on the way up and on the way down fixed it. At face height the elbow still flares wider than a coach would cue.</li>
+        <li><strong>Didn't: wrist, shoulder, spine.</strong> The rig has no wrist, so the bell rolling onto the forearm in the clean is a blended position, not a rotation around the hand. The shoulders can't shrug, so the lockout has no active shoulder, and the head doesn't move back and through. The trunk is still one rigid bone.</li>
+      </ul>
+    </div>
+    <div class="note">
+      <h2>What one rep stores</h2>
+      <pre id="data"></pre>
+      <p>Fifteen phases. The bell hand's position, both elbow directions and the free hand are stored per phase; the knees, the bell hang and the left-hand mirror are shared code.</p>
+      <h2>What changed in the rig</h2>
+      <ul>
+        <li><strong>Hands and elbow directions per phase</strong>, measured from the shoulder in the ribcage frame (the dead bug had world hands and one fixed elbow direction per movement). The rack, the pull and the press each need a different elbow.</li>
+        <li><strong>The bell rolls.</strong> A per-phase value moves it from hanging off the hand (in line with the forearm while the arm points down) onto the outside of the forearm (rack), and another swings that rest toward the back of the forearm (lockout).</li>
+        <li><strong>Knee track per movement.</strong> The fixed knee direction let the knees cave inside the feet at the squat bottom.</li>
+        <li><strong>No overshoot between keys.</strong> The smooth curve flattens at peaks and valleys and caps its slopes, so the standing leg never over-reaches between the soft rack catch and the squat.</li>
+        <li><strong>Deep link:</strong> <code>#t=2.4&amp;side=1</code> opens paused at that moment.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+  const C = { chalk: "#EFEBE2", dim: "#9A968C", edge: "#2A2D33", bell: "#3E8E5A", floor: "#24262B" };
+  const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ================= Current app drawing (same as Figure in bellwork.jsx) ================= */
+  const SIDE_SEGS = [["hip", "kn2", 2.8, .28], ["kn2", "an2", 2.8, .28], ["hip", "sh", 3.8, 1], ["hip", "kn", 3.4, 1], ["kn", "an", 3.4, 1], ["sh", "el", 3.2, 1], ["el", "ha", 3.2, 1]];
+  const FRONT_SEGS = [["hip", "sh", 3.8, 1], ["hip", "knR", 3.4, 1], ["knR", "anR", 3.4, 1], ["hip", "knL", 3.4, 1], ["knL", "anL", 3.4, 1], ["sh", "elR", 3.2, 1], ["elR", "haR", 3.2, 1], ["sh", "elL", 3.2, 1], ["elL", "haL", 3.2, 1]];
+  function oldPose(frames, u) {
+    const seg = u * frames.length, i = Math.floor(seg) % frames.length, t = seg - Math.floor(seg);
+    const A = frames[i], B = frames[(i + 1) % frames.length], o = {};
+    for (const k in A) o[k] = [A[k][0] + (B[k][0] - A[k][0]) * t, A[k][1] + (B[k][1] - A[k][1]) * t];
+    return o;
+  }
+  function headFrom(p) {
+    if (p.head) return p.head;
+    const dx = p.sh[0] - p.hip[0], dy = p.sh[1] - p.hip[1], l = Math.hypot(dx, dy) || 1;
+    return [p.sh[0] + dx / l * 13, p.sh[1] + dy / l * 13];
+  }
+  function drawOld(ctx, frames, u) {
+    const p = oldPose(frames, u), segs = frames[0].elR ? FRONT_SEGS : SIDE_SEGS;
+    ctx.clearRect(0, 0, 200, 200); ctx.lineCap = "round";
+    line(ctx, [18, 178], [182, 178], C.edge, 2);
+    for (const [a, b, w, op] of segs) { if (!p[a] || !p[b]) continue; ctx.globalAlpha = op; line(ctx, p[a], p[b], C.chalk, w); }
+    ctx.globalAlpha = 1;
+    ring(ctx, headFrom(p), 8, C.chalk, 3);
+    const bell = p.bell || p.ha || p.haR;
+    disc(ctx, bell, 7.5, C.bell); ring(ctx, [bell[0], bell[1] - 7], 4.5, C.bell, 2.6);
+  }
+
+  /* ================= Rig: shared, written once ================= */
+  // World: x forward (toward the feet when lying down), y up, z = figure's right. Meters.
+  const B = { thigh: .44, shin: .43, spine: .50, neck: .12, headR: .095, upper: .29, fore: .27, hipW: .09, shW: .18, bellDrop: .10, bellR: .08 };
+  const v = (x, y, z) => [x, y, z];
+  const add = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
+  const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+  const mul = (a, s) => [a[0] * s, a[1] * s, a[2] * s];
+  const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const len = a => Math.hypot(a[0], a[1], a[2]);
+  const norm = a => { const l = len(a) || 1; return mul(a, 1 / l); };
+  const rad = d => d * Math.PI / 180;
+
+  // Two-bone IK: root, target, bone lengths, and a pole direction the middle joint bends toward.
+  function ik(root, target, a, b, pole) {
+    let d = sub(target, root), dist = len(d);
+    const maxR = a + b - 1e-3, minR = Math.abs(a - b) + 1e-3;
+    const dir = norm(d), want = dist; dist = Math.min(maxR, Math.max(minR, dist));
+    const cosA = (a * a + dist * dist - b * b) / (2 * a * dist), sinA = Math.sqrt(Math.max(0, 1 - cosA * cosA));
+    const perp = norm(sub(pole, mul(dir, dot(pole, dir))));
+    const mid = add(root, add(mul(dir, a * cosA), mul(perp, a * sinA)));
+    return { mid, end: add(root, mul(dir, dist)), miss: Math.abs(want - dist) };   // miss > 0: the target was out of reach
+  }
+
+  // A body frame tilted in the sagittal plane: 0 is upright, -90 is lying on the back.
+  const tilt = deg => { const a = rad(deg); return { up: v(Math.sin(a), Math.cos(a), 0), fwd: v(Math.cos(a), -Math.sin(a), 0) }; };
+
+  // s: one interpolated state. m: per-movement constants (which hand holds the bell, how far the knees track out). Not interpolated.
+  // Hands and elbow poles are [forward, up, out] from that side's shoulder, in the ribcage frame,
+  // so a racked hand stays on the chest while the trunk squats and leans.
+  function solve(s, m) {
+    const pel = s.pelvis, tw = rad(s.twist);
+    const P = tilt(s.pitch);                                            // pelvis frame: knees bend toward P.fwd
+    const T = tilt(s.lean), r0 = v(0, 0, 1);                            // ribcage frame, then twist about the spine
+    const up = T.up;
+    const fwd = add(mul(T.fwd, Math.cos(tw)), mul(r0, -Math.sin(tw)));
+    const right = add(mul(r0, Math.cos(tw)), mul(T.fwd, Math.sin(tw)));
+    const hip = side => add(pel, v(0, 0, side * B.hipW));               // pelvis stays square: hips never twist
+    const neck = add(pel, mul(up, B.spine));
+    const shoulder = side => add(add(neck, mul(right, side * B.shW)), mul(up, -.02));
+    const head = add(neck, mul(up, B.neck));
+    const legs = {};
+    for (const [name, side] of [["L", -1], ["R", 1]]) {
+      const ft = s["foot" + name], h = hip(side);
+      const k = ik(h, ft.at, B.thigh, B.shin, add(add(P.fwd, mul(P.up, -.15)), v(0, 0, side * (m.kneeOut ?? .08))));
+      const floorToe = [.17 - .05 * ft.toes, -.08 - .03 * ft.toes, 0];   // flat or on the toes, pointing forward
+      const airToe = mul(P.fwd, .15);                                    // foot off the floor: toes pulled toward the shins
+      const toe = add(k.end, add(mul(floorToe, 1 - ft.air), mul(airToe, ft.air)));
+      legs[name] = { hip: h, knee: k.mid, ankle: k.end, toe, miss: k.miss };
+    }
+    const fromShoulder = (side, o) => add(add(mul(fwd, o[0]), mul(up, o[1])), mul(right, side * o[2]));
+    const arms = {};
+    for (const [name, side] of [["L", -1], ["R", 1]]) {
+      const sh = shoulder(side);
+      const e = ik(sh, add(sh, fromShoulder(side, s["hand" + name])), B.upper, B.fore, fromShoulder(side, s["pole" + name]));
+      arms[name] = { sh, elbow: e.mid, hand: e.end, miss: e.miss };
+    }
+    // One bell in one hand. seat 0: hanging off the hand, in line with a downward forearm (it swings on the arm).
+    // seat 1: resting on the forearm, down and to the outside (rack). turn swings that rest from the outside
+    // of the forearm (rack) toward the back of it (lockout). The bell keeps its distance from the handle throughout.
+    const side = m.bell === "R" ? 1 : -1, A = arms[m.bell], handle = A.hand, down = v(0, -1, 0);
+    const fa = norm(sub(A.hand, A.elbow)), hang = norm(add(down, mul(fa, Math.max(0, -fa[1]))));
+    const ta = rad(90 * s.turn), out = add(mul(right, side * Math.cos(ta)), mul(fwd, -Math.sin(ta)));
+    const rest = add(mul(down, Math.cos(rad(42))), mul(out, Math.sin(rad(42))));
+    const bell = add(handle, mul(norm(add(mul(hang, 1 - s.seat), mul(rest, s.seat))), B.bellDrop));
+    return { pel, neck, head, fwd, up, legs, arms, handle, bell };
+  }
+
+  // Mirror: swap sides, flip z, reverse the twist. Hands and poles are already side-relative, so they only swap.
+  const flipZ = a => [a[0], a[1], -a[2]];
+  const flipFoot = f => ({ at: flipZ(f.at), toes: f.toes, air: f.air });
+  const mirrorPhase = p => ({ ...p, pelvis: flipZ(p.pelvis), twist: -p.twist, footL: flipFoot(p.footR), footR: flipFoot(p.footL), handL: p.handR, handR: p.handL, poleL: p.poleR, poleR: p.poleL });
+  const mirrorConst = m => ({ ...m, bell: m.bell === "R" ? "L" : "R" });
+
+  // Flatten each phase to numbers, interpolate with a smooth cubic, rebuild.
+  const flat = p => [...p.pelvis, p.pitch, p.lean, p.twist, ...p.footL.at, p.footL.toes, p.footL.air, ...p.footR.at, p.footR.toes, p.footR.air, ...p.handL, ...p.handR, ...p.poleL, ...p.poleR, p.seat, p.turn];
+  const unflat = a => ({ pelvis: a.slice(0, 3), pitch: a[3], lean: a[4], twist: a[5], footL: { at: a.slice(6, 9), toes: a[9], air: a[10] }, footR: { at: a.slice(11, 14), toes: a[14], air: a[15] }, handL: a.slice(16, 19), handR: a.slice(19, 22), poleL: a.slice(22, 25), poleR: a.slice(25, 28), seat: a[28], turn: a[29] });
+  function sampler(cycle) {
+    const N = cycle.length, VALS = cycle.map(flat);
+    const TOTAL = cycle.reduce((s, p) => s + p.t, 0);
+    const T = []; { let acc = 0; for (const p of cycle) { T.push(acc); acc += p.t; } }
+    const tAt = i => T[((i % N) + N) % N] + Math.floor(i / N) * TOTAL;
+    const vAt = (i, k) => VALS[((i % N) + N) % N][k];
+    function at(time) {
+      const u = ((time % TOTAL) + TOTAL) % TOTAL;
+      let i = N - 1; for (let j = 0; j < N; j++) if (u >= T[j]) i = j;
+      const t0 = tAt(i), t1 = tAt(i + 1), h = t1 - t0, s = (u - t0) / h;
+      const h00 = 2*s*s*s - 3*s*s + 1, h10 = s*s*s - 2*s*s + s, h01 = -2*s*s*s + 3*s*s, h11 = s*s*s - s*s;
+      const out = [];
+      for (let k = 0; k < VALS[0].length; k++) {
+        const a = vAt(i, k), b = vAt(i + 1, k);
+        // No overshoot past any key: zero slope at a peak, a valley or a repeated value, and slopes capped
+        // at 3× the neighbouring secants (Fritsch–Carlson), so a standing leg never over-reaches between keys.
+        const slope = (p, q, r, tp, tq, tr) => {
+          const s0 = (q - p) / (tq - tp), s1 = (r - q) / (tr - tq);
+          if (s0 * s1 <= 0) return 0;
+          const m = (r - p) / (tr - tp);
+          return Math.sign(m) * Math.min(Math.abs(m), 3 * Math.abs(s0), 3 * Math.abs(s1));
+        };
+        const m0 = slope(vAt(i - 1, k), a, b, tAt(i - 1), t0, t1);
+        const m1 = slope(a, b, vAt(i + 2, k), t0, t1, tAt(i + 2));
+        out.push(h00 * a + h10 * h * m0 + h01 * b + h11 * h * m1);
+      }
+      return { state: unflat(out), phase: cycle[i].name };
+    }
+    return { at, total: TOTAL };
+  }
+
+  /* ================= Camera and drawing ================= */
+  function camera(yawDeg, pitchDeg) {
+    const y = rad(yawDeg), p = rad(pitchDeg);
+    const right = v(Math.cos(y), 0, -Math.sin(y)), toward = v(Math.sin(y), 0, Math.cos(y));
+    return pt => {
+      const X = dot(pt, right), Y = pt[1], D = dot(pt, toward);
+      return { x: X, y: Y * Math.cos(p) - D * Math.sin(p), d: D * Math.cos(p) + Y * Math.sin(p) };
+    };
+  }
+  const solvedPoints = r => [r.head, r.neck, r.pel, r.bell, r.handle,
+    ...["L", "R"].flatMap(k => [r.legs[k].hip, r.legs[k].knee, r.legs[k].ankle, r.legs[k].toe, r.arms[k].sh, r.arms[k].elbow, r.arms[k].hand])];
+  // Each view scaled and centred to what the figure sweeps through over the whole cycle.
+  function fitViews(cams, samplers, m) {
+    const boxes = {};
+    for (const id in cams) {
+      let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+      for (const { smp, mc } of samplers) for (let i = 0; i < 80; i++) {
+        for (const pt of solvedPoints(solve(smp.at(i / 80 * smp.total).state, mc))) {
+          const q = cams[id](pt); x0 = Math.min(x0, q.x); x1 = Math.max(x1, q.x); y0 = Math.min(y0, q.y); y1 = Math.max(y1, q.y);
+        }
+      }
+      const pad = .12; boxes[id] = { x0: x0 - pad, x1: x1 + pad, y0: y0 - pad, y1: y1 + pad };
+    }
+    const fit = {};
+    for (const id in boxes) { const b = boxes[id]; fit[id] = { S: Math.min(184 / (b.x1 - b.x0), 170 / (b.y1 - b.y0)), cx: (b.x0 + b.x1) / 2, cy: (b.y0 + b.y1) / 2 }; }
+    return fit;
+  }
+  function drawRig(ctx, proj, fit, st, m, floorBox) {
+    const r = solve(st, m);
+    const P2 = pt => { const q = proj(pt); return { x: 100 + (q.x - fit.cx) * fit.S, y: 104 - (q.y - fit.cy) * fit.S, d: q.d }; };
+    ctx.clearRect(0, 0, 200, 200); ctx.lineCap = "round"; ctx.lineJoin = "round";
+    // floor patch
+    const [fx0, fx1, fz] = floorBox;
+    const corners = [[fx0, 0, -fz], [fx1, 0, -fz], [fx1, 0, fz], [fx0, 0, fz]].map(P2);
+    ctx.fillStyle = C.floor; ctx.beginPath(); corners.forEach((q, i) => i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y)); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = C.edge; ctx.lineWidth = 1; ctx.stroke();
+    const segs = [];
+    const S2 = (a, b, w) => segs.push([P2(a), P2(b), w]);
+    for (const L of ["L", "R"]) {
+      const g = r.legs[L]; S2(g.hip, g.knee, 3.4); S2(g.knee, g.ankle, 3.4); S2(g.ankle, g.toe, 2.8);
+      const a = r.arms[L]; S2(a.sh, a.elbow, 3.1); S2(a.elbow, a.hand, 3.1);
+    }
+    S2(r.legs.L.hip, r.legs.R.hip, 3.4);
+    S2(r.arms.L.sh, r.arms.R.sh, 3.4);
+    S2(r.pel, r.neck, 3.8);
+    const ds = segs.map(s => (s[0].d + s[1].d) / 2), lo = Math.min(...ds), hi = Math.max(...ds);
+    const items = segs.map((s, i) => ({ kind: "seg", s, d: ds[i] }));
+    const bellP = P2(r.bell); items.push({ kind: "bell", d: bellP.d });
+    const hd = P2(r.head); items.push({ kind: "head", d: hd.d });
+    items.sort((a, b) => a.d - b.d).forEach(it => {
+      if (it.kind === "bell") {
+        const h = P2(r.handle);
+        ctx.globalAlpha = 1; line(ctx, [h.x, h.y], [bellP.x, bellP.y], C.bell, 2.2);
+        disc(ctx, [bellP.x, bellP.y], B.bellR * fit.S, C.bell); ring(ctx, [h.x, h.y], 3.6, C.bell, 2.4);
+        return;
+      }
+      if (it.kind === "head") {
+        ctx.globalAlpha = 1; ring(ctx, [hd.x, hd.y], B.headR * fit.S, C.chalk, 3);
+        const nose = P2(add(r.head, mul(r.fwd, B.headR * 1.45))), nb = P2(add(r.head, mul(r.fwd, B.headR * .9)));
+        line(ctx, [nb.x, nb.y], [nose.x, nose.y], C.chalk, 2.4);
+        return;
+      }
+      const near = hi - lo < 1e-6 ? 1 : (it.d - lo) / (hi - lo);
+      ctx.globalAlpha = .32 + .68 * near;
+      line(ctx, [it.s[0].x, it.s[0].y], [it.s[1].x, it.s[1].y], C.chalk, it.s[2]);
+    });
+    ctx.globalAlpha = 1;
+  }
+
+  function line(ctx, a, b, col, w) { ctx.strokeStyle = col; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); }
+  function ring(ctx, p, r, col, w) { ctx.strokeStyle = col; ctx.lineWidth = w; ctx.beginPath(); ctx.arc(p[0], p[1], r, 0, Math.PI * 2); ctx.stroke(); }
+  function disc(ctx, p, r, col) { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(p[0], p[1], r, 0, Math.PI * 2); ctx.fill(); }
+
+  function setup(id) {
+    const cv = document.getElementById(id), ctx = cv.getContext("2d");
+    const size = () => { const dpr = Math.min(window.devicePixelRatio || 1, 3), w = cv.clientWidth || 160; cv.width = w * dpr; cv.height = w * dpr; ctx.setTransform(cv.width / 200, 0, 0, cv.height / 200, 0, 0); };
+    size(); window.addEventListener("resize", size);
+    return ctx;
+  }
+  /* ================= Current app version (copied from movements.js and poses.js on main) ================= */
+  const P = (hip, sh, el, ha, kn, an, extra = {}) => ({ hip, sh, el, ha, kn, an, ...extra });
+  const FS = (o = {}) => ({ hip: [100, 106], sh: [100, 68], elR: [112, 88], haR: [114, 108], elL: [88, 88], haL: [86, 108], knR: [108, 141], anR: [110, 176], knL: [92, 141], anL: [90, 176], ...o });
+  const S_RACK = P([100, 106], [100, 68], [110, 86], [110, 70], [100, 141], [100, 176], { bell: [115, 66] });
+  const S_OH = P([100, 104], [100, 66], [103, 48], [102, 30], [100, 140], [100, 176], { bell: [106, 24] });
+  const S_RACKSQ = P([100, 140], [106, 102], [114, 114], [112, 104], [118, 155], [104, 176], { bell: [117, 100] });
+  const F_RACK = FS({ elR: [114, 84], haR: [110, 68], bell: [113, 62] });
+  const F_OH = FS({ elR: [110, 44], haR: [108, 26], bell: [110, 20] });
+  const F_RACKSQ = FS({ hip: [100, 140], sh: [100, 102], elR: [116, 118], haR: [108, 108], knR: [124, 152], anR: [114, 176], knL: [76, 152], anL: [86, 176], bell: [111, 102] });
+  const F_HINGE = FS({ hip: [100, 118], sh: [100, 82], elR: [108, 104], haR: [102, 128], knR: [112, 148], knL: [88, 148], bell: [100, 136] });
+  const OLD_DUR = 3.4;
+  const OLD_S = [
+    P([96, 122], [124, 98], [116, 118], [104, 138], [104, 150], [100, 176], { bell: [100, 145] }),
+    S_RACK, S_RACKSQ, S_RACK, S_OH, S_RACK,
+  ];
+  const OLD_F = [F_HINGE, F_RACK, F_RACKSQ, F_RACK, F_OH, F_RACK];
+
+  /* ================= Clean + squat + press: the only per-movement data ================= */
+  // Bell in the right hand; the left-hand version is mirror(right). Feet stay planted the whole rep.
+  const FEET = { footL: { at: [0, .08, -.19], toes: 0, air: 0 }, footR: { at: [0, .08, .19], toes: 0, air: 0 } };
+  // A hand target given in world terms (forward, down, out) from the shoulder, for arms that hang under gravity.
+  const W = (lean, dx, dy, out) => { const a = rad(lean); return [dx * Math.cos(a) - dy * Math.sin(a), dx * Math.sin(a) + dy * Math.cos(a), out]; };
+  const RACK = [.16, -.04, -.11], CHIN = [.16, .04, 0], PRESS_MID = [.12, .16, .10], LOCKOUT = [-.02, .555, -.06];
+  const EL_HANG = [-1, 0, .2], EL_PULL = [-.6, -1, .3], EL_RACK = [.3, -1, 0], EL_CHIN = [.25, -1, .2], EL_PRESS = [.7, -.5, .8], EL_LOCK = [.3, 0, 1];
+  const FREE_SIDE = [.03, -.55, .05], FREE_OUT = [.03, -.52, .17], FREE_REACH = [.45, -.25, -.03];
+  const EL_FREE_HANG = [-1, 0, .3], EL_FREE_REACH = [-.2, -1, .4];
+  const STAND = [0, .94, 0];
+  const M = { bell: "R", kneeOut: .3 };   // knees track out over the feet in the squat
+  const REP = [
+    { name: "Hang",          t: .35, pelvis: [-.24, .85, 0], lean: 62, handR: W(62, .01, -.53, -.17) , poleR: EL_HANG,  seat: 0,   turn: 0,  handL: W(62, 0, -.54, .10),     poleL: EL_FREE_HANG },
+    { name: "Hike",          t: .30, pelvis: [-.27, .83, 0], lean: 66, handR: W(66, -.18, -.50, -.17), poleR: EL_HANG,  seat: 0,   turn: 0,  handL: W(66, -.12, -.52, .10),  poleL: EL_FREE_HANG },
+    { name: "Hip drive",     t: .22, pelvis: [-.04, .91, 0], lean: 10, handR: W(10, .14, -.50, -.15),   poleR: EL_PULL,  seat: .2,  turn: 0,  handL: [.02, -.55, .07],        poleL: EL_FREE_HANG },
+    { name: "Pull close",    t: .20, pelvis: STAND,          lean: 3,  handR: [.15, -.20, -.12],        poleR: EL_PULL,  seat: .65, turn: 0,  handL: [.02, -.55, .07],        poleL: EL_FREE_HANG },
+    { name: "Rack",          t: .30, pelvis: [0, .91, 0],    lean: 3,  handR: RACK,                     poleR: EL_RACK,  seat: 1,   turn: 0,  handL: FREE_SIDE,               poleL: EL_FREE_HANG },
+    { name: "Front squat",   t: .55, pelvis: STAND,          lean: 3,  handR: RACK,                     poleR: EL_RACK,  seat: 1,   turn: 0,  handL: FREE_SIDE,               poleL: EL_FREE_HANG },
+    { name: "Bottom",        t: .30, pelvis: [-.15, .42, 0], lean: 22, handR: RACK,                     poleR: EL_RACK,  seat: 1,   turn: 0,  handL: FREE_REACH,              poleL: EL_FREE_REACH },
+    { name: "Drive up",      t: .22, pelvis: [-.08, .70, 0], lean: 14, handR: RACK,                     poleR: EL_RACK,  seat: 1,   turn: 0,  handL: [.28, -.42, 0],          poleL: EL_FREE_REACH },
+    { name: "Press off the chest", t: .15, pelvis: [-.03, .84, 0], lean: 8, handR: CHIN,                 poleR: EL_CHIN,  seat: 1,   turn: .1, handL: [.10, -.50, .08],        poleL: EL_FREE_HANG },
+    { name: "Press",         t: .20, pelvis: [-.01, .91, 0], lean: 4,  handR: PRESS_MID,                poleR: EL_PRESS, seat: 1,   turn: .2, handL: [.03, -.53, .12],        poleL: EL_FREE_HANG },
+    { name: "Lockout",       t: .35, pelvis: STAND,          lean: 1,  handR: LOCKOUT,                  poleR: EL_LOCK,  seat: 1,   turn: .6, handL: FREE_OUT,                poleL: EL_FREE_HANG },
+    { name: "Lower",         t: .20, pelvis: STAND,          lean: 2,  handR: PRESS_MID,                poleR: EL_PRESS, seat: 1,   turn: .2, handL: [.03, -.53, .12],        poleL: EL_FREE_HANG },
+    { name: "Elbow under",   t: .20, pelvis: STAND,          lean: 3,  handR: CHIN,                     poleR: EL_CHIN,  seat: 1,   turn: .1, handL: [.03, -.54, .08],        poleL: EL_FREE_HANG },
+    { name: "Back to rack",  t: .25, pelvis: STAND,          lean: 3,  handR: RACK,                     poleR: EL_RACK,  seat: 1,   turn: 0,  handL: FREE_SIDE,               poleL: EL_FREE_HANG },
+    { name: "Drop to hang",  t: .25, pelvis: [-.08, .86, 0], lean: 25, handR: W(25, .05, -.45, -.15),   poleR: EL_PULL,  seat: .3,  turn: 0,  handL: W(25, .02, -.55, .04),   poleL: EL_FREE_HANG },
+  ].map(p => ({ pitch: 0, twist: 0, ...FEET, ...p }));
+  const SIDES = [
+    { label: "Right hand", cycle: REP, m: M },
+    { label: "Left hand", cycle: REP.map(mirrorPhase), m: mirrorConst(M) },
+  ];
+  const CAMS = { rigS: camera(0, 6), rigF: camera(90, 6), rigQ: camera(40, 15) };
+  const FLOOR = [-.55, .65, .45];
+  const f2 = n => (n >= 0 ? " " : "") + n.toFixed(2);
+  const DATA_TEXT =
+    "feet: planted at (0, 0.08, ±0.19)\n" +
+    "hand: forward / up / out from the shoulder\n\n" +
+    "phase          sec  pelvis x/y   lean  bell hand            seat\n" +
+    REP.map(p => `${p.name.padEnd(13)} ${p.t.toFixed(2)}  ${f2(p.pelvis[0])} ${p.pelvis[1].toFixed(2)}  ${String(p.lean).padStart(3)}  ${p.handR.map(f2).join(" ")}  ${p.seat.toFixed(2)}`).join("\n") +
+    "\n\n+ free hand and both elbow directions per phase\nleft hand: mirror(right), computed";
+
+  /* ================= Playback ================= */
+  const ctxs = Object.fromEntries(["oldS", "oldF", "rigS", "rigF", "rigQ"].map(id => [id, setup(id)]));
+  const phaseEl = document.getElementById("phase");
+  const sides = SIDES.map(sd => ({ ...sd, smp: sampler(sd.cycle) }));
+  const FIT = fitViews(CAMS, sides.map(sd => ({ smp: sd.smp, mc: sd.m })));
+  let side = 0, playing = !reduced, speed = 1, clock = 0, last = null;
+  const scrub = document.getElementById("scrub"), playBtn = document.getElementById("play");
+  function render() {
+    const u = ((clock / OLD_DUR) % 1 + 1) % 1;
+    drawOld(ctxs.oldS, OLD_S, u);
+    drawOld(ctxs.oldF, OLD_F, u);
+    const sd = sides[side], s = sd.smp.at(clock);
+    for (const id of ["rigS", "rigF", "rigQ"]) drawRig(ctxs[id], CAMS[id], FIT[id], s.state, sd.m, FLOOR);
+    phaseEl.textContent = s.phase;
+  }
+  function frame(ts) {
+    const total = sides[side].smp.total;
+    if (last !== null && playing) { clock += (ts - last) / 1000 * speed; scrub.value = Math.round((((clock % total) + total) % total) / total * 1000); }
+    last = ts; render(); requestAnimationFrame(frame);
+  }
+  const setPlay = on => { playing = on; playBtn.textContent = on ? "Pause" : "Play"; playBtn.setAttribute("aria-pressed", String(on)); };
+  setPlay(playing);
+  playBtn.addEventListener("click", () => setPlay(!playing));
+  scrub.addEventListener("input", () => { setPlay(false); clock = scrub.value / 1000 * sides[side].smp.total; });
+  document.querySelectorAll("[data-speed]").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("[data-speed]").forEach(o => o.setAttribute("aria-pressed", String(o === b))); speed = parseFloat(b.dataset.speed);
+  }));
+  const sidesEl = document.getElementById("sides");
+  if (sides.length > 1) {
+    sidesEl.innerHTML = '<span class="group-label">Side</span>' + sides.map((sd, i) => `<button data-side="${i}" aria-pressed="${i === 0}">${sd.label}</button>`).join("");
+    sidesEl.querySelectorAll("[data-side]").forEach(b => b.addEventListener("click", () => {
+      side = +b.dataset.side; sidesEl.querySelectorAll("[data-side]").forEach(o => o.setAttribute("aria-pressed", String(o === b)));
+    }));
+  } else sidesEl.hidden = true;
+  const deep = new URLSearchParams(location.hash.slice(1));   // e.g. #t=2.1&side=1 opens paused at that moment
+  if (deep.has("t")) { setPlay(false); clock = +deep.get("t") || 0; }
+  if (deep.has("side")) sidesEl.querySelectorAll("[data-side]")[+deep.get("side")]?.click();
+  requestAnimationFrame(frame);
+  document.getElementById("data").textContent = DATA_TEXT;
+})();
+</script>
+</body></html>
