@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: batch 2 (lunges) built, in Joe's phone review.** Step 1b is on `main` ([PR #4](https://github.com/jojo-512/bellwork/pull/4)). Batch 2 puts reverse lunge + twist, clean + reverse lunge and lateral lunge + press on the rig; Joe confirms each movement and its two card views on his phone, then it merges with his go-ahead. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Next: batch 3 (hinge and pull).
+0. **Animation: batch 2 (lunges) merged to `main` ([PR #5](https://github.com/jojo-512/bellwork/pull/5), merge commit ef713b4).** Six Complex movements are on the rig: clean + squat + press, clean & press, thruster, reverse lunge + twist, clean + reverse lunge, lateral lunge + press. All approved by Joe on his phone, views confirmed. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Next: batch 3 (hinge and pull: swing + squat, RDL + row, swing + high pull, gorilla + sumo).
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -21,6 +21,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 - Lateral lunge + press steps the right foot out to 0.76 m and sits into the right hip, then stands and presses by the horns like the thruster.
 - Card views (Claude's suggestion, for Joe to confirm): lunge + twist side + three-quarter (the twist reads best there), lateral lunge front + three-quarter (side hides the lateral step), clean + lunge side + front.
 - The floor patch now covers every foot position in the rep, so a wide stance stays on it; movements with feet under the hips draw the same patch as before.
+- Opened [PR #5](https://github.com/jojo-512/bellwork/pull/5). Joe approved all three and confirmed the views; merged by Claude with his go-ahead (merge commit ef713b4).
 
 ## Earlier (2026-10-14, Claude, rig step 1b)
 
