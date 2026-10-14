@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: step 1a built, waiting on Joe's review.** Plan approved ([proposals/rig-app-plan.md](./proposals/rig-app-plan.md)). Step 1a: `rig.js`, `blocks.js`, rig checks in `npm run check`, and the contact sheet's rig mode as the review page (`contact.html?id=clean_squat_press`). Nothing on the workout screen changes. Next: Joe reviews the page on his phone; then step 1b (`RigFigure` in the app with clean + squat + press, clean + press, thruster).
+0. **Animation: step 1a built, open as [PR #3](https://github.com/jojo-512/bellwork/pull/3), waiting on Joe's review.** Plan approved ([proposals/rig-app-plan.md](./proposals/rig-app-plan.md)). Step 1a: `rig.js`, `blocks.js`, rig checks in `npm run check`, and the contact sheet's rig mode as the review page (`contact.html?id=clean_squat_press`). Nothing on the workout screen changes. Next: Joe reviews the page on his phone; then step 1b (`RigFigure` in the app with clean + squat + press, clean + press, thruster).
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -19,6 +19,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 - Clean + squat + press now carries `rig` data (blocks plus overrides; block targets land within 1.4 cm of the prototype's). The app still draws its old figure.
 - The new checks caught three faults in the approved trial and they're fixed: the hike hand was 2.3 cm out of reach (`between_legs` moved to where the hand lands), the legs over-straightened between Pull to rack and Rack (sampler overshoot; slopes are now monotone), and the elbow snapped at 6 m/s from Bottom to Drive + press (the press is now about halfway at the mid-drive phase, hand [0.12, 1.5, 0.2]; elbow peak under 5 m/s).
 - The prototype pages in `docs/prototypes/` are kept for the record; the contact sheet replaces them for review.
+- Opened [PR #3](https://github.com/jojo-512/bellwork/pull/3) (step 1a, with the plan commits) into `main`. Merge only with Joe's go-ahead.
 
 ## Earlier (2026-10-14, Claude, app plan)
 
