@@ -14,8 +14,8 @@ Where we left off. Update at the end of each working session (or ask the Project
 
 ## Last session (2026-10-13, Claude)
 
-- **Proposal opened, not approved:** joint-angle rig for animation. Write-up in [proposals/rig-animation.md](./proposals/rig-animation.md), prototype swing in [prototypes/swing-rig.html](./prototypes/swing-rig.html). Branch `claude/rig-animation-proposal`. Nothing in the app changed.
-- Next: Cursor reviews the PR (questions in §6 of the proposal), then Joe decides.
+- **Proposal opened, not approved:** joint-angle rig for animation. Write-up in [proposals/rig-animation.md](./proposals/rig-animation.md), prototype swing in [prototypes/swing-rig.html](./prototypes/swing-rig.html). Branch `claude/rig-animation-proposal`. Also proposes six workout slots instead of five (§5), reversible by keeping the template as data. Nothing in the app changed.
+- Next: Cursor reviews the PR (questions in §7 of the proposal), then Joe decides.
 
 ## Earlier (2026-10-01)
 
