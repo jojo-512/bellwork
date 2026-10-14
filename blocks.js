@@ -19,6 +19,8 @@ export const HANDS = {
   rack: { frame: "torso", at: [0.146, -0.075, 0.06] },
   overhead: { frame: "torso", at: [0.0, 0.53, 0.17] },
   thigh: { frame: "pelvis", at: [0.04, -0.06, 0.26] },
+  goblet: { frame: "torso", at: [0.2, -0.13, 0.06] },
+  overhead_horns: { frame: "torso", at: [0.08, 0.5, 0.06] },
 };
 
 /* Elbow bend directions: [up, out, forward] in the ribcage frame. Picked per phase.
@@ -28,6 +30,7 @@ export const ELBOWS = {
   pull: [-0.8, 0, -0.4],
   rack: [-1, 0.08, 0],
   press: [-1, 0.12, 0.2],
+  goblet: [-1, 0.35, 0],
   free: [-0.3, 0.3, -1],
   floor_press: [-0.6, 0.8, -0.5],
   dead_bug: [-0.2, 0.8, -0.2],

@@ -265,6 +265,20 @@ const STANDARD = [
       S_RACK, S_OH, S_RACK,
     ],
     posesF: [F_HINGE, F_RACK, F_OH, F_RACK],
+    rig: {
+      feet: "hip_width", on: "R", kneeOut: 0.4, sides: "right", views: ["side", "front"], still: "Rack",
+      phases: [
+        { name: "Hike", t: 0.4, body: "hike", handR: "between_legs", handL: [0.02, 0.58, -0.22], elR: "hang", bell: "hanging" },
+        { name: "Drive", t: 0.25, pelvis: [-0.04, 0.9], lean: 22, handR: [0.16, 0.84, 0.06], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging" },
+        { name: "Pull to rack", t: 0.25, pelvis: [0, 0.93], lean: 4, handR: [0.14, 1.08, 0.14], elR: "pull", bell: 0.6 },
+        { name: "Rack", t: 0.35, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Press", t: 0.3, body: "stand", lean: 1, handR: [0.1, 1.66, 0.22], elR: "press", bell: "racked" },
+        { name: "Lockout", t: 0.3, body: "stand", lean: 0, handR: "overhead", handL: [0.02, 0.88, -0.3], elR: "press", bell: "racked", lock: ["R"] },
+        { name: "Lower", t: 0.25, body: "stand", lean: 1, handR: [0.06, 1.78, 0.24], handL: [0.03, 0.88, -0.28], elR: "press", bell: "racked" },
+        { name: "Lower to rack", t: 0.25, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Drop", t: 0.35, pelvis: [-0.08, 0.88], lean: 30, handR: [0.17, 0.84, 0.06], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging" },
+      ],
+    },
   },
   {
     id: "thruster", name: "Thruster", tags: ["lower", "full"], pattern: "Squat",
@@ -283,6 +297,18 @@ const STANDARD = [
       FS({ elR: [110, 52], haR: [104, 36], elL: [90, 52], haL: [96, 36], bell: [100, 30] }),
       F_GOBLET,
     ],
+    rig: {
+      feet: "hip_width", on: "horns", kneeOut: 0.4, sides: "right", views: ["side", "front"], still: "Goblet",
+      phases: [
+        { name: "Goblet", t: 0.25, body: "stand", handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Squat", t: 0.35, pelvis: [-0.08, 0.72], lean: 10, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Bottom", t: 0.3, body: "squat_bottom", handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Drive", t: 0.25, pelvis: [-0.06, 0.8], lean: 8, handR: [0.22, 1.42, 0.07], handL: [0.22, 1.42, -0.07], elR: "press", elL: "press" },
+        { name: "Press", t: 0.2, body: "stand", lean: 1, handR: [0.23, 1.74, 0.07], handL: [0.23, 1.74, -0.07], elR: "press", elL: "press" },
+        { name: "Lockout", t: 0.3, body: "stand", lean: 0, handR: "overhead_horns", handL: "overhead_horns", elR: "press", elL: "press", lock: ["R", "L"] },
+        { name: "Lower", t: 0.3, body: "stand", lean: 1, handR: [0.21, 1.72, 0.07], handL: [0.21, 1.72, -0.07], elR: "press", elL: "press" },
+      ],
+    },
   },
   {
     id: "snatch", name: "Snatch", tags: ["full"], pattern: "Hinge",
