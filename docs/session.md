@@ -12,8 +12,16 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 5. After install: verify **Complex PR numbers** match pre-migration.
 6. Slot template (whole-body guarantee) — Batch 3, after the remaining pending approvals land in rotation.
 7. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
+8. **Clean + squat + press rig trial** ([page](./prototypes/clean-squat-press-rig.html), branch `claude/pensive-cori-xlhxdn`): Joe to review the rack, clean path and press timing before it feeds the implementation plan.
 
-## Last session (2026-10-14, Claude, history cleanup)
+## Last session (2026-10-14, Claude, clean + squat + press rig trial)
+
+- Trial page: [prototypes/clean-squat-press-rig.html](./prototypes/clean-squat-press-rig.html). First standing complex on the pelvis-rooted rig, beside the current app's six poses. Eleven phases: hike, drive, pull to rack, rack, squat, bottom, drive + press, lockout, lower, lower to rack, drop. The press starts on the way up from the squat, per the cue. Right/Left hand toggle; left is a computed mirror.
+- Rig extended in two places (page only, no app code): a per-phase `rack` value blends a single bell between hanging from the hand and resting on the outside of the forearm, so the clean rolls the bell round the hand; a per-movement `kneeOut` lets the knees track out in the squat.
+- Checked numerically and in screenshots: arm at 98% of full reach at lockout, nothing below the floor, the bell clears head, torso and legs through the whole rep. Open issue noted on the page: one elbow direction per arm is a compromise (clean-pull elbow drifts back and out; press elbow is sensitive to the hand target).
+- Branch `claude/pensive-cori-xlhxdn`, no PR.
+
+## Earlier (2026-10-14, Claude, history cleanup)
 
 - **Repo history rewritten and every branch force-pushed**, `main` included (files on `main` unchanged). Removed: Joe's full name and personal email from commit metadata (now the GitHub username and no-reply address), a third-party creator handle and video detail, and Cursor subagent IDs. Every commit has a new ID; commit IDs in the docs were updated on this branch.
 - **Ingest rule changed:** no footage, links or creator details go into the repo, and the `bellwork_notes` template has no `creator` field (`docs/animation-ingest-redesign.md` on the Slice 2 branch).
