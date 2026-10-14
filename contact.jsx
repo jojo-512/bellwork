@@ -1,7 +1,8 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { EXERCISES } from "./movements.js";
 import { Figure } from "./bellwork.jsx";
+import { build, solve, draw, checkRig, validateRig, VIEWS, VIEW_LABELS } from "./rig.js";
 
 const COLORS = {
   bg: "#17181B",
@@ -30,6 +31,7 @@ function framesOf(ex) {
 }
 
 function Sheet({ ex }) {
+  if (ex.rig) return <RigSheet ex={ex} />;
   const color = colorFor(ex);
   const { side, front, frontOnly } = framesOf(ex);
   const hasFigure = side.length > 0 || front.length > 0;
@@ -67,6 +69,183 @@ function Sheet({ ex }) {
           <LoopRow side={side} front={front} dur={ex.dur || 2} color={color} bellFlip={ex.bellFlip} />
         </>
       )}
+    </article>
+  );
+}
+
+/* ---------------- Rig mode: the review page for movements on the rig ----------------
+   Side, front and three-quarter playing, one still per phase in each view, the phase data
+   and the check results. Views the workout card will show are marked "on card". */
+
+const H2 = { fontFamily: '"Big Shoulders Display", sans-serif', fontSize: 22, letterSpacing: "0.08em", textTransform: "uppercase", margin: "0 0 10px", color: COLORS.chalkDim };
+const ALL_VIEWS = Object.keys(VIEWS);
+
+// Size a canvas for its CSS width at up to 2× pixel density, drawing into a 200×200 box.
+function fitCanvas(cv) {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2), w = cv.clientWidth || 160;
+  if (cv.width !== Math.round(w * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(w * dpr); }
+  const ctx = cv.getContext("2d");
+  ctx.setTransform(cv.width / 200, 0, 0, cv.height / 200, 0, 0);
+  return ctx;
+}
+
+function Still({ ex, built, at, view, color }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const cv = ref.current;
+    const paint = () => draw(fitCanvas(cv), solve(built.smp.at(at).state, built.m), view, color, ex.rig.frame);
+    paint();
+    window.addEventListener("resize", paint);
+    return () => window.removeEventListener("resize", paint);
+  }, [ex, built, at, view, color]);
+  return <canvas ref={ref} style={{ width: "100%", aspectRatio: "1", display: "block" }} />;
+}
+
+function Btn({ on, children, ...rest }) {
+  return (
+    <button aria-pressed={on} {...rest} style={{
+      background: on ? COLORS.chalk : "transparent", color: on ? COLORS.bg : COLORS.chalk,
+      border: `1px solid ${on ? COLORS.chalk : COLORS.panelEdge}`, borderRadius: 999, padding: "6px 14px",
+      font: "inherit", fontSize: 16, fontWeight: 600, cursor: "pointer",
+    }}>{children}</button>
+  );
+}
+
+function RigSheet({ ex }) {
+  const color = colorFor(ex);
+  const rig = ex.rig;
+  const reduced = useMemo(() => !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), []);
+  const [side, setSide] = useState("R");
+  const [playing, setPlaying] = useState(!reduced);
+  const [speed, setSpeed] = useState(1);
+  const built = useMemo(() => ({ R: build(ex, "R"), L: build(ex, "L") }), [ex]);
+  const cur = built[side];
+  const canvases = useRef({});
+  const phaseRef = useRef(null), scrubRef = useRef(null);
+  const clock = useRef(0), last = useRef(null);
+  const live = useRef({ playing, speed, cur });
+  live.current = { playing, speed, cur };
+  const shape = useMemo(() => validateRig(ex), [ex]);
+  const issues = useMemo(() => (shape.length ? [] : checkRig(ex)), [ex, shape]);
+
+  useEffect(() => {
+    let raf;
+    const frame = (ts) => {
+      const { playing: on, speed: sp, cur: c } = live.current;
+      if (last.current !== null && on) clock.current += ((ts - last.current) / 1000) * sp;
+      last.current = ts;
+      const total = c.smp.total, u = ((clock.current % total) + total) % total;
+      const { state, phase } = c.smp.at(u), r = solve(state, c.m);
+      for (const w of ALL_VIEWS) { const cv = canvases.current[w]; if (cv) draw(fitCanvas(cv), r, w, color, rig.frame); }
+      if (phaseRef.current) phaseRef.current.textContent = phase;
+      if (scrubRef.current && on) scrubRef.current.value = String(Math.round((u / total) * 1000));
+      raf = requestAnimationFrame(frame);
+    };
+    raf = requestAnimationFrame(frame);
+    return () => cancelAnimationFrame(raf);
+  }, [color, rig]);
+
+  const sides = rig.sides === "alternate" ? "right, then left (alternating)" : "right side on the card";
+  return (
+    <article data-contact-sheet={ex.id} data-rig="1" style={{ maxWidth: 1120, margin: "0 auto", padding: "28px 16px 64px" }}>
+      <p style={{ margin: "0 0 8px", color: COLORS.chalkDim, letterSpacing: "0.14em", textTransform: "uppercase", fontSize: 13, fontWeight: 600 }}>
+        Contact sheet · rig · review only
+      </p>
+      <h1 style={{ fontFamily: '"Big Shoulders Display", sans-serif', fontWeight: 800, fontSize: 42, lineHeight: 0.95, margin: "0 0 10px" }}>{ex.name}</h1>
+      <p style={{ margin: "0 0 14px", color: COLORS.chalkDim, fontSize: 18 }}>
+        <span style={{ color: COLORS.chalk }}>{ex.id}</span>{" · "}{ex.pattern}{" · "}{ex.reps}
+        {ex.pending ? <span style={{ color: COLORS.warn }}> · pending</span> : null}
+        {` · ${rig.phases.length} phases · ${ex.dur}s a rep · ${sides}`}
+      </p>
+      <p style={{ margin: "0 0 6px", fontSize: 18, lineHeight: 1.45, maxWidth: 720 }}>{ex.cue}</p>
+      <p style={{ margin: "0 0 20px", color: COLORS.chalkDim, fontSize: 16, lineHeight: 1.4, maxWidth: 720 }}>Grip: {ex.grip}</p>
+
+      <section data-checks style={{ marginBottom: 20, padding: "12px 14px", border: `1px solid ${shape.length || issues.length ? COLORS.warn : COLORS.panelEdge}`, borderRadius: 12, background: COLORS.panel }}>
+        {shape.length || issues.length ? (
+          <>
+            <div style={{ color: COLORS.warn, fontWeight: 600, marginBottom: 6 }}>Checks: {shape.length + issues.length} to fix</div>
+            <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.45 }}>{[...shape, ...issues].map((m) => <li key={m}>{m}</li>)}</ul>
+          </>
+        ) : (
+          <div><span style={{ fontWeight: 600 }}>Checks pass</span><span style={{ color: COLORS.chalkDim }}> · reach, lockout, floor, bell clearance, joint speed, bend direction, hand-offs, framing, both sides</span></div>
+        )}
+      </section>
+
+      <div style={{ position: "sticky", top: 0, zIndex: 2, background: COLORS.bg, padding: "8px 0 10px", display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
+        <Btn on={playing} onClick={() => setPlaying(!playing)}>{playing ? "Pause" : "Play"}</Btn>
+        {[1, 0.5, 0.25].map((s) => <Btn key={s} on={speed === s} onClick={() => setSpeed(s)}>{s === 1 ? "1×" : s === 0.5 ? "½×" : "¼×"}</Btn>)}
+        {rig.sides !== "alternate" && ["R", "L"].map((k) => <Btn key={k} on={side === k} onClick={() => setSide(k)}>{k === "R" ? "Right hand" : "Left hand"}</Btn>)}
+        <input ref={scrubRef} type="range" min="0" max="1000" defaultValue="0" aria-label="Scrub"
+          onInput={(e) => { setPlaying(false); clock.current = (e.target.value / 1000) * cur.smp.total; }}
+          style={{ flex: "1 1 200px", minWidth: 0 }} />
+        <span ref={phaseRef} style={{ minWidth: 120, fontWeight: 600 }} />
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 10, marginBottom: 28 }}>
+        {ALL_VIEWS.map((w) => (
+          <div key={w} data-view={w} style={{ background: COLORS.panel, border: `1px solid ${rig.views.includes(w) ? COLORS.chalkDim : COLORS.panelEdge}`, borderRadius: 12, overflow: "hidden" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 12px 0", fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+              <span style={{ color: COLORS.chalkDim }}>{VIEW_LABELS[w]}</span>
+              {rig.views.includes(w) ? <span>On card</span> : null}
+            </div>
+            <canvas ref={(el) => { canvases.current[w] = el; }} style={{ width: "100%", aspectRatio: "1", display: "block", background: COLORS.bg }} />
+          </div>
+        ))}
+      </div>
+
+      {ALL_VIEWS.map((w) => (
+        <section key={w} style={{ marginBottom: 24 }}>
+          <h2 style={H2}>{VIEW_LABELS[w]} · each phase{rig.views.includes(w) ? " · on card" : ""}</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(110px, 1fr))", gap: 8 }}>
+            {cur.cycle.map((p, i) => (
+              <div key={i} data-phase={i + 1} data-view={w} style={{ background: COLORS.panel, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 10, overflow: "hidden" }}>
+                <div style={{ padding: "6px 8px 0", fontSize: 13, lineHeight: 1.2 }}>
+                  <span style={{ fontWeight: 800 }}>{i + 1}</span> <span style={{ color: COLORS.chalkDim }}>{p.name}</span>
+                </div>
+                <Still ex={ex} built={cur} at={cur.smp.starts[i]} view={w} color={color} />
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+
+      <section style={{ marginBottom: 24 }}>
+        <h2 style={H2}>Phases</h2>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ borderCollapse: "collapse", fontSize: 15, minWidth: 560 }}>
+            <thead><tr style={{ color: COLORS.chalkDim, textAlign: "left" }}>
+              {["#", "Phase", "Time", "Body", "Bell hand", "Free hand", "Elbow", "Bell", "Lock"].map((h) => <th key={h} style={{ padding: "4px 10px 4px 0", fontWeight: 600 }}>{h}</th>)}
+            </tr></thead>
+            <tbody>
+              {rig.phases.map((p, i) => {
+                const f = (x) => (x == null ? "" : Array.isArray(x) ? x.join(", ") : String(x));
+                const body = p.body ? p.body + (p.pelvis || p.lean != null ? " *" : "") : `pelvis ${f(p.pelvis)} · lean ${p.lean}`;
+                return (
+                  <tr key={i} style={{ borderTop: `1px solid ${COLORS.panelEdge}` }}>
+                    <td style={{ padding: "4px 10px 4px 0" }}>{i + 1}</td>
+                    <td style={{ padding: "4px 10px 4px 0" }}>{p.name}</td>
+                    <td style={{ padding: "4px 10px 4px 0" }}>{p.t}</td>
+                    <td style={{ padding: "4px 10px 4px 0" }}>{body}</td>
+                    <td style={{ padding: "4px 10px 4px 0" }}>{f(rig.on === "L" ? p.handL : p.handR) || "thigh"}</td>
+                    <td style={{ padding: "4px 10px 4px 0" }}>{f(rig.on === "L" ? p.handR : p.handL) || "thigh"}</td>
+                    <td style={{ padding: "4px 10px 4px 0" }}>{f(rig.on === "L" ? p.elL : p.elR) || "free"}</td>
+                    <td style={{ padding: "4px 10px 4px 0" }}>{f(p.bell) || "hanging"}{p.on ? ` · ${p.on}` : ""}</td>
+                    <td style={{ padding: "4px 10px 4px 0" }}>{f(p.lock)}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <p style={{ color: COLORS.chalkDim, fontSize: 15 }}>Named values come from blocks.js; numbers are meters (x forward, y up, z right). * a block with overrides.</p>
+      </section>
+
+      {Array.isArray(ex.poses) && ex.poses.length > 1 ? (
+        <section>
+          <p style={{ color: COLORS.chalkDim, fontSize: 16, margin: "0 0 10px" }}>Before: the figure the app shows today, for comparison.</p>
+          <LoopRow side={ex.frontOnly ? [] : ex.poses} front={ex.posesF || []} dur={ex.dur || 2} color={color} bellFlip={ex.bellFlip} />
+        </section>
+      ) : null}
     </article>
   );
 }
@@ -129,8 +308,9 @@ function LoopRow({ side, front, dur, color, bellFlip }) {
 }
 
 function Picker({ missing }) {
-  const pending = EXERCISES.filter((e) => e.pending);
-  const rest = EXERCISES.filter((e) => !e.pending);
+  const onRig = EXERCISES.filter((e) => e.rig);
+  const pending = EXERCISES.filter((e) => e.pending && !e.rig);
+  const rest = EXERCISES.filter((e) => !e.pending && !e.rig);
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", padding: "28px 20px 64px" }}>
       <p style={{ margin: "0 0 8px", color: COLORS.chalkDim, letterSpacing: "0.14em", textTransform: "uppercase", fontSize: 13, fontWeight: 600 }}>
@@ -142,6 +322,7 @@ function Picker({ missing }) {
       <p style={{ color: COLORS.chalkDim, fontSize: 18, lineHeight: 1.45, marginTop: 0 }}>
         Open one lift with <span style={{ color: COLORS.chalk }}>?id=swing_high_pull</span>. This page is not the workout.
       </p>
+      <Group title="On the rig" items={onRig} />
       <Group title="Pending" items={pending} />
       <Group title="In rotation" items={rest} />
     </div>

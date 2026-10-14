@@ -18,7 +18,10 @@ const FRONT_KEYS = ["hip", "sh", "elR", "haR", "elL", "haL", "knR", "anR", "knL"
 
 async function loadMovements() {
   const result = await esbuild.build({
-    entryPoints: [join(__dirname, "movements.js")],
+    stdin: {
+      contents: 'export * from "./movements.js"; export { validateRig, checkRig } from "./rig.js";',
+      resolveDir: __dirname,
+    },
     bundle: true,
     write: false,
     format: "cjs",
@@ -332,7 +335,7 @@ function poseGeometry(ex) {
 }
 
 async function main() {
-  const { EXERCISES, PATTERN_ORDER } = await loadMovements();
+  const { EXERCISES, PATTERN_ORDER, validateRig, checkRig } = await loadMovements();
   const errors = [];
   const warnings = [];
   const ids = new Set();
@@ -426,6 +429,25 @@ async function main() {
     }
   }
 
+  /* Rig movements (rig.js, docs/proposals/rig-app-plan.md §3.5): data shape, then geometry on
+     both sides — reach, lockout, floor, bell clearance, joint speed, bend direction, hand-offs,
+     framing. As with poses, a pending movement warns and one in rotation fails. */
+  let rigCount = 0;
+  for (const ex of EXERCISES) {
+    if (!("rig" in ex)) continue;
+    rigCount++;
+    const label = ex.id;
+    if (typeof ex.dur !== "number" || !(ex.dur > 0)) errors.push(`${label}: dur must be a positive number when rig exists`);
+    const shape = validateRig(ex);
+    for (const msg of shape) errors.push(`${label}.${msg}`);
+    if (shape.length) continue;
+    for (const msg of checkRig(ex)) {
+      const line = `${label}: rig ${msg}`;
+      if (ex.pending) warnings.push(line);
+      else errors.push(line);
+    }
+  }
+
   for (const w of warnings) console.warn("warn:", w);
   if (errors.length) {
     console.error(`check failed: ${errors.length} error(s)`);
@@ -433,7 +455,7 @@ async function main() {
     process.exit(1);
   }
   const warnNote = warnings.length ? `, ${warnings.length} warning(s)` : "";
-  console.log(`check ok: ${EXERCISES.length} movements, ${knownGroups.size} variant groups${warnNote}, patterns=[${PATTERN_ORDER.join(", ")}]`);
+  console.log(`check ok: ${EXERCISES.length} movements (${rigCount} on the rig), ${knownGroups.size} variant groups${warnNote}, patterns=[${PATTERN_ORDER.join(", ")}]`);
 }
 
 main().catch((err) => {
