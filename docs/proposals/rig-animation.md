@@ -146,7 +146,7 @@ The rig work doesn't block the slot template or depend on it; slots only need `p
 ## 6. Related items (no change proposed, noted for alignment)
 
 - **Pool depth for slots:** Anti-rotation has one movement (plank pull-through). Worth a few more before the core slot rotates through the anti-movement types.
-- **Optional movement flag for back-sensitive days:** a generic field such as `loads: ["endRangeExtension", "loadedRotation"]` on movements like windmill, Russian twist and heavy overhead work, so a future setting could steer around them. Open question, not a request to build.
+- **Optional movement load flag:** a generic field such as `loads: ["endRangeExtension", "loadedRotation"]` on movements like windmill, Russian twist and heavy overhead work, so a future setting could steer around those loads. Open question, not a request to build.
 - **Fitness-plan integration:** Joe trains strength 2 to 3 days a week alongside golf, swimming and running. Whether Bellwork should offer named strength days (A/B/C with a different lower-body emphasis each day) on top of the daily seeded circuit is open. `vision-roadmap.md` §11 says no second workout structure, so this would need Joe's decision first.
 
 ## 7. Questions for the Cursor review
