@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: app plan drafted, waiting on Joe.** [proposals/rig-app-plan.md](./proposals/rig-app-plan.md): canvas `RigFigure`, shared `rig.js` and `blocks.js`, rig checks in `check.mjs`, the contact sheet as the review page; slice 1 is clean + squat + press, clean + press and thruster, then four Complex batches. Joe decides renderer, per-batch shipping, three-quarter view. No app code until approved. New videos wait for conversion; the notes flow is ready ([proposals/rig-ingest.md](./proposals/rig-ingest.md)).
+0. **Animation: app plan revised after review, waiting on Joe's approval.** [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Joe agreed in chat with: canvas, ship per batch, views any two of side/front/three-quarter chosen per movement and confirmed on his phone, right side for one-sided movements and right-then-left for alternating ones. Next: Joe approves the plan, then step 1a (rig, checks, review page; no app change). New videos wait for conversion; the notes flow is ready ([proposals/rig-ingest.md](./proposals/rig-ingest.md)).
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -16,6 +16,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 ## Last session (2026-10-14, Claude, app plan)
 
 - Drafted [proposals/rig-app-plan.md](./proposals/rig-app-plan.md) for Joe's approval. Recommended: canvas renderer, ship Complex per batch, three-quarter view only on the review page, right side only in the app.
+- An independent Claude subagent reviewed the plan against the code and prototypes. Main finds: bell hand must be per phase (Complex changes hands mid-rep), the speed check must cover every joint (the elbow peaks fastest in clean + squat + press), fixed framing and shading, phone canvas memory, split slice 1 into rig-only and app PRs, estimates roughly doubled. Plan revised; §7 lists the changes. Decision 4 changed to right-then-left for alternating movements; decision 3 widened to any two views per movement.
 
 ## Earlier (2026-10-14, Claude, animation bake-off and decision)
 
