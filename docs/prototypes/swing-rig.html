@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Swing Rig Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: two stage panels side by side (stacked on phones), one shared control bar, then the data that drives each. Matches Bellwork's dark gym-chalk palette. */
+:root {
+  --bg: #17181B;
+  --panel: #1F2125;
+  --edge: #2A2D33;
+  --chalk: #EFEBE2;
+  --chalk-dim: #9A968C;
+  --lower: #3E8E5A;
+  --old: #8A6F5A;
+  --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--chalk); font-family: var(--body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 920px; margin: 0 auto; padding-inline: 16px; padding-block: 24px 48px; display: grid; gap: 22px; }
+header { display: grid; gap: 6px; }
+.eyebrow { font-family: var(--display); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--lower); font-size: 13px; }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(30px, 6vw, 44px); line-height: 1.02; margin: 0; text-wrap: balance; }
+.lede { color: var(--chalk-dim); max-width: 62ch; margin: 0; }
+.stages { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 620px) { .stages { grid-template-columns: 1fr; } }
+.stage { background: var(--panel); border: 1px solid var(--edge); border-radius: 10px; padding: 12px; display: grid; gap: 8px; min-width: 0; }
+.stage-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.stage-title { font-family: var(--display); font-weight: 700; font-size: 20px; letter-spacing: .02em; text-transform: uppercase; }
+.tag { font-family: var(--mono); font-size: 11px; color: var(--chalk-dim); }
+canvas { width: 100%; max-width: 100%; aspect-ratio: 1 / 1; display: block; }
+.phase { font-family: var(--display); font-weight: 600; font-size: 15px; letter-spacing: .12em; text-transform: uppercase; color: var(--lower); min-height: 1.4em; }
+.phase.old { color: var(--chalk-dim); }
+.controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; background: var(--panel); border: 1px solid var(--edge); border-radius: 10px; padding: 12px; }
+.group { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.group-label { font-family: var(--display); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: 12px; color: var(--chalk-dim); margin-right: 2px; }
+button { font: 500 13px/1 var(--body); color: var(--chalk); background: transparent; border: 1px solid var(--edge); border-radius: 999px; padding: 8px 12px; cursor: pointer; }
+button[aria-pressed="true"] { background: var(--chalk); color: var(--bg); border-color: var(--chalk); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--lower); outline-offset: 2px; }
+#scrub { flex: 1 1 160px; min-width: 0; accent-color: var(--lower); }
+.notes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 620px) { .notes { grid-template-columns: 1fr; } }
+.note { display: grid; gap: 8px; min-width: 0; align-content: start; }
+.note h2 { font-family: var(--display); font-weight: 700; font-size: 18px; text-transform: uppercase; letter-spacing: .03em; margin: 0; }
+.note p { margin: 0; color: var(--chalk-dim); max-width: 62ch; }
+pre { margin: 0; background: var(--panel); border: 1px solid var(--edge); border-radius: 8px; padding: 10px 12px; overflow-x: auto; font: 12px/1.55 var(--mono); color: var(--chalk); }
+.k { color: var(--chalk-dim); }
+.size { font-family: var(--mono); font-size: 12px; color: var(--chalk-dim); font-variant-numeric: tabular-nums; }
+</style>
+</head><body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Bellwork · animation test</div>
+    <h1>Kettlebell swing, two ways</h1>
+    <p class="lede">Left is the swing exactly as the app draws it today: two hand-placed poses, blended in a straight line. Right is the same movement on a joint-angle rig: seven phases, fixed bone lengths, one skeleton that can be viewed from any side.</p>
+  </header>
+
+  <section class="stages" aria-label="Animations">
+    <div class="stage">
+      <div class="stage-head"><span class="stage-title">Current</span><span class="tag">2 poses · x,y points</span></div>
+      <canvas id="old" width="400" height="400" aria-label="Current two-pose swing animation"></canvas>
+      <div class="phase old" id="oldPhase">Side view only</div>
+    </div>
+    <div class="stage">
+      <div class="stage-head"><span class="stage-title">Rig</span><span class="tag">7 phases · joint angles</span></div>
+      <canvas id="rig" width="400" height="400" aria-label="Joint-angle rig swing animation"></canvas>
+      <div class="phase" id="rigPhase">Float</div>
+    </div>
+  </section>
+
+  <section class="controls" aria-label="Playback">
+    <div class="group"><span class="group-label">Play</span>
+      <button id="play" aria-pressed="true">Pause</button>
+    </div>
+    <div class="group" role="group" aria-label="Speed"><span class="group-label">Speed</span>
+      <button data-speed="1" aria-pressed="true">1×</button>
+      <button data-speed="0.5" aria-pressed="false">½×</button>
+      <button data-speed="0.25" aria-pressed="false">¼×</button>
+    </div>
+    <div class="group" role="group" aria-label="Rig camera"><span class="group-label">Rig view</span>
+      <button data-yaw="0" aria-pressed="true">Side</button>
+      <button data-yaw="38" aria-pressed="false">¾</button>
+      <button data-yaw="90" aria-pressed="false">Front</button>
+    </div>
+    <label class="group" style="flex:1 1 220px; min-width:0" for="scrub"><span class="group-label">Scrub</span>
+      <input id="scrub" type="range" min="0" max="1000" value="0">
+    </label>
+  </section>
+
+  <section class="notes">
+    <div class="note">
+      <h2>What the rig stores per movement</h2>
+      <p>Each phase is four numbers: shin tilt, knee bend, hip bend and shoulder angle, plus how long the phase lasts. The skeleton, bone lengths and drawing code are shared by every movement and written once.</p>
+      <pre id="rigData"></pre>
+      <div class="size" id="rigSize"></div>
+    </div>
+    <div class="note">
+      <h2>What the app stores today</h2>
+      <p>Two side-view poses as screen coordinates, plus two separately drawn front-view poses. Nothing stops a limb from changing length between frames, and every phase between the bottom and the top is a straight-line blend.</p>
+      <pre id="oldData"></pre>
+      <div class="size" id="oldSize"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+  const C = { chalk: "#EFEBE2", dim: "#9A968C", edge: "#2A2D33", bell: "#3E8E5A" };
+  const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- Current app swing (copied from poses.js / movements.js) ---------- */
+  const OLD = [
+    { hip: [96, 124], sh: [128, 98], el: [118, 118], ha: [104, 138], kn: [104, 150], an: [100, 176], bell: [96, 146] },
+    { hip: [100, 104], sh: [100, 68], el: [122, 72], ha: [144, 76], kn: [100, 141], an: [100, 176], bell: [150, 78] },
+  ];
+  const OLD_DUR = 1.5;
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const lp = (a, b, t) => [lerp(a[0], b[0], t), lerp(a[1], b[1], t)];
+  function oldPose(u) {
+    const seg = u * OLD.length, i = Math.floor(seg) % OLD.length, t = seg - Math.floor(seg);
+    const A = OLD[i], B = OLD[(i + 1) % OLD.length], o = {};
+    for (const k in A) o[k] = lp(A[k], B[k], t);
+    return o;
+  }
+  function drawOld(ctx, u) {
+    const p = oldPose(u);
+    ctx.clearRect(0, 0, 200, 200);
+    ctx.lineCap = "round";
+    line(ctx, [18, 178], [182, 178], C.edge, 2);
+    for (const [a, b, w] of [["hip", "sh", 3.8], ["hip", "kn", 3.4], ["kn", "an", 3.4], ["sh", "el", 3.2], ["el", "ha", 3.2]]) line(ctx, p[a], p[b], C.chalk, w);
+    const dx = p.sh[0] - p.hip[0], dy = p.sh[1] - p.hip[1], len = Math.hypot(dx, dy) || 1;
+    const head = [p.sh[0] + dx / len * 13, p.sh[1] + dy / len * 13];
+    ring(ctx, head, 8, C.chalk, 3);
+    disc(ctx, p.bell, 7.5, C.bell);
+    ring(ctx, [p.bell[0], p.bell[1] - 7], 4.5, C.bell, 2.6);
+  }
+
+  /* ---------- Rig: shared skeleton, defined once ---------- */
+  const BONE = { shin: .25, thigh: .245, torso: .30, neck: .10, upper: .17, fore: .15, bell: .055, foot: .1 };
+  const WIDTH = { hip: .055, shoulder: .09, elbow: .06, hand: .028 };
+  const rad = d => d * Math.PI / 180;
+  const step = (p, ang, l) => [p[0] + l * Math.sin(rad(ang)), p[1] + l * Math.cos(rad(ang))];
+
+  /* ---------- Swing: the only per-movement data ---------- */
+  const SWING = {
+    id: "swing", dur: 1.6,
+    phases: [
+      { name: "Float",     t: .18, shin: 2, knee: 3,  hip: -3, shoulder: 88 },
+      { name: "Drop",      t: .12, shin: 2, knee: 4,  hip: -1, shoulder: 40 },
+      { name: "Hike",      t: .12, shin: 4, knee: 18, hip: 42, shoulder: 20 },
+      { name: "Backswing", t: .08, shin: 6, knee: 32, hip: 83, shoulder: 30 },
+      { name: "Drive",     t: .10, shin: 5, knee: 26, hip: 66, shoulder: 26 },
+      { name: "Snap",      t: .14, shin: 3, knee: 5,  hip: 4,  shoulder: 42 },
+      { name: "Rise",      t: .14, shin: 2, knee: 3,  hip: -3, shoulder: 72 },
+    ],
+  };
+  const KEYS = ["shin", "knee", "hip", "shoulder"];
+  const P = SWING.phases, N = P.length;
+  const total = P.reduce((s, p) => s + p.t, 0);
+  const T = []; { let acc = 0; for (const p of P) { T.push(acc / total); acc += p.t; } }
+  const tAt = i => T[((i % N) + N) % N] + Math.floor(i / N);
+  const vAt = (i, k) => P[((i % N) + N) % N][k];
+  function slope(i, k) {
+    return (vAt(i + 1, k) - vAt(i - 1, k)) / (tAt(i + 1) - tAt(i - 1));
+  }
+  function angles(u) {
+    let i = N - 1; for (let j = 0; j < N; j++) if (u >= T[j]) i = j;
+    const t0 = tAt(i), t1 = tAt(i + 1), h = t1 - t0, s = (u - t0) / h;
+    const h00 = 2*s*s*s - 3*s*s + 1, h10 = s*s*s - 2*s*s + s, h01 = -2*s*s*s + 3*s*s, h11 = s*s*s - s*s;
+    const o = { phase: P[i].name };
+    for (const k of KEYS) o[k] = h00 * vAt(i, k) + h10 * h * slope(i, k) + h01 * vAt(i + 1, k) + h11 * h * slope(i + 1, k);
+    return o;
+  }
+  function pose(a) {
+    const an = [0, 0], kn = step(an, a.shin, BONE.shin);
+    const thigh = a.shin - a.knee, hip = step(kn, thigh, BONE.thigh);
+    const torso = thigh + a.hip, sh = step(hip, torso, BONE.torso), head = step(sh, torso, BONE.neck);
+    const arm = torso + 180 - a.shoulder, el = step(sh, arm, BONE.upper), ha = step(el, arm, BONE.fore), bell = step(ha, arm, BONE.bell);
+    const toe = [an[0] + BONE.foot, 0];
+    return { an, toe, kn, hip, sh, head, el, ha, bell };
+  }
+  function drawRig(ctx, u, yaw) {
+    const a = angles(u), p = pose(a), c = Math.cos(rad(yaw)), s = Math.sin(rad(yaw));
+    const S = 135, cx = 100 + (yaw > 60 ? 0 : 0), gy = 178;
+    const pr = (pt, z) => { const X = pt[0] * c + z * s, D = -pt[0] * s + z * c; return { x: cx + X * S, y: gy - pt[1] * S, d: D }; };
+    ctx.clearRect(0, 0, 200, 200);
+    ctx.lineCap = "round";
+    line(ctx, [18, 178], [182, 178], C.edge, 2);
+    const segs = [];
+    for (const side of [-1, 1]) {
+      const zh = side * WIDTH.hip;
+      segs.push([pr(p.an, zh), pr(p.toe, zh), 3]);
+      segs.push([pr(p.an, zh), pr(p.kn, zh), 3.4]);
+      segs.push([pr(p.kn, zh), pr(p.hip, zh), 3.4]);
+      segs.push([pr(p.sh, side * WIDTH.shoulder), pr(p.el, side * WIDTH.elbow), 3.2]);
+      segs.push([pr(p.el, side * WIDTH.elbow), pr(p.ha, side * WIDTH.hand), 3.2]);
+    }
+    segs.push([pr(p.hip, -WIDTH.hip), pr(p.hip, WIDTH.hip), 3.4]);
+    segs.push([pr(p.sh, -WIDTH.shoulder), pr(p.sh, WIDTH.shoulder), 3.4]);
+    const midHip = pr(p.hip, 0), midSh = pr(p.sh, 0);
+    segs.push([midHip, midSh, 3.8]);
+    const ds = segs.map(sg => (sg[0].d + sg[1].d) / 2), lo = Math.min(...ds), hi = Math.max(...ds);
+    segs.map((sg, i) => [sg, ds[i]]).sort((A, B) => A[1] - B[1]).forEach(([sg, d]) => {
+      const near = hi - lo < 1e-6 ? 1 : (d - lo) / (hi - lo);
+      ctx.globalAlpha = .35 + .65 * near;
+      line(ctx, [sg[0].x, sg[0].y], [sg[1].x, sg[1].y], C.chalk, sg[2]);
+    });
+    ctx.globalAlpha = 1;
+    const hd = pr(p.head, 0); ring(ctx, [hd.x, hd.y], 8, C.chalk, 3);
+    const b = pr(p.bell, 0), hh = pr(p.ha, 0);
+    const ang = Math.atan2(b.y - hh.y, b.x - hh.x);
+    disc(ctx, [b.x + Math.cos(ang) * 3, b.y + Math.sin(ang) * 3], 7.5, C.bell);
+    ring(ctx, [hh.x, hh.y], 4.2, C.bell, 2.6);
+    return a.phase;
+  }
+
+  /* ---------- drawing helpers ---------- */
+  function line(ctx, a, b, col, w) { ctx.strokeStyle = col; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); }
+  function ring(ctx, p, r, col, w) { ctx.strokeStyle = col; ctx.lineWidth = w; ctx.beginPath(); ctx.arc(p[0], p[1], r, 0, Math.PI * 2); ctx.stroke(); }
+  function disc(ctx, p, r, col) { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(p[0], p[1], r, 0, Math.PI * 2); ctx.fill(); }
+
+  function setup(id) {
+    const cv = document.getElementById(id), ctx = cv.getContext("2d");
+    const dpr = Math.min(window.devicePixelRatio || 1, 3);
+    const size = () => { const w = cv.clientWidth || 300; cv.width = w * dpr; cv.height = w * dpr; ctx.setTransform(cv.width / 200, 0, 0, cv.height / 200, 0, 0); };
+    size(); window.addEventListener("resize", size);
+    return ctx;
+  }
+  const oldCtx = setup("old"), rigCtx = setup("rig");
+  const rigPhase = document.getElementById("rigPhase");
+
+  /* ---------- playback ---------- */
+  let playing = !reduced, speed = 1, yaw = 0, clock = 0, last = null;
+  const scrub = document.getElementById("scrub"), playBtn = document.getElementById("play");
+  function render() {
+    drawOld(oldCtx, ((clock / OLD_DUR) % 1 + 1) % 1);
+    rigPhase.textContent = drawRig(rigCtx, ((clock / SWING.dur) % 1 + 1) % 1, yaw);
+  }
+  function frame(ts) {
+    if (last !== null && playing) { clock += (ts - last) / 1000 * speed; scrub.value = Math.round(((clock / SWING.dur) % 1) * 1000); }
+    last = ts; render(); requestAnimationFrame(frame);
+  }
+  playBtn.textContent = playing ? "Pause" : "Play";
+  playBtn.setAttribute("aria-pressed", String(playing));
+  playBtn.addEventListener("click", () => { playing = !playing; playBtn.textContent = playing ? "Pause" : "Play"; playBtn.setAttribute("aria-pressed", String(playing)); });
+  scrub.addEventListener("input", () => { playing = false; playBtn.textContent = "Play"; playBtn.setAttribute("aria-pressed", "false"); clock = scrub.value / 1000 * SWING.dur; });
+  const pick = (attr, cb) => document.querySelectorAll(`[${attr}]`).forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll(`[${attr}]`).forEach(o => o.setAttribute("aria-pressed", String(o === b))); cb(parseFloat(b.getAttribute(attr)));
+  }));
+  pick("data-speed", v => speed = v);
+  pick("data-yaw", v => yaw = v);
+  requestAnimationFrame(frame);
+
+  /* ---------- data panels ---------- */
+  const rigJson = JSON.stringify({ id: SWING.id, dur: SWING.dur, phases: P });
+  const rigPretty = "{ id: \"swing\", dur: 1.6, phases: [\n" + P.map(p => `  { ${p.name.padEnd(9)} t ${p.t.toFixed(2)}  shin ${String(p.shin).padStart(2)}  knee ${String(p.knee).padStart(2)}  hip ${String(p.hip).padStart(3)}  shoulder ${String(p.shoulder).padStart(2)} }`).join("\n") + "\n]}";
+  document.getElementById("rigData").textContent = rigPretty;
+  document.getElementById("rigSize").textContent = `Motion data: ${rigJson.length} bytes · works from any camera angle`;
+  const oldTxt = `poses: [S_HINGE, S_SWTOP]
+S_HINGE  hip 96,124  sh 128,98  el 118,118
+         ha 104,138  kn 104,150  an 100,176
+S_SWTOP  hip 100,104 sh 100,68  el 122,72
+         ha 144,76   kn 100,141  an 100,176
+posesF: [ two more hand-placed front poses ]`;
+  document.getElementById("oldData").textContent = oldTxt;
+  document.getElementById("oldSize").textContent = "Motion data: about 400 bytes · side and front authored separately";
+})();
+</script>
+</body></html>

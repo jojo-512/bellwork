@@ -20,7 +20,7 @@ still be using in six months; the content is what proves the loop works.
 
 ### Verified against the code today
 
-I re-counted `bellwork.jsx` at `d53e729`. Batch 1 did not touch any movement data, so every number
+I re-counted `bellwork.jsx` at `5e902d3`. Batch 1 did not touch any movement data, so every number
 in the roadmap still holds exactly:
 
 | | Total | Standard | Complex |
@@ -275,6 +275,6 @@ Nothing on scope. Pending Library approvals and Joe's Complex PR check after ins
 
 - **v1.0** — All 11 scoping items decided by Joe; §7 turned from questions into the decision record.
   No change to scope or slice order — every recommendation was taken. Build brief promoted to ready.
-- **v0.1** — First Batch 2 plan. Counts re-verified against `d53e729`; storage migration, the
+- **v0.1** — First Batch 2 plan. Counts re-verified against `5e902d3`; storage migration, the
   approve-during-a-run wrinkle, the validator, and the `PATTERN_ORDER` carry detail added on top of
   the roadmap's seven items.
