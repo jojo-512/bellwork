@@ -93,14 +93,14 @@ pre { margin: 0; background: var(--panel); border: 1px solid var(--edge); border
       <h2>What worked, what didn't</h2>
       <ul>
         <li><strong>Worked: one rep, feet never move.</strong> Both feet are fixed targets from hike to lockout, so the clean, the front squat and the press all happen over planted feet. The bell passes between the legs at the hike, travels up close to the body, sits in a rack with the elbow tucked under it through the squat, and the arm locks out at 98% of full reach with the bell stacked over the shoulder. The press starts on the way up from the bottom, as the cue says. The left hand is a computed mirror.</li>
-        <li><strong>Extended the rig in two places.</strong> A per-phase <code>rack</code> value blends how the single bell sits: hanging from the hand (trailing the forearm when the arm points down) or resting on the outside of the forearm. In between it rolls round the hand, so the clean never flips it onto the wrist. A per-movement <code>kneeOut</code> lets the knees track out over the feet; the shared default let them cave in at the bottom of the squat.</li>
-        <li><strong>Didn't: one elbow direction for the whole rep is a compromise.</strong> It gives a tucked rack and an elbow under the bell in the press, but in the clean pull the elbow drifts back and a little out, and the press elbow is touchy: moving the hand target 2 cm forward swung it from behind the head to in front of the face. Lowering needed its own phase so the forearm didn't cross the face. The bell is a disc, so "no flip" shows only in its path, and the toes can't turn out.</li>
+        <li><strong>Extended the rig in three places.</strong> A per-phase <code>rack</code> value blends how the single bell sits: hanging from the hand (trailing the forearm when the arm points down) or resting on the outside of the forearm. In between it rolls round the hand, so the clean never flips it onto the wrist. Each phase names its elbow direction from four presets (hang, pull, rack, press), so the elbow stays tucked in the clean, under the hand in the rack and under the bell in the press. A per-movement <code>kneeOut</code> lets the knees track out over the feet; the shared default let them cave in at the bottom of the squat.</li>
+        <li><strong>Didn't: rig limits.</strong> The press still needed its own lowering phase so the forearm didn't cross the face. The bell is a disc, so "no flip" shows only in its path. The toes can't turn out, the spine is one rigid bone, and the head doesn't move back for the press, so in the side view the bell is drawn over the head at lockout (it is 23 cm clear in 3D).</li>
       </ul>
     </div>
     <div class="note">
       <h2>What one rep stores</h2>
       <pre id="data"></pre>
-      <p>Eleven phases, each a pelvis position, a ribcage lean, two hand targets and how the bell sits. The planted feet, the knee and elbow solving, the hanging or racked bell and the left-hand mirror are fixed values or shared code.</p>
+      <p>Eleven phases, each a pelvis position, a ribcage lean, two hand targets, how the bell sits and a named elbow preset. The planted feet, the knee and elbow solving, the hanging or racked bell and the left-hand mirror are fixed values or shared code.</p>
     </div>
   </section>
 </div>
@@ -184,7 +184,7 @@ pre { margin: 0; background: var(--panel); border: 1px solid var(--edge); border
     }
     const arms = {};
     for (const [name, side] of [["L", -1], ["R", 1]]) {
-      const sh = shoulder(side), [pu, pr, pf] = m.armPole[name];
+      const sh = shoulder(side), [pu, pr, pf] = s["pole" + name] || m.armPole[name];   // per-phase elbow direction if the phase sets one
       const e = ik(sh, s["hand" + name], B.upper, B.fore, add(add(mul(up, pu), mul(right, side * pr)), mul(fwd, pf)));
       arms[name] = { sh, elbow: e.mid, hand: e.end };
     }
@@ -211,12 +211,12 @@ pre { margin: 0; background: var(--panel); border: 1px solid var(--edge); border
   // Mirror: swap sides, flip z, reverse the twist.
   const flipZ = a => [a[0], a[1], -a[2]];
   const flipFoot = f => ({ at: flipZ(f.at), toes: f.toes, air: f.air });
-  const mirrorPhase = p => ({ ...p, pelvis: flipZ(p.pelvis), twist: -p.twist, footL: flipFoot(p.footR), footR: flipFoot(p.footL), handL: flipZ(p.handR), handR: flipZ(p.handL) });
+  const mirrorPhase = p => ({ ...p, pelvis: flipZ(p.pelvis), twist: -p.twist, footL: flipFoot(p.footR), footR: flipFoot(p.footL), handL: flipZ(p.handR), handR: flipZ(p.handL), poleL: p.poleR, poleR: p.poleL });
   const mirrorConst = m => ({ ...m, bell: m.bell === "horns" ? "horns" : m.bell === "R" ? "L" : "R", armPole: { L: m.armPole.R, R: m.armPole.L } });
 
   // Flatten each phase to numbers, interpolate with a smooth cubic, rebuild.
-  const flat = p => [...p.pelvis, p.pitch, p.lean, p.twist, ...p.footL.at, p.footL.toes, p.footL.air, ...p.footR.at, p.footR.toes, p.footR.air, ...p.handL, ...p.handR, p.rack ?? 1];
-  const unflat = a => ({ pelvis: a.slice(0, 3), pitch: a[3], lean: a[4], twist: a[5], footL: { at: a.slice(6, 9), toes: a[9], air: a[10] }, footR: { at: a.slice(11, 14), toes: a[14], air: a[15] }, handL: a.slice(16, 19), handR: a.slice(19, 22), rack: a[22] });
+  const flat = p => [...p.pelvis, p.pitch, p.lean, p.twist, ...p.footL.at, p.footL.toes, p.footL.air, ...p.footR.at, p.footR.toes, p.footR.air, ...p.handL, ...p.handR, p.rack ?? 1, ...(p.poleL || [0, 0, 0]), ...(p.poleR || [0, 0, 0])];
+  const unflat = a => ({ pelvis: a.slice(0, 3), pitch: a[3], lean: a[4], twist: a[5], footL: { at: a.slice(6, 9), toes: a[9], air: a[10] }, footR: { at: a.slice(11, 14), toes: a[14], air: a[15] }, handL: a.slice(16, 19), handR: a.slice(19, 22), rack: a[22], poleL: a.slice(23, 26), poleR: a.slice(26, 29) });
   function sampler(cycle) {
     const N = cycle.length, VALS = cycle.map(flat);
     const TOTAL = cycle.reduce((s, p) => s + p.t, 0);
@@ -345,22 +345,25 @@ pre { margin: 0; background: var(--panel); border: 1px solid var(--edge); border
   /* ================= Clean + squat + press: the only per-movement data ================= */
   // Standing, feet planted a little wider than the hips. Bell in the right hand; the left side is a mirror.
   const FEET = { footL: { at: [0, .08, -.16], toes: 0, air: 0 }, footR: { at: [0, .08, .16], toes: 0, air: 0 } };
-  const M = { bell: "R", kneeOut: .4, armPole: { R: [-1, .08, 0], L: [-.3, .3, -1] } };   // knees track over the toes; bell elbow under the hand; free elbow bends back
-  // pelvis x/y, ribcage lean, bell hand, free hand, rack (0 = bell hangs from the hand, 1 = bell rests on the forearm)
-  const ph = (name, t, px, py, lean, handR, handL, rack) => ({ name, t, pelvis: [px, py, 0], pitch: 0, lean, twist: 0, ...FEET, handR, handL, rack });
+  const M = { bell: "R", kneeOut: .4, armPole: { R: [-1, .08, 0], L: [-.3, .3, -1] } };   // knees track over the toes
+  // Elbow directions (up, out, forward in the ribcage frame), picked per phase by name.
+  const EL = { hang: [-.3, .1, -1], pull: [-.8, 0, -.4], rack: [-1, .08, 0], press: [-1, .12, .2] };
+  const FREE = [-.3, .3, -1];                                                      // free elbow bends back
+  // pelvis x/y, ribcage lean, bell hand, free hand, rack (0 = bell hangs from the hand, 1 = bell rests on the forearm), bell elbow
+  const ph = (name, t, px, py, lean, handR, handL, rack, el) => ({ name, t, pelvis: [px, py, 0], pitch: 0, lean, twist: 0, ...FEET, handR, handL, rack, el, poleR: EL[el], poleL: FREE });
   const SIDE = [.04, .88, -.26];                                                   // free hand relaxed by the thigh
   const REP = [
-    ph("Hike",          .40, -.14, .78, 62, [ .05,  .52, .03], [-.04, .62, -.24], 0),
-    ph("Drive",         .25, -.04, .90, 22, [ .16,  .84, .06], [ .04, .80, -.25], 0),
-    ph("Pull to rack",  .25,  .00, .93,  4, [ .12, 1.08, .18], SIDE,              .6),
-    ph("Rack",          .30,  .00, .94,  2, [ .16, 1.36, .06], SIDE,               1),
-    ph("Squat",         .40, -.08, .72, 10, [ .15, 1.12, .06], [ .26, .86, -.22],  1),
-    ph("Bottom",        .30, -.16, .50, 20, [ .13,  .84, .06], [ .40, .85, -.20],  1),
-    ph("Drive + press", .35, -.06, .78,  8, [ .05, 1.72, .26], [ .14, .82, -.24],  1),
-    ph("Lockout",       .35,  .00, .94,  0, [ .00, 1.97, .17], [ .02, .88, -.30],  1),
-    ph("Lower",         .20,  .00, .94,  1, [ .05, 1.80, .25], [ .03, .88, -.28],  1),
-    ph("Lower to rack", .25,  .00, .94,  2, [ .16, 1.36, .06], SIDE,               1),
-    ph("Drop",          .35, -.05, .90, 25, [ .17,  .84, .06], [ .04, .80, -.25],  0),
+    ph("Hike",          .40, -.24, .84, 64, [ .00,  .53, .04], [ .02, .58, -.22], 0, "hang"),
+    ph("Drive",         .25, -.04, .90, 22, [ .16,  .84, .06], [ .04, .80, -.25], 0, "hang"),
+    ph("Pull to rack",  .25,  .00, .93,  4, [ .14, 1.08, .14], SIDE,              .6, "pull"),
+    ph("Rack",          .30,  .00, .94,  2, [ .16, 1.36, .06], SIDE,               1, "rack"),
+    ph("Squat",         .40, -.08, .72, 10, [ .15, 1.12, .06], [ .26, .86, -.22],  1, "rack"),
+    ph("Bottom",        .30, -.16, .50, 20, [ .13,  .84, .06], [ .40, .85, -.20],  1, "rack"),
+    ph("Drive + press", .35, -.06, .78,  8, [ .08, 1.70, .24], [ .14, .82, -.24],  1, "press"),
+    ph("Lockout",       .35,  .00, .94,  0, [ .00, 1.97, .17], [ .02, .88, -.30],  1, "press"),
+    ph("Lower",         .20,  .00, .94,  1, [ .06, 1.78, .24], [ .03, .88, -.28],  1, "press"),
+    ph("Lower to rack", .25,  .00, .94,  2, [ .16, 1.36, .06], SIDE,               1, "rack"),
+    ph("Drop",          .35, -.08, .88, 30, [ .17,  .84, .06], [ .04, .80, -.25],  0, "hang"),
   ];
   const SIDES = [
     { label: "Right hand", cycle: REP, m: M },
@@ -372,8 +375,8 @@ pre { margin: 0; background: var(--panel); border: 1px solid var(--edge); border
   const DATA_TEXT =
     "feet: flat at (0, 0.08, ±0.16), never move\n" +
     "free hand: by the thigh, forward in the squat\n\n" +
-    "phase          sec   pelvis x/y   lean  bell hand x/y/z    rack\n" +
-    REP.map(p => `${p.name.padEnd(14)} ${p.t.toFixed(2)}  ${f2(p.pelvis[0])} ${p.pelvis[1].toFixed(2)}   ${String(p.lean).padStart(3)}  ${f2(p.handR[0])} ${p.handR[1].toFixed(2)} ${p.handR[2].toFixed(2)}   ${p.rack}`).join("\n") +
+    "phase          sec   pelvis x/y   lean  bell hand x/y/z    rack  elbow\n" +
+    REP.map(p => `${p.name.padEnd(14)} ${p.t.toFixed(2)}  ${f2(p.pelvis[0])} ${p.pelvis[1].toFixed(2)}   ${String(p.lean).padStart(3)}  ${f2(p.handR[0])} ${p.handR[1].toFixed(2)} ${p.handR[2].toFixed(2)}   ${String(p.rack).padEnd(4)}  ${p.el}`).join("\n") +
     "\n\nleft hand: mirror(right), computed";
 
   /* ================= Playback ================= */
