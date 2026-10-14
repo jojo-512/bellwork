@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: step 1b built, waiting on Joe's phone review.** Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Step 1a is on `main` ([PR #3](https://github.com/jojo-512/bellwork/pull/3)). Step 1b puts `RigFigure` in the app for clean + squat + press, clean & press and thruster; it merges only with Joe's go-ahead. Then batch 2 (lunges).
+0. **Animation: step 1b built ([PR #4](https://github.com/jojo-512/bellwork/pull/4)), in Joe's phone review.** Clean & press approved on the phone. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Step 1a is on `main` ([PR #3](https://github.com/jojo-512/bellwork/pull/3)). Step 1b puts `RigFigure` in the app for clean + squat + press, clean & press and thruster; it merges only with Joe's go-ahead. Then batch 2 (lunges).
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.

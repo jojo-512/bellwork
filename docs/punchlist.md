@@ -7,7 +7,7 @@ Add items anytime after a workout. Keep each line one concrete thing.
 
 ## Open
 
-_(none)_
+- [ ] Rig figures (canvas): check phone heat and battery over a real gym session with the new figures on screen, including time in the Library. Not tested yet; comes from gym use after step 1b ships.
 
 ## Done
 
