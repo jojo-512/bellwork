@@ -4,16 +4,25 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **PR #1: rig chosen as the animation direction** (`claude/rig-animation-proposal`). Cursor's second review is posted ([review](https://github.com/jojo-512/bellwork/pull/1#pullrequestreview-5512574578)) with a slice-by-slice migration plan. Slice 2 and the Oct 7 ingest docs are on [`cursor/rig-v2-shoulders-9b80`](https://github.com/jojo-512/bellwork/tree/cursor/rig-v2-shoulders-9b80). Next: a fresh Cursor project (the old one was deleted) pointed at this repo, with Research Rob rewired without creator details; then a trial movement Joe reviews before any app work. No app build yet.
-1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
-2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
-3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
-4. **Export was recommended before install** — if you haven't, export the session log once, then hard-refresh / re-add Home Screen.
-5. After install: verify **Complex PR numbers** match pre-migration.
-6. Slot template (whole-body guarantee) — Batch 3, after the remaining pending approvals land in rotation.
-7. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
+0. **Trial prototype ready for phone review:** Clean + squat + press on the pelvis-rooted rig at [`docs/prototypes/clean-squat-press-rig.html`](./prototypes/clean-squat-press-rig.html) on branch `cursor/clean-squat-press-rig-d1be`. No app changes. Joe reviews on phone; no merge until he says so.
+1. **PR #1: rig chosen as the animation direction** (`claude/rig-animation-proposal`). Cursor's second review is posted ([review](https://github.com/jojo-512/bellwork/pull/1#pullrequestreview-5512574578)) with a slice-by-slice migration plan. Slice 2 and the Oct 7 ingest docs are on [`cursor/rig-v2-shoulders-9b80`](https://github.com/jojo-512/bellwork/tree/cursor/rig-v2-shoulders-9b80). No app build yet.
+2. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
+3. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
+4. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
+5. **Export was recommended before install** — if you haven't, export the session log once, then hard-refresh / re-add Home Screen.
+6. After install: verify **Complex PR numbers** match pre-migration.
+7. Slot template (whole-body guarantee) — Batch 3, after the remaining pending approvals land in rotation.
+8. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
 
-## Last session (2026-10-14, Claude, history cleanup)
+## Last session (2026-10-14, Cursor — CSP rig trial)
+
+- **Trial only, no app changes.** Fresh clone after the history rewrite. Branched from `claude/rig-animation-proposal` so the dead-bug / floor-press / lunge prototypes are present.
+- Added [`docs/prototypes/clean-squat-press-rig.html`](./prototypes/clean-squat-press-rig.html): current app poses from `main` on top; rig side / front / three-quarter below; play, speed, scrub, Right/Left side.
+- **Rig extensions vs dead-bug:** per-phase discrete `hold` (`floor` / `rack`, not on the cubic); standing pitch 0 with a deep hinge lean to reach a floor handle; free-hand targets off the horns; clean-pull waypoint so the cubic doesn't fold the forearm through the thigh.
+- **Honest notes on the page:** chain reads; floor-hold works but the floor start is deeper than the app stick figure; one shared arm-pole is soft for both rack and press.
+- Branch: `cursor/clean-squat-press-rig-d1be`. Pushed for Joe's phone review; no PR opened (per request).
+
+## Earlier (2026-10-14, Claude, history cleanup)
 
 - **Repo history rewritten and every branch force-pushed**, `main` included (files on `main` unchanged). Removed: Joe's full name and personal email from commit metadata (now the GitHub username and no-reply address), a third-party creator handle and video detail, and Cursor subagent IDs. Every commit has a new ID; commit IDs in the docs were updated on this branch.
 - **Ingest rule changed:** no footage, links or creator details go into the repo, and the `bellwork_notes` template has no `creator` field (`docs/animation-ingest-redesign.md` on the Slice 2 branch).
