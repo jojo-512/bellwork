@@ -67,7 +67,7 @@ The numeric checks are a script today, written for the clean + squat + press tri
 
 As in `AGENTS.md`: Cursor can author an animation when Joe asks, with Opus picked by hand, following this same flow, and Claude runs §4 on it before Joe reviews.
 
-## 6. Questions for Joe
+## 6. Decisions and open question
 
-1. **Converting the existing pool:** convert the current pool to the rig in batches before taking in new videos, or interleave the two? Converting first avoids running two animation systems for long. I'd convert first, starting with Complex.
-2. **First real test:** which video should go through this flow first? A five- or six-movement one would test the multi-movement handling.
+1. **Convert the existing pool first** (Joe, 2026-10-14), in batches, starting with Complex. New videos wait until the conversion is done, so the app never runs two animation systems for long.
+2. **Open:** which video goes through this flow first, once conversion is under way. A five- or six-movement one would test the multi-movement handling.
