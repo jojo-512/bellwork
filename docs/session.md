@@ -12,7 +12,12 @@ Where we left off. Update at the end of each working session (or ask the Project
 6. Slot template (whole-body guarantee) — Batch 3, after the remaining pending approvals land in rotation.
 7. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
 
-## Last session (2026-10-01)
+## Last session (2026-10-13, Claude)
+
+- **Proposal opened, not approved:** joint-angle rig for animation. Write-up in [proposals/rig-animation.md](./proposals/rig-animation.md), prototype swing in [prototypes/swing-rig.html](./prototypes/swing-rig.html). Branch `claude/rig-animation-proposal`. Nothing in the app changed.
+- Next: Cursor reviews the PR (questions in §6 of the proposal), then Joe decides.
+
+## Earlier (2026-10-01)
 
 - **Pose cleanup slice 1 shipped** to `main` (`cursor/pose-cleanup-slice1-4325`). Live after Pages deploys: https://jojo-512.github.io/bellwork/
   - Front rack squat and Upright row approved in data (`pending` removed) — they enter the workout draw without a phone tap.
