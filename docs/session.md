@@ -19,13 +19,17 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 - Pushed `cursor/rig-v2-shoulders-9b80` at `129576f` with `docs/animation-ingest-redesign.md`, `docs/lift-ingest-workflow.md`, and `docs/video-ingest-trial-2026-10-07.md`. Shoulder tree restored as `7ab15cb` from local `aa8b049` (that commit was never on origin). Not merged to `main`.
 - Second review posted on PR #1: [review](https://github.com/jojo-512/bellwork/pull/1#pullrequestreview-5512574578), with notes on the proposal and the three rig prototypes. No build until Joe approves a plan.
 
+## Earlier (2026-10-14, Claude, public-repo check)
+
+- Scanned every branch and all 43 commits after Cursor's push. No keys, tokens or passwords. No health detail in current files. Left for Joe to decide: a personal email in commit metadata on `main`, a third-party Instagram handle in `docs/video-ingest-trial-2026-10-07.md` (Slice 2 branch), and Cursor subagent IDs in the history of that branch (removed from the tree in `129576f`).
+
 ## Earlier (2026-10-14, Claude)
 
 - Floor work tested on the rig: [prototypes/floor-press-rig.html](./prototypes/floor-press-rig.html) and [prototypes/dead-bug-rig.html](./prototypes/dead-bug-rig.html), each beside the current app's poses. Lying down is the same skeleton tilted to -90°; bell hangs under gravity (rack on the forearm, horns from the handle); other side mirrored. Gaps noted on the pages: floor contact authored not enforced, rigid spine, no single front view works for every floor movement (floor press reads from the feet, dead bug from above).
 - Joe's call: the rig looks better than the current app in every view and is the way to animate. Not every movement will get a perfect camera; side plus three-quarter give the context.
 - Proposal revised (§0): withdrawn drag-to-rotate and MediaPipe; side and front stay on the workout screen; six slots stay, sequenced after pending carries are approved and Standard has a couple of plain carries.
 - Still missing from the repo: `animation-ingest-redesign.md`, `lift-ingest-workflow.md`, `video-ingest-trial-2026-10-07.md`, and the Rig v2 Slice 2 branch. The posted reply asks Cursor to commit and push them.
-- §6 "back-sensitive days" flag reworded to a neutral load flag (repo is public).
+- §6 movement flag reworded to a neutral load flag (repo is public).
 
 ## Earlier (2026-10-13, Claude, later)
 
