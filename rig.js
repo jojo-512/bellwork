@@ -164,7 +164,7 @@ export function solve(s, m = {}) {
   const wt = holds.reduce((n, [w]) => n + Math.max(0, w), 0) || 1;
   let handle = [0, 0, 0], bell = [0, 0, 0];
   for (const [w, h] of holds) if (w > 0) { handle = add(handle, mul(h.handle, w / wt)); bell = add(bell, mul(h.bell, w / wt)); }
-  return { pel, neck, head, fwd, legs, arms, handle, bell, ik: ik2 };
+  return { pel, neck, head, fwd, legs, arms, handle, bell, ik: ik2, floor: m.floor };
 }
 
 /* ---------------- Sampler ----------------
@@ -204,7 +204,11 @@ export function build(ex, side = "R") {
   const scaled = rep.map((p) => ({ ...p, t: p.t * k }));
   const one = side === "L" ? scaled.map(mirror) : scaled;
   const cycle = ex.rig.sides === "alternate" ? [...one, ...one.map(mirror)] : one;
-  const m = { kneeOut: ex.rig.kneeOut };
+  // The floor patch covers every foot position in the rep, so a wide stance stays on it.
+  const feet = cycle.flatMap((p) => [p.footL, p.footR]);
+  const floor = [Math.min(FLOOR[0], ...feet.map((f) => f[0] - 0.15)), Math.max(FLOOR[1], ...feet.map((f) => f[0] + 0.3)),
+    Math.max(FLOOR[2], ...feet.map((f) => Math.abs(f[2]) + 0.2))];
+  const m = { kneeOut: ex.rig.kneeOut, floor };
   return { cycle, smp: sampler(cycle), m };
 }
 
@@ -230,7 +234,7 @@ const solvedPoints = (r) => [r.head, r.neck, r.pel, r.bell, r.handle,
 
 /* ---------------- Drawing ---------------- */
 export const RIG_COLORS = { chalk: "#EFEBE2", edge: "#2A2D33", floor: "#24262B" };
-const FLOOR = [-0.7, 0.7, 0.45];
+const FLOOR = [-0.7, 0.7, 0.45];   // default floor patch: x from, x to, z half-width (m)
 // Far limbs dim by a fixed depth scale, so a still limb never changes shade.
 const DEPTH = [-0.25, 0.25];
 
@@ -242,7 +246,7 @@ function disc(ctx, p, r, col) { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(p.
 export function draw(ctx, r, view, bellColor, frame) {
   const P2 = camera(view, frame), C = RIG_COLORS;
   ctx.clearRect(0, 0, 200, 200); ctx.lineCap = "round"; ctx.lineJoin = "round";
-  const [fx0, fx1, fz] = FLOOR, ox = (frame && frame.x) || 0;
+  const [fx0, fx1, fz] = r.floor || FLOOR, ox = (frame && frame.x) || 0;
   const corners = [[fx0 + ox, 0, -fz], [fx1 + ox, 0, -fz], [fx1 + ox, 0, fz], [fx0 + ox, 0, fz]].map(P2);
   ctx.globalAlpha = 1; ctx.fillStyle = C.floor; ctx.beginPath();
   corners.forEach((q, i) => (i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y)));

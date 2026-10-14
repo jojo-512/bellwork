@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: step 1b merged to `main` ([PR #4](https://github.com/jojo-512/bellwork/pull/4), merge commit 96599dd).** Clean + squat + press, clean & press and thruster draw on the rig in the app, all approved by Joe on his phone. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Next: batch 2 (lunges: lunge + twist, clean + lunge, lateral lunge + press).
+0. **Animation: batch 2 (lunges) built, in Joe's phone review.** Step 1b is on `main` ([PR #4](https://github.com/jojo-512/bellwork/pull/4)). Batch 2 puts reverse lunge + twist, clean + reverse lunge and lateral lunge + press on the rig; Joe confirms each movement and its two card views on his phone, then it merges with his go-ahead. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Next: batch 3 (hinge and pull).
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -13,7 +13,16 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 6. Slot template (whole-body guarantee) — Batch 3, after the remaining pending approvals land in rotation.
 7. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
 
-## Last session (2026-10-14, Claude, rig step 1b)
+## Last session (2026-10-14, Claude, rig batch 2: lunges)
+
+- Reverse lunge + twist, clean + reverse lunge and lateral lunge + press carry `rig` and pass the checks. The lunges reuse the blocks (no new body blocks): the back foot is a per-phase `footR` target, flat or on its toes, and the front foot stays planted.
+- Reverse lunge + twist follows the prototype, alternating right then left (`sides: "alternate"`). The twist turns the ribcage over the front leg with the hips square.
+- Clean + reverse lunge is the step 1a clean, then the right leg steps back with the bell racked on the right.
+- Lateral lunge + press steps the right foot out to 0.76 m and sits into the right hip, then stands and presses by the horns like the thruster.
+- Card views (Claude's suggestion, for Joe to confirm): lunge + twist side + three-quarter (the twist reads best there), lateral lunge front + three-quarter (side hides the lateral step), clean + lunge side + front.
+- The floor patch now covers every foot position in the rep, so a wide stance stays on it; movements with feet under the hips draw the same patch as before.
+
+## Earlier (2026-10-14, Claude, rig step 1b)
 
 - `RigFigure` in `bellwork.jsx`: a canvas per view, one shared 30 fps loop that paints only figures on screen (IntersectionObserver), pixels freed when a figure scrolls off, sharpness capped at 2×, one shared clock so a movement's views stay in step and the timer's re-render never restarts them, and reduced motion draws the movement's `still` phase.
 - The switch: a movement with `rig` counts as figured (`hasPoses`), the workout card shows its `rig.views` with labels from `VIEW_LABELS`, and the Library's side/front toggle picks from `rig.views`. The contact sheet already switched in 1a. Movements without `rig` keep the old `Figure`.
