@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: rig chosen, Claude authors; convert the pool first, Complex first.** Next session: Claude drafts the app implementation plan (rig into `bellwork.jsx`, the checks into the repo, conversion batches starting with Complex) for Joe to approve. No app code until then. New videos wait until conversion is under way; the notes flow is ready ([proposals/rig-ingest.md](./proposals/rig-ingest.md), [ingest/notes-spec.md](./ingest/notes-spec.md)). Clean + squat + press is the first converted movement ([page](./prototypes/clean-squat-press-rig.html)).
+0. **Animation: app plan drafted, waiting on Joe.** [proposals/rig-app-plan.md](./proposals/rig-app-plan.md): canvas `RigFigure`, shared `rig.js` and `blocks.js`, rig checks in `check.mjs`, the contact sheet as the review page; slice 1 is clean + squat + press, clean + press and thruster, then four Complex batches. Joe decides renderer, per-batch shipping, three-quarter view. No app code until approved. New videos wait for conversion; the notes flow is ready ([proposals/rig-ingest.md](./proposals/rig-ingest.md)).
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -13,7 +13,11 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 6. Slot template (whole-body guarantee) — Batch 3, after the remaining pending approvals land in rotation.
 7. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
 
-## Last session (2026-10-14, Claude, animation bake-off and decision)
+## Last session (2026-10-14, Claude, app plan)
+
+- Drafted [proposals/rig-app-plan.md](./proposals/rig-app-plan.md) for Joe's approval. Recommended: canvas renderer, ship Complex per batch, three-quarter view only on the review page, right side only in the app.
+
+## Earlier (2026-10-14, Claude, animation bake-off and decision)
 
 - **Bake-off:** the same clean + squat + press brief went to Cursor on Grok (about 30 min), Cursor on Opus at medium effort (about 26 min, about 2% of a month's Cursor Opus allowance) and a Claude subagent that saw neither Cursor build (11 min). Cursor on Opus and Claude came out close on quality, Grok behind; Claude was fastest, kept the data smallest and followed the cue's press timing most closely. Cursor's first run on Auto missed the lockout and the clean.
 - **Decision (Joe):** Claude authors rig animations. Cursor stays available with Opus picked by hand when timing doesn't matter, and Claude checks any movement Cursor authors. Recorded in a new `AGENTS.md` Animation section. The repo stays public for now (no private folders exist in a public repo); added the public-repo rule to `AGENTS.md`.
