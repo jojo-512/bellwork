@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { EXERCISES, PATTERN_ORDER } from "./movements.js";
+import { build, solve, draw, VIEW_LABELS } from "./rig.js";
 
 /* ============================================================
    BELLWORK v4 — 20-minute kettlebell AMRAP generator
@@ -70,6 +71,7 @@ function normalizeMode(m) {
 }
 
 function hasPoses(ex) {
+  if (ex.rig) return true;
   if (ex.frontOnly) return Array.isArray(ex.posesF) && ex.posesF.length > 0;
   return Array.isArray(ex.poses) && ex.poses.length > 0 && Array.isArray(ex.posesF) && ex.posesF.length > 0;
 }
@@ -231,6 +233,65 @@ export function Figure({ poses, dur, color, animate, bellFlip }) {
       )}
     </svg>
   );
+}
+
+/* Rig figures (docs/proposals/rig-app-plan.md §3.3). One shared loop at 30 fps paints only the
+   figures on screen, and a canvas keeps its pixels only while it's on screen, so a full Library
+   stays inside the phone's canvas memory. Every figure reads the same clock, so a movement's
+   views stay in step and a re-render never restarts one. */
+const RIG_BUILDS = new Map();
+function rigBuild(ex) {
+  let b = RIG_BUILDS.get(ex.id);
+  if (!b) { b = build(ex); RIG_BUILDS.set(ex.id, b); }
+  return b;
+}
+const RIG_LIVE = new Set();
+let rigRaf = 0, rigLast = 0;
+function rigTick(now) {
+  rigRaf = RIG_LIVE.size ? requestAnimationFrame(rigTick) : 0;
+  if (now - rigLast < 1000 / 30 - 4) return;
+  rigLast = now;
+  for (const paint of RIG_LIVE) paint(now / 1000);
+}
+
+// Which camera a figure uses: the movement's own views, or one of them for the Library toggle.
+function rigViews(ex) {
+  return ex.rig.views && ex.rig.views.length ? ex.rig.views : ["side", "front"];
+}
+
+export function RigFigure({ ex, view, color, animate }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const cv = ref.current;
+    if (!cv) return undefined;
+    const { smp, m } = rigBuild(ex);
+    const ctx = cv.getContext("2d");
+    const stillAt = smp.starts[Math.max(0, ex.rig.phases.findIndex((p) => p.name === ex.rig.still))];
+    let shown = false;
+    const paint = (t) => {
+      const px = Math.round(cv.clientWidth * Math.min(2, window.devicePixelRatio || 1));
+      if (!px) return;
+      if (cv.width !== px) { cv.width = px; cv.height = px; }
+      ctx.setTransform(px / 200, 0, 0, px / 200, 0, 0);
+      draw(ctx, solve(smp.at(t).state, m), view, color, ex.rig.frame);
+    };
+    const show = () => {
+      shown = true;
+      if (!animate) { paint(stillAt); return; }
+      paint(performance.now() / 1000);
+      RIG_LIVE.add(paint);
+      if (!rigRaf) rigRaf = requestAnimationFrame(rigTick);
+    };
+    const hide = () => { shown = false; RIG_LIVE.delete(paint); cv.width = 0; cv.height = 0; };
+    const io = typeof IntersectionObserver === "function"
+      ? new IntersectionObserver(([e]) => (e.isIntersecting ? show() : hide()), { rootMargin: "120px" })
+      : null;
+    if (io) io.observe(cv); else show();
+    const ro = typeof ResizeObserver === "function" ? new ResizeObserver(() => { if (shown && !animate) paint(stillAt); }) : null;
+    if (ro) ro.observe(cv);
+    return () => { if (io) io.disconnect(); if (ro) ro.disconnect(); RIG_LIVE.delete(paint); };
+  }, [ex.id, view, color, animate]);
+  return <canvas ref={ref} aria-hidden="true" style={{ display: "block", width: "100%", aspectRatio: "1 / 1" }} />;
 }
 
 const STORE_KEY = "bellwork-sessions";
@@ -442,9 +503,12 @@ function Library({ reduced, approved, onApprove }) {
               {items.map((ex) => {
                 const exColor = FOCUS_META[ex.tags[0]].color;
                 const figured = hasPoses(ex);
-                const poses = figured
+                const poses = figured && !ex.rig
                   ? (ex.frontOnly ? ex.posesF : (showSide ? ex.poses : ex.posesF))
                   : null;
+                const views = ex.rig ? rigViews(ex) : null;
+                const want = showSide ? "side" : "front";
+                const libView = views && (views.includes(want) ? want : showSide ? views[0] : views[views.length - 1]);
                 const open = expandedId === ex.id;
                 return (
                   <div
@@ -455,9 +519,11 @@ function Library({ reduced, approved, onApprove }) {
                       borderRadius: 12, padding: 10, cursor: "pointer",
                     }}
                   >
-                    {figured && poses ? (
+                    {figured && (poses || views) ? (
                       <div style={{ background: COLORS.bg, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 8, overflow: "hidden", marginBottom: 8 }}>
-                        <Figure poses={poses} dur={ex.dur} color={exColor} animate={!reduced} bellFlip={ex.bellFlip} />
+                        {views
+                          ? <RigFigure ex={ex} view={libView} color={exColor} animate={!reduced} />
+                          : <Figure poses={poses} dur={ex.dur} color={exColor} animate={!reduced} bellFlip={ex.bellFlip} />}
                       </div>
                     ) : (
                       <div style={{
@@ -1055,7 +1121,16 @@ export default function Bellwork() {
                     </span>
                   )}
                 </div>
-                {hasPoses(ex) ? (
+                {ex.rig ? (
+                  <div style={{ display: "flex", gap: 10 }}>
+                    {rigViews(ex).map((view, _, all) => (
+                      <div key={view} style={{ flex: all.length > 1 ? 1 : "0 1 62%", margin: all.length > 1 ? 0 : "0 auto", background: COLORS.bg, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 10, overflow: "hidden" }}>
+                        <div style={{ textAlign: "center", color: COLORS.chalkDim, fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", paddingTop: 6, textTransform: "uppercase" }}>{VIEW_LABELS[view]}</div>
+                        <RigFigure ex={ex} view={view} color={exColor} animate={!reduced} />
+                      </div>
+                    ))}
+                  </div>
+                ) : hasPoses(ex) ? (
                   <div style={{ display: "flex", gap: 10 }}>
                     {!ex.frontOnly && (
                       <div style={{ flex: 1, background: COLORS.bg, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 10, overflow: "hidden" }}>
