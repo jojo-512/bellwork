@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **PR #1: rig chosen as the animation direction** (`claude/rig-animation-proposal`). Joe chose the pelvis-rooted rig over Rig v2 on 2026-10-14. Second review is posted ([review](https://github.com/jojo-512/bellwork/pull/1#pullrequestreview-5512574578)). Slice 2 and the Oct 7 ingest docs are on [`cursor/rig-v2-shoulders-9b80`](https://github.com/jojo-512/bellwork/tree/cursor/rig-v2-shoulders-9b80) (`f489208`). Next: Joe approves an implementation plan. No app build yet.
+0. **PR #1: rig chosen as the animation direction** (`claude/rig-animation-proposal`). Joe chose the pelvis-rooted rig over Rig v2 on 2026-10-14. Second review is posted ([review](https://github.com/jojo-512/bellwork/pull/1#pullrequestreview-5512574578)). Slice 2 and the Oct 7 ingest docs are on [`cursor/rig-v2-shoulders-9b80`](https://github.com/jojo-512/bellwork/tree/cursor/rig-v2-shoulders-9b80) (`129576f`). Next: Joe approves an implementation plan. No app build yet.
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -16,7 +16,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 ## Last session (2026-10-14, Cursor)
 
 - Joe chose the joint-angle rig over Rig v2. No app code in this pass.
-- Pushed `cursor/rig-v2-shoulders-9b80` at `f489208` with `docs/animation-ingest-redesign.md`, `docs/lift-ingest-workflow.md`, and `docs/video-ingest-trial-2026-10-07.md`. Shoulder tree restored as `7ab15cb` from local `aa8b049` (that commit was never on origin). Not merged to `main`.
+- Pushed `cursor/rig-v2-shoulders-9b80` at `129576f` with `docs/animation-ingest-redesign.md`, `docs/lift-ingest-workflow.md`, and `docs/video-ingest-trial-2026-10-07.md`. Shoulder tree restored as `7ab15cb` from local `aa8b049` (that commit was never on origin). Not merged to `main`.
 - Second review posted on PR #1: [review](https://github.com/jojo-512/bellwork/pull/1#pullrequestreview-5512574578), with notes on the proposal and the three rig prototypes. No build until Joe approves a plan.
 
 ## Earlier (2026-10-14, Claude)
