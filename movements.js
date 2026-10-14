@@ -686,6 +686,20 @@ const HYBRIDS = [
       FS({ hip: [100, 134], sh: [102, 96], elR: [122, 108], haR: [130, 102], elL: [98, 112], haL: [122, 104], knR: [108, 153], anR: [108, 176], knL: [90, 165], anL: [84, 175], bell: [136, 104] }),
       F_LUNGE,
     ],
+    rig: {
+      feet: "hip_width", on: "horns", sides: "alternate", views: ["side", "quarter"], still: "Twist",
+      phases: [
+        { name: "Stand", t: 0.45, body: "stand", lean: 3, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Step back", t: 0.4, pelvis: [-0.04, 0.92], lean: 4, footR: { at: [-0.3, 0.17, 0.16], toes: 0.5 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Land on toes", t: 0.4, pelvis: [-0.2, 0.72], lean: 6, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Lunge", t: 0.45, pelvis: [-0.32, 0.52], lean: 6, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Twist", t: 0.55, pelvis: [-0.32, 0.52], lean: 6, twist: 42, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Hold", t: 0.3, pelvis: [-0.32, 0.52], lean: 6, twist: 42, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Untwist", t: 0.5, pelvis: [-0.32, 0.52], lean: 6, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Drive up", t: 0.4, pelvis: [-0.2, 0.72], lean: 5, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Step in", t: 0.4, pelvis: [-0.04, 0.92], lean: 4, footR: { at: [-0.3, 0.17, 0.16], toes: 0.5 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+      ],
+    },
   },
   {
     id: "swing_squat", name: "Swing + goblet squat", tags: ["lower", "full"], pattern: "Hinge",
@@ -713,6 +727,21 @@ const HYBRIDS = [
       FS({ hip: [100, 134], sh: [100, 96], elR: [114, 112], haR: [110, 96], elL: [86, 114], haL: [84, 130], knR: [108, 153], anR: [108, 176], knL: [90, 165], anL: [84, 175], bell: [113, 90] }),
       F_RACK,
     ],
+    rig: {
+      feet: "hip_width", on: "R", kneeOut: 0.2, sides: "right", views: ["side", "front"], still: "Lunge",
+      phases: [
+        { name: "Hike", t: 0.4, body: "hike", handR: "between_legs", handL: [0.02, 0.58, -0.22], elR: "hang", bell: "hanging" },
+        { name: "Drive", t: 0.25, pelvis: [-0.04, 0.9], lean: 22, handR: [0.16, 0.84, 0.06], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging" },
+        { name: "Pull to rack", t: 0.25, pelvis: [0, 0.93], lean: 4, handR: [0.14, 1.08, 0.14], elR: "pull", bell: 0.6 },
+        { name: "Rack", t: 0.3, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Step back", t: 0.3, pelvis: [-0.04, 0.92], lean: 4, footR: { at: [-0.3, 0.17, 0.16], toes: 0.5 }, handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Lunge", t: 0.45, pelvis: [-0.32, 0.52], lean: 6, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Drive up", t: 0.35, pelvis: [-0.2, 0.72], lean: 5, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Step in", t: 0.3, pelvis: [-0.04, 0.92], lean: 4, footR: { at: [-0.3, 0.17, 0.16], toes: 0.5 }, handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Stand", t: 0.25, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Drop", t: 0.35, pelvis: [-0.08, 0.88], lean: 30, handR: [0.17, 0.84, 0.06], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging" },
+      ],
+    },
   },
   {
     id: "clean_squat_press", name: "Clean + squat + press", tags: ["upper", "full"], pattern: "Squat",
@@ -724,7 +753,6 @@ const HYBRIDS = [
       S_RACK, S_RACKSQ, S_RACK, S_OH, S_RACK,
     ],
     posesF: [F_HINGE, F_RACK, F_RACKSQ, F_RACK, F_OH, F_RACK],
-    // Rig (docs/proposals/rig-app-plan.md). Not drawn in the app yet; the contact sheet plays it.
     rig: {
       feet: "hip_width", on: "R", kneeOut: 0.4, sides: "right", views: ["side", "front"], still: "Rack",
       phases: [
@@ -761,6 +789,19 @@ const HYBRIDS = [
       FS({ elR: [110, 52], haR: [104, 36], elL: [90, 52], haL: [96, 36], bell: [100, 30] }),
       F_GOBLET,
     ],
+    rig: {
+      feet: "hip_width", on: "horns", kneeOut: 0.3, sides: "right", views: ["front", "quarter"], still: "Lunge",
+      phases: [
+        { name: "Goblet", t: 0.3, body: "stand", handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Step out", t: 0.35, pelvis: [-0.03, 0.9, 0.1], lean: 6, footR: { at: [0, 0.15, 0.42], toes: 0.3 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Lunge", t: 0.45, pelvis: [-0.14, 0.57, 0.42], lean: 28, footR: { at: [0, 0.08, 0.76] }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Bottom", t: 0.3, pelvis: [-0.15, 0.55, 0.43], lean: 30, footR: { at: [0, 0.08, 0.76] }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Drive", t: 0.35, pelvis: [-0.04, 0.86, 0.12], lean: 8, footR: { at: [0, 0.15, 0.42], toes: 0.3 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Press", t: 0.3, body: "stand", lean: 1, handR: [0.23, 1.74, 0.07], handL: [0.23, 1.74, -0.07], elR: "press", elL: "press" },
+        { name: "Lockout", t: 0.3, body: "stand", lean: 0, handR: "overhead_horns", handL: "overhead_horns", elR: "press", elL: "press", lock: ["R", "L"] },
+        { name: "Lower", t: 0.3, body: "stand", lean: 1, handR: [0.21, 1.72, 0.07], handL: [0.21, 1.72, -0.07], elR: "press", elL: "press" },
+      ],
+    },
   },
   {
     id: "snatch_lunge", name: "Snatch + overhead lunge", tags: ["full"], pattern: "Hinge",
