@@ -2,7 +2,7 @@
 
 Trial only. Research Rob’s notes from Joe’s attached reel (Instagram-style, 20-min AMRAP, one black cast-iron kettlebell). On-screen text and voiceover name each move. Camera is mostly front / waist-up. **Bell weight was not readable. It is not in this note and it was not added to the catalog.** Catalog reps are circuit defaults, not this reel’s counts.
 
-Repo checked: `jojo-512/bellwork` `main` @ `7dba3c8c58712527b7d4cf7cbd5a6fa3097746d2` (2026-10-05, “Approve bent-over reverse fly.”). Rules used: repo `INGEST.md`, `poses.js`, `movements.js`, `check.mjs`, `Figure` in `bellwork.jsx`, plus `docs/vision-roadmap.md` (Phase 1 bell-only) and `docs/lift-ingest-workflow.md`.
+Repo checked: `jojo-512/bellwork` `main` @ `ffbf8df255536f216c2983b2b2db9b1f63b09d37` (2026-10-05, “Approve bent-over reverse fly.”). Rules used: repo `INGEST.md`, `poses.js`, `movements.js`, `check.mjs`, `Figure` in `bellwork.jsx`, plus `docs/vision-roadmap.md` (Phase 1 bell-only) and `docs/lift-ingest-workflow.md`.
 
 ## 1. Can we ingest now?
 
@@ -40,7 +40,7 @@ Nothing was added or edited.
 
 **No catalog change.** No branch, no commit, no edit to `movements.js`, `poses.js`, `INBOX.md`, or `INGEST.md`.
 
-`main` left as cloned: `7dba3c8c58712527b7d4cf7cbd5a6fa3097746d2`. Not pushed.
+`main` left as cloned: `ffbf8df255536f216c2983b2b2db9b1f63b09d37`. Not pushed.
 
 Why none of the five new moves cleared the bar: a new card has to be Tier A, drawable with the current `Figure` / `poses.js` model, and allowed by `INGEST.md` as a simple pending entry (text-only is allowed when a known shape just didn’t get drawn). These fail the “drawable” test, or they are bodyweight. Text-only pending would still put a card Joe cannot check against a figure, and it would invent a pool member the model cannot show. Weight was not guessed. Reel rep counts were not written onto existing cards.
 

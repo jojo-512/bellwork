@@ -38,8 +38,8 @@ Where we left off. Update at the end of each working session (or ask the Project
 
 ## Earlier (2026-09-23)
 
-- **Shipped Batch 1** to `main` (`2cec3bb`) → https://jojo-512.github.io/bellwork/
-- Docs trio pushed to repo (`d53e729`): vision-roadmap · punchlist · session
+- **Shipped Batch 1** to `main` (`d56afdd`) → https://jojo-512.github.io/bellwork/
+- Docs trio pushed to repo (`5e902d3`): vision-roadmap · punchlist · session
 - Vision roadmap locked at **v1.2**
 
 ## Open questions

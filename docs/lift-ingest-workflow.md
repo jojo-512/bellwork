@@ -1,6 +1,6 @@
 # Lift ingest — easier render → review → approve
 
-Status: **Joe approved (2026-10-01).** Open question answered: yes — on a single-lift review, **approve** or **push** is the push OK for that lift's commit (clear `pending`, or ship pending). Not a standing approval. Tooling/app changes still need their own push OK. §4 “Build first” is on `main` (`ee32c8f`), pushed 2026-10-01.
+Status: **Joe approved (2026-10-01).** Open question answered: yes — on a single-lift review, **approve** or **push** is the push OK for that lift's commit (clear `pending`, or ship pending). Not a standing approval. Tooling/app changes still need their own push OK. §4 “Build first” is on `main` (`40b6536`), pushed 2026-10-01.
 
 The question: when you send one lift for ingestion, how do we get from "here's a movement" to "it's in my rotation" with fewer round-trips?
 
