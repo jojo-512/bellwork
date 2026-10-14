@@ -1,9 +1,10 @@
 # Bellwork — session log
 
-Where we left off. Update at the end of each working session (or ask the Project agent to).
+Where we left off. Any agent (Cursor or Claude) updates this file at the end of each working session, and whenever it opens, merges or closes a pull request: add a dated entry under Last session and keep Next current. Read it before starting work.
 
 ## Next
 
+0. **PR #1 under review** (`claude/rig-animation-proposal`): joint-angle rig for animation, plus six workout slots instead of five. Cursor reviews and answers §7 of [proposals/rig-animation.md](./proposals/rig-animation.md) as PR comments, Claude replies, then Joe decides. Nothing ships from it until approved.
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.

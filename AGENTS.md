@@ -14,7 +14,7 @@ Product context: [`docs/vision-roadmap.md`](./docs/vision-roadmap.md), [`docs/pu
 - Prefer the simpler solution. Don't add dependencies, frameworks, or structure the app doesn't need.
 - Decisions already made, don't re-propose: no 2-bell toggle (badge instead), Complex mode is not a separate workout structure, no progression nudge feature.
 - Pushing to main deploys to the live site via GitHub Pages. Never push without my explicit go-ahead. Show me the diff first.
-- Two agents work in this repo: Cursor and Claude. Proposals arrive as a branch plus a pull request, with the reasoning in `docs/proposals/`. Review the PR before building on it, and update `docs/session.md` at the end of a session so the other agent can pick up.
+- Two agents work in this repo: Cursor and Claude. Proposals arrive as a branch plus a pull request, with the reasoning in `docs/proposals/`. Review the PR before building on it, and update `docs/session.md` at the end of every session and whenever you open, merge or close a PR, so the other agent can pick up.
 - Feedback comes from real gym sessions. When I report an animation or form issue, treat the movement mechanics as the spec.
 
 ## Build and deploy
