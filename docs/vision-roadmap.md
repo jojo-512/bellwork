@@ -236,7 +236,7 @@ consistently against a rule nobody can state.
 
 ## 7. Where the bell canon is short
 
-Counted from `bellwork.jsx` at commit `a2ed777`. **46 movements total** — 32 in the Standard pool,
+Counted from `bellwork.jsx` at commit `d6c8610`. **46 movements total** — 32 in the Standard pool,
 17 in Complex (3 hybrids are also standard-eligible). To answer your question directly: yes, canon
 means total movements in the pool, and the additions below would take it to roughly 66.
 
@@ -558,7 +558,7 @@ None. Batch 1 is approved and ready to build (`internal/batch-1-build-brief.md`)
   approvals live on the device until the agent syncs them into the data file. All open questions
   closed.
 - **v0.8** — `pools` rename approved. Agent approval set as the baseline for pending movements;
-  the on-device button reduced to a yes/no. Re-checked the repo: still at `a2ed777`, so all code
+  the on-device button reduced to a yes/no. Re-checked the repo: still at `d6c8610`, so all code
   references hold.
 - **v0.7** — Added a plain-English explanation of Standard / Complex / `hybrid` / `advancedOnly`,
   with the finding that the model is coherent but the names describe the wrong thing; proposed

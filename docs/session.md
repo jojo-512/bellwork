@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **PR #1: rig chosen as the animation direction** (`claude/rig-animation-proposal`). Joe chose the pelvis-rooted rig over Rig v2 on 2026-10-14. Second review is posted ([review](https://github.com/jojo-512/bellwork/pull/1#pullrequestreview-5512574578)). Slice 2 and the Oct 7 ingest docs are on [`cursor/rig-v2-shoulders-9b80`](https://github.com/jojo-512/bellwork/tree/cursor/rig-v2-shoulders-9b80) (`129576f`). Next: Joe approves an implementation plan. No app build yet.
+0. **PR #1: rig chosen as the animation direction** (`claude/rig-animation-proposal`). Cursor's second review is posted ([review](https://github.com/jojo-512/bellwork/pull/1#pullrequestreview-5512574578)) with a slice-by-slice migration plan. Slice 2 and the Oct 7 ingest docs are on [`cursor/rig-v2-shoulders-9b80`](https://github.com/jojo-512/bellwork/tree/cursor/rig-v2-shoulders-9b80). Next: a fresh Cursor project (the old one was deleted) pointed at this repo, with Research Rob rewired without creator details; then a trial movement Joe reviews before any app work. No app build yet.
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -13,15 +13,22 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 6. Slot template (whole-body guarantee) — Batch 3, after the remaining pending approvals land in rotation.
 7. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
 
-## Last session (2026-10-14, Cursor)
+## Last session (2026-10-14, Claude, history cleanup)
+
+- **Repo history rewritten and every branch force-pushed**, `main` included (files on `main` unchanged). Removed: Joe's full name and personal email from commit metadata (now the GitHub username and no-reply address), a third-party creator handle and video detail, and Cursor subagent IDs. Every commit has a new ID; commit IDs in the docs were updated on this branch.
+- **Ingest rule changed:** no footage, links or creator details go into the repo, and the `bellwork_notes` template has no `creator` field (`docs/animation-ingest-redesign.md` on the Slice 2 branch).
+- **Old clones are unsafe.** Any clone made before this rewrite still holds the old history. Clone fresh; never merge, rebase or push from an old clone.
+- Joe deleted the old Cursor project and isn't carrying over its notes. GitHub can still serve old commits to anyone with a direct link until it cleans up; a GitHub Support purge request is the remaining step.
+
+## Earlier (2026-10-14, Cursor)
 
 - Joe chose the joint-angle rig over Rig v2. No app code in this pass.
-- Pushed `cursor/rig-v2-shoulders-9b80` at `129576f` with `docs/animation-ingest-redesign.md`, `docs/lift-ingest-workflow.md`, and `docs/video-ingest-trial-2026-10-07.md`. Shoulder tree restored as `7ab15cb` from local `aa8b049` (that commit was never on origin). Not merged to `main`.
+- Pushed `cursor/rig-v2-shoulders-9b80` at `6c11c43` with `docs/animation-ingest-redesign.md`, `docs/lift-ingest-workflow.md`, and `docs/video-ingest-trial-2026-10-07.md`. Shoulder tree restored as `27953e8` from local `aa8b049` (that commit was never on origin). Not merged to `main`.
 - Second review posted on PR #1: [review](https://github.com/jojo-512/bellwork/pull/1#pullrequestreview-5512574578), with notes on the proposal and the three rig prototypes. No build until Joe approves a plan.
 
 ## Earlier (2026-10-14, Claude, public-repo check)
 
-- Scanned every branch and all 43 commits after Cursor's push. No keys, tokens or passwords. No health detail in current files. Left for Joe to decide: a personal email in commit metadata on `main`, a third-party Instagram handle in `docs/video-ingest-trial-2026-10-07.md` (Slice 2 branch), and Cursor subagent IDs in the history of that branch (removed from the tree in `129576f`).
+- Scanned every branch and all 43 commits after Cursor's push. No keys, tokens or passwords. No health detail in current files. Flagged a personal email in commit metadata, a third-party handle in an ingest doc, and Cursor subagent IDs in history; all removed in the history cleanup above.
 
 ## Earlier (2026-10-14, Claude)
 
@@ -69,8 +76,8 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Earlier (2026-09-23)
 
-- **Shipped Batch 1** to `main` (`2cec3bb`) → https://jojo-512.github.io/bellwork/
-- Docs trio pushed to repo (`d53e729`): vision-roadmap · punchlist · session
+- **Shipped Batch 1** to `main` (`d56afdd`) → https://jojo-512.github.io/bellwork/
+- Docs trio pushed to repo (`5e902d3`): vision-roadmap · punchlist · session
 - Vision roadmap locked at **v1.2**
 
 ## Open questions
