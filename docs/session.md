@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: step 1b built ([PR #4](https://github.com/jojo-512/bellwork/pull/4)), in Joe's phone review.** Clean & press and thruster approved on the phone; clean + squat + press was approved in 1a. Merges with Joe's go-ahead. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Step 1a is on `main` ([PR #3](https://github.com/jojo-512/bellwork/pull/3)). Step 1b puts `RigFigure` in the app for clean + squat + press, clean & press and thruster; it merges only with Joe's go-ahead. Then batch 2 (lunges).
+0. **Animation: step 1b merged to `main` ([PR #4](https://github.com/jojo-512/bellwork/pull/4), merge commit 96599dd).** Clean + squat + press, clean & press and thruster draw on the rig in the app, all approved by Joe on his phone. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Next: batch 2 (lunges: lunge + twist, clean + lunge, lateral lunge + press).
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -19,6 +19,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 - The switch: a movement with `rig` counts as figured (`hasPoses`), the workout card shows its `rig.views` with labels from `VIEW_LABELS`, and the Library's side/front toggle picks from `rig.views`. The contact sheet already switched in 1a. Movements without `rig` keep the old `Figure`.
 - Clean & press and thruster now carry `rig`, and both pass the checks. Clean & press is clean + squat + press without the squat, with a mid-press phase. Thruster uses two new hand blocks (`goblet`, `overhead_horns`) and a `goblet` elbow, holds the bell by the horns throughout, and presses forward of the face so the bell clears the head; overhead the bell hangs under the hands, as a horns grip does (the old figure drew it above them).
 - Checked in the built app at 390×844: card, Library (both toggles) and reduced motion; no console errors. Private previews published from the session for Joe.
+- Opened [PR #4](https://github.com/jojo-512/bellwork/pull/4). Joe approved clean & press and thruster on his phone, logged the battery check as an open punchlist item, and gave the go-ahead; merged by Claude (merge commit 96599dd).
 
 ## Earlier (2026-10-14, Claude, rig step 1a)
 
