@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **PR #1: rig chosen as the animation direction** (`claude/rig-animation-proposal`). Cursor's second review is posted ([review](https://github.com/jojo-512/bellwork/pull/1#pullrequestreview-5512574578)) with a slice-by-slice migration plan. Slice 2 and the Oct 7 ingest docs are on [`cursor/rig-v2-shoulders-9b80`](https://github.com/jojo-512/bellwork/tree/cursor/rig-v2-shoulders-9b80). Next: a fresh Cursor project (the old one was deleted) pointed at this repo, with Research Rob rewired without creator details; then a trial movement Joe reviews before any app work. No app build yet.
+0. **Animation: rig chosen, Claude authors.** Clean + squat + press is the first standing complex on the rig ([page](./prototypes/clean-squat-press-rig.html), branch `claude/pensive-cori-xlhxdn`). Next: a short proposal for the rig ingestion process (Research Rob notes → rig phases → Claude check → Joe's phone approval), then an implementation plan for Joe to approve. PR #1 (`claude/rig-animation-proposal`) holds the direction; Cursor's second review is [here](https://github.com/jojo-512/bellwork/pull/1#pullrequestreview-5512574578). No app build yet.
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -12,9 +12,16 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 5. After install: verify **Complex PR numbers** match pre-migration.
 6. Slot template (whole-body guarantee) — Batch 3, after the remaining pending approvals land in rotation.
 7. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
-8. **Clean + squat + press rig trial** ([page](./prototypes/clean-squat-press-rig.html), branch `claude/pensive-cori-xlhxdn`): Joe to review the rack, clean path and press timing before it feeds the implementation plan.
 
-## Last session (2026-10-14, Claude, clean + squat + press rig trial)
+## Last session (2026-10-14, Claude, animation bake-off and decision)
+
+- **Bake-off:** the same clean + squat + press brief went to Cursor on Grok (about 30 min), Cursor on Opus at medium effort (about 26 min, about 2% of a month's Cursor Opus allowance) and a Claude subagent that saw neither Cursor build (11 min). Cursor on Opus and Claude came out close on quality, Grok behind; Claude was fastest, kept the data smallest and followed the cue's press timing most closely. Cursor's first run on Auto missed the lockout and the clean.
+- **Decision (Joe):** Claude authors rig animations. Cursor stays available with Opus picked by hand when timing doesn't matter, and Claude checks any movement Cursor authors. Recorded in a new `AGENTS.md` Animation section. The repo stays public for now (no private folders exist in a public repo); added the public-repo rule to `AGENTS.md`.
+- **`CLAUDE.md` added:** it points Claude sessions to `AGENTS.md`, so both agents read one rulebook.
+- **Clean + squat + press revised:** a deeper hike (hips back, shins near vertical) and a per-phase elbow preset (hang, pull, rack, press) on the bell arm, which keeps the elbow tucked in the clean and steadies the press. Both Cursor runs also found the elbow needs a per-phase direction; named presets keep the data small. Carry this into the shared rig.
+- The three Cursor trial branches are to be deleted; this session can't delete remote branches, so Joe is doing it on GitHub.
+
+## Earlier (2026-10-14, Claude, clean + squat + press rig trial)
 
 - Trial page: [prototypes/clean-squat-press-rig.html](./prototypes/clean-squat-press-rig.html). First standing complex on the pelvis-rooted rig, beside the current app's six poses. Eleven phases: hike, drive, pull to rack, rack, squat, bottom, drive + press, lockout, lower, lower to rack, drop. The press starts on the way up from the squat, per the cue. Right/Left hand toggle; left is a computed mirror.
 - Rig extended in two places (page only, no app code): a per-phase `rack` value blends a single bell between hanging from the hand and resting on the outside of the forearm, so the clean rolls the bell round the hand; a per-movement `kneeOut` lets the knees track out in the squat.

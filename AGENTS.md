@@ -16,6 +16,14 @@ Product context: [`docs/vision-roadmap.md`](./docs/vision-roadmap.md), [`docs/pu
 - Pushing to main deploys to the live site via GitHub Pages. Never push without my explicit go-ahead. Show me the diff first.
 - Two agents work in this repo: Cursor and Claude. Proposals arrive as a branch plus a pull request, with the reasoning in `docs/proposals/`. Review the PR before building on it, and update `docs/session.md` at the end of every session and whenever you open, merge or close a PR, so the other agent can pick up.
 - Feedback comes from real gym sessions. When I report an animation or form issue, treat the movement mechanics as the spec.
+- The repo is public. Never commit personal details, health or medical reasoning, creator names or handles, video links or footage.
+
+## Animation
+
+- Movements animate on the pelvis-rooted rig (`docs/proposals/rig-animation.md` §0, prototypes in `docs/prototypes/`). Decided 2026-10-14.
+- Claude authors rig animations by default: it was faster and simpler in a side-by-side trial, and doesn't use Cursor credits. Cursor can author one when Joe asks, with Opus selected by hand (not Auto).
+- Every movement, whoever authors it, is checked by Claude before it goes into the app: each phase in side, front and three-quarter views, against the movement mechanics and its `cue`, plus the numeric checks (reach, floor, bell clear of the body, no snaps).
+- Joe approves each movement on his phone before it ships.
 
 ## Build and deploy
 
