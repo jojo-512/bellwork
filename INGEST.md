@@ -143,6 +143,32 @@ the side frame and the front frame.
 `ballistic_row` is the example: `hold: "air"` on the float, with a short `t`,
 so the bell changes hands instead of sliding from palm to palm.
 
+### Shoulders (optional)
+
+Leave these off and the figure is unchanged: both arms still leave the one
+`sh` point, and the head still sits on the hip→`sh` line.
+
+`neck` is the top of the spine. The head is derived from hip→`neck` (13 units
+past it), and it defaults to `sh`. Set it when a shoulder moves and the head
+should stay.
+
+`shR` and `shL` are the front shoulder points the arms attach to. Set them
+together. Each one gets its own line from `neck` (`neck`→`shR` and
+`neck`→`shL`). There is no bar drawn straight across both shoulders. The
+check caps the span at 40 and requires `neck` (or `sh`, if you omitted
+`neck`) to sit between the two points.
+
+Pose helpers in `poses.js`. They add keys; they don't replace the pose.
+
+| Helper | What it does |
+|---|---|
+| `twist(pose, deg)` | Front only. Positive degrees lift the right shoulder toward the ear and narrow the chest; the left stays down. Negative lifts the left. `twist(pose, 0)` opens a resting V under the neck. Neck stays put, so the head stays. |
+| `shrug(pose, side, lift)` | Raises `R`, `L`, or `both` along its own line from the neck. Neck stays. On a side pose the one shoulder rises off `neck`. |
+| `mirror(pose)` | Swaps right and left and reflects x across the center of the box. `hold` flips `R` ↔ `L`. |
+| `withHold(pose, hold)` | Sets `hold`. |
+
+`rotational_gorilla_row` is the turn: a hinge, a row, and the working shoulder rising off the neck while the other stays down on the knee. The side view is still one arm. `unilateral_shrug` lifts one collarbone toward the ear. The head stays on `neck`.
+
 ### Text-only is fine
 
 If you can't get a figure right in this pass, omit `poses` / `posesF`. The
@@ -165,7 +191,8 @@ OK for an app or schema change.
    he replies **approve**.
 3. **`npm run build` then `npm run check`.** Schema problems fail the check.
    The pose checks (bell off the hand — or off the hand named by `hold` —
-   a standing leg that stretches, a foot off the ground line, plus the `air`
+   a standing leg that stretches, a foot off the ground line, a shoulder bar
+   wider than 40 or a neck that misses the bar, plus the `air`
    rules in §6) **warn** on a pending lift and **fail** the check on a lift
    already in rotation. Fix every warning on the lift you are authoring. Warnings on other pending lifts are the known backlog — do not
    redraw them in this pass. Thresholds and the skips (floor work, kneeling,
@@ -258,6 +285,7 @@ true` so a wrong figure can't ruin a session.
 - [ ] `reps` is a plain string; `dur` is set if there are poses
 - [ ] Every pose has the required keys and a `bell: [x, y]`
 - [ ] If you set `hold` or `t`, the side and front frames agree, and an `air` frame is a single short float above the hands
+- [ ] If you set `shR` / `shL`, both are set, the span is at most 40, and `neck` sits between them. Omit them and the figure matches today
 - [ ] Side and front pose counts match (unless `frontOnly`)
 - [ ] Prefer composing from `S_*` / `F_*` primitives over inventing coordinates
 - [ ] `pending: true` on a new entry you have not been told to approve

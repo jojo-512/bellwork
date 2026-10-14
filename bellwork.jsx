@@ -113,10 +113,17 @@ function buildCircuit(focus, mode, salt, approved = []) {
   return picked;
 }
 
+function isPair(v) {
+  return Array.isArray(v) && v.length === 2 && typeof v[0] === "number" && typeof v[1] === "number";
+}
+
+/* Head sits 13u past the top of the spine. `neck` defaults to `sh`, so a pose
+   that never set it lands on the same point as before. */
 function headFrom(pose) {
   if (pose.head) return pose.head;
+  const top = isPair(pose.neck) ? pose.neck : pose.sh;
   const [hx, hy] = pose.hip;
-  const [sx, sy] = pose.sh;
+  const [sx, sy] = top;
   const dx = sx - hx, dy = sy - hy;
   const len = Math.sqrt(dx * dx + dy * dy) || 1;
   return [sx + (dx / len) * 13, sy + (dy / len) * 13];
@@ -135,6 +142,50 @@ const FRONT_SEGS = [
   ["sh", "elR", 3.2, 1], ["elR", "haR", 3.2, 1],
   ["sh", "elL", 3.2, 1], ["elL", "haL", 3.2, 1],
 ];
+/* Spine ends at `neck`. Each shoulder is its own line from the neck —
+   neck→shR and neck→shL — so the two joints can sit at different heights.
+   A line is hidden when that shoulder is still on the neck. */
+const FRONT_SEGS_RIG = [
+  ["hip", "neck", 3.8, 1],
+  ["hip", "knR", 3.4, 1], ["knR", "anR", 3.4, 1],
+  ["hip", "knL", 3.4, 1], ["knL", "anL", 3.4, 1],
+  ["neck", "shR", 3.2, 1],
+  ["neck", "shL", 3.2, 1],
+  ["shR", "elR", 3.2, 1], ["elR", "haR", 3.2, 1],
+  ["shL", "elL", 3.2, 1], ["elL", "haL", 3.2, 1],
+];
+const SIDE_SEGS_RIG = [
+  ["hip", "kn2", 2.8, 0.28], ["kn2", "an2", 2.8, 0.28],
+  ["hip", "neck", 3.8, 1],
+  ["neck", "sh", 3.2, 1],
+  ["hip", "kn", 3.4, 1], ["kn", "an", 3.4, 1],
+  ["sh", "el", 3.2, 1], ["el", "ha", 3.2, 1],
+];
+
+function samePoint(a, b) {
+  return isPair(a) && isPair(b) && a[0] === b[0] && a[1] === b[1];
+}
+
+/* A pose opts in by setting two shoulders, or a neck that isn't `sh`. */
+function poseUsesRig(pose) {
+  if (isPair(pose.neck) && isPair(pose.sh) && !samePoint(pose.neck, pose.sh)) return true;
+  if (isPair(pose.shR) && isPair(pose.shL) && !samePoint(pose.shR, pose.shL)) return true;
+  return false;
+}
+
+function fillRig(pose) {
+  const sh = isPair(pose.sh) ? pose.sh : pose.neck;
+  const neck = isPair(pose.neck) ? pose.neck : sh;
+  const shR = isPair(pose.shR) ? pose.shR : sh;
+  const shL = isPair(pose.shL) ? pose.shL : sh;
+  return { ...pose, neck, shR, shL };
+}
+
+function boneOpacity(pose, aKey, bKey, base) {
+  const collar = aKey === "neck" && (bKey === "shR" || bKey === "shL" || bKey === "sh");
+  if (collar && samePoint(pose[aKey], pose[bKey])) return 0;
+  return base;
+}
 
 /* Relative time from each frame to the next, including the loop back to frame 1.
    Omitted `t` weighs 1. Equal weights stay evenly spaced, so the SVG matches
@@ -170,8 +221,10 @@ export function Figure({ poses, dur, color, animate, bellFlip }) {
   }, [animate]);
 
   const durS = `${dur}s`;
+  const rig = poses.some(poseUsesRig);
+  const drawn = rig ? poses.map(fillRig) : poses;
   const cyc = (getter) => {
-    const vals = poses.map(getter);
+    const vals = drawn.map(getter);
     return [...vals, vals[0]];
   };
   const keyTimes = keyTimesFor(poses);
@@ -185,7 +238,9 @@ export function Figure({ poses, dur, color, animate, bellFlip }) {
       {...(keyTimes ? { keyTimes } : {})}
     />
   );
-  const segs = poses[0].elR ? FRONT_SEGS : SIDE_SEGS;
+  const segs = rig
+    ? (poses[0].elR ? FRONT_SEGS_RIG : SIDE_SEGS_RIG)
+    : (poses[0].elR ? FRONT_SEGS : SIDE_SEGS);
   const heads = cyc(headFrom);
   const bells = cyc((p) => p.bell || p.ha || p.haR);
   const hOff = bellFlip ? 7 : -7;
@@ -198,16 +253,19 @@ export function Figure({ poses, dur, color, animate, bellFlip }) {
     <svg ref={svgRef} viewBox="0 0 200 200" width="100%" height="100%" role="img" aria-hidden="true">
       <line x1="18" y1="178" x2="182" y2="178" stroke={COLORS.panelEdge} strokeWidth="2" />
       {segs.map(([aKey, bKey, w, op], i) => {
-        if (!poses[0][aKey] || !poses[0][bKey]) return null;
+        if (!drawn[0][aKey] || !drawn[0][bKey]) return null;
         const A = cyc((p) => p[aKey]);
         const B = cyc((p) => p[bKey]);
+        const ops = cyc((p) => boneOpacity(p, aKey, bKey, op));
+        const opVaries = ops.some((v) => v !== ops[0]);
         return (
           <line key={i} x1={A[0][0]} y1={A[0][1]} x2={B[0][0]} y2={B[0][1]}
-            stroke={COLORS.chalk} strokeWidth={w} strokeLinecap="round" opacity={op}>
+            stroke={COLORS.chalk} strokeWidth={w} strokeLinecap="round" opacity={ops[0]}>
             {anim("x1", A.map((v) => v[0]))}
             {anim("y1", A.map((v) => v[1]))}
             {anim("x2", B.map((v) => v[0]))}
             {anim("y2", B.map((v) => v[1]))}
+            {opVaries ? anim("opacity", ops) : null}
           </line>
         );
       })}

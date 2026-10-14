@@ -34,7 +34,7 @@ function isPair(v) {
   return Array.isArray(v) && v.length === 2 && v.every((n) => typeof n === "number" && Number.isFinite(n));
 }
 
-function checkPoseMeta(pose, where, errors) {
+function checkPoseMeta(pose, where, errors, view) {
   if ("hold" in pose && pose.hold != null && !HOLDS.has(pose.hold)) {
     errors.push(`${where}: hold must be R, L, both, air, floor, or none`);
   }
@@ -43,6 +43,16 @@ function checkPoseMeta(pose, where, errors) {
       errors.push(`${where}: t must be a positive number`);
     }
   }
+  if ("neck" in pose && pose.neck != null && !isPair(pose.neck)) {
+    errors.push(`${where}: neck must be [x, y]`);
+  }
+  const hasR = "shR" in pose && pose.shR != null;
+  const hasL = "shL" in pose && pose.shL != null;
+  if (hasR && !isPair(pose.shR)) errors.push(`${where}: shR must be [x, y]`);
+  if (hasL && !isPair(pose.shL)) errors.push(`${where}: shL must be [x, y]`);
+  if (view === "front" && hasR !== hasL) {
+    errors.push(`${where}: set shR and shL together`);
+  }
 }
 
 function checkPoseSide(pose, where, errors) {
@@ -50,7 +60,7 @@ function checkPoseSide(pose, where, errors) {
     if (!isPair(pose[k])) errors.push(`${where}: side pose missing ${k}`);
   }
   if (!isPair(pose.bell)) errors.push(`${where}: side pose missing bell [x,y]`);
-  checkPoseMeta(pose, where, errors);
+  checkPoseMeta(pose, where, errors, "side");
 }
 
 function checkPoseFront(pose, where, errors) {
@@ -58,7 +68,7 @@ function checkPoseFront(pose, where, errors) {
     if (!isPair(pose[k])) errors.push(`${where}: front pose missing ${k}`);
   }
   if (!isPair(pose.bell)) errors.push(`${where}: front pose missing bell [x,y]`);
-  checkPoseMeta(pose, where, errors);
+  checkPoseMeta(pose, where, errors, "front");
 }
 
 /* Pose geometry. Tuned against the 57-lift catalog on 2026-10-01.
@@ -101,9 +111,17 @@ function checkPoseFront(pose, where, errors) {
    Catalog result with these caps: reverse_fly (bell), clean_carry and
    snatch_oh_carry (trail thigh) warn. swing_high_pull, gorilla_sumo, and
    halo_march pass — their problems are "reads as the wrong lift" or frame
-   order, which a length check cannot see. */
+   order, which a length check cannot see.
+
+   Shoulders (optional): when a front pose sets `shR` and `shL`, the span
+   between them cannot exceed SHOULDER_MAX, and `neck` (default `sh`) has
+   to sit between the two ends. The figure draws each as its own line from
+   the neck. Absent keys skip the check. Upper-arm length is measured from
+   `shR` / `shL` when those points exist, and from `sh` otherwise. */
 
 const BELL_MAX = 18;
+const SHOULDER_MAX = 40;
+const NECK_ON_BAR = 12;
 const HOLDS = new Set(["R", "L", "both", "air", "floor", "none"]);
 const AIR_T_MAX = 0.6;
 const FLOOR_BELL_Y = 160;
@@ -143,6 +161,29 @@ const FRONT_ARMS = [
 
 function len(a, b) {
   return Math.hypot(a[0] - b[0], a[1] - b[1]);
+}
+
+function segmentT(p, a, b) {
+  const abx = b[0] - a[0], aby = b[1] - a[1];
+  const ab2 = abx * abx + aby * aby;
+  if (ab2 < 1e-6) return 0;
+  return ((p[0] - a[0]) * abx + (p[1] - a[1]) * aby) / ab2;
+}
+
+function distToSegment(p, a, b) {
+  const abx = b[0] - a[0], aby = b[1] - a[1];
+  const ab2 = abx * abx + aby * aby;
+  if (ab2 < 1e-6) return len(p, a);
+  const t = Math.max(0, Math.min(1, segmentT(p, a, b)));
+  return len(p, [a[0] + abx * t, a[1] + aby * t]);
+}
+
+/* Drawn upper arm leaves the shoulder point, not the middle of the bar. */
+function armEnds(pose, a, b) {
+  if (a === "sh" && b === "elR" && isPair(pose.shR) && isPair(pose.elR)) return [pose.shR, pose.elR];
+  if (a === "sh" && b === "elL" && isPair(pose.shL) && isPair(pose.elL)) return [pose.shL, pose.elL];
+  if (!isPair(pose[a]) || !isPair(pose[b])) return null;
+  return [pose[a], pose[b]];
 }
 
 function anklePoints(pose) {
@@ -276,8 +317,9 @@ function checkLimbs(poses, view, legs, arms, issues) {
       }
     }
     for (const [name, a, b] of arms) {
-      if (!isPair(pose[a]) || !isPair(pose[b])) continue;
-      const d = len(pose[a], pose[b]);
+      const ends = armEnds(pose, a, b);
+      if (!ends) continue;
+      const d = len(ends[0], ends[1]);
       if (d > ARM_MAX) {
         issues.push(`${view} frame ${frame}: ${name} is ${Math.round(d)}u (max ${ARM_MAX})`);
       }
@@ -290,6 +332,21 @@ function checkLimbs(poses, view, legs, arms, issues) {
     if (mx / Math.max(mn, 0.5) >= LEG_RATIO && mx - mn >= LEG_DELTA) {
       issues.push(`${view}: planted ${name} runs ${Math.round(mn)}–${Math.round(mx)}u across frames`);
     }
+  }
+}
+
+function checkShoulders(pose, view, frame, issues) {
+  if (!isPair(pose.shR) || !isPair(pose.shL)) return;
+  const width = len(pose.shR, pose.shL);
+  if (width > SHOULDER_MAX) {
+    issues.push(`${view} frame ${frame}: shoulder width is ${Math.round(width)}u (max ${SHOULDER_MAX})`);
+  }
+  const neck = isPair(pose.neck) ? pose.neck : pose.sh;
+  if (!isPair(neck)) return;
+  const t = segmentT(neck, pose.shR, pose.shL);
+  const dist = distToSegment(neck, pose.shR, pose.shL);
+  if (t < -0.05 || t > 1.05 || dist > NECK_ON_BAR) {
+    issues.push(`${view} frame ${frame}: neck is not between the shoulders`);
   }
 }
 
@@ -324,6 +381,7 @@ function poseGeometry(ex) {
     poses.forEach((pose, i) => {
       checkBell(pose, view, i + 1, issues);
       checkFeet(pose, view, i + 1, issues);
+      if (view === "front") checkShoulders(pose, view, i + 1, issues);
     });
     checkAir(poses, view, issues);
     checkLimbs(poses, view, legs, arms, issues);

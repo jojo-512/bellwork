@@ -75,6 +75,10 @@ function poseNote(pose) {
   const parts = [];
   if (pose.hold) parts.push(`hold ${pose.hold}`);
   if (pose.t != null) parts.push(`t ${pose.t}`);
+  const spread = Array.isArray(pose.shR) && Array.isArray(pose.shL)
+    && (pose.shR[0] !== pose.shL[0] || pose.shR[1] !== pose.shL[1]);
+  if (spread) parts.push("shoulders");
+  if (Array.isArray(pose.neck)) parts.push("neck");
   return parts.join(" · ");
 }
 

@@ -6,7 +6,45 @@ import {
   P, FS,
   S_HINGE, S_RACK, S_OH, S_GOBLET, S_SQUAT, S_RACKSQ, S_LUNGE_R, S_SWTOP,
   F_RACK, F_OH, F_GOBLET, F_SQUAT, F_RACKSQ, F_HINGE, F_LUNGE,
+  twist, shrug, mirror, withHold,
 } from "./poses.js";
+
+/* Rotational gorilla row — deep hinge, one hand rows, the other braces.
+   twist() hangs each shoulder off the neck. The turn lifts the rowing
+   shoulder; the brace side stays down. Side view stays the plain hinge. */
+const ROT_BODY = {
+  sh: [100, 88], hip: [100, 116],
+  knR: [112, 148], anR: [110, 176],
+  knL: [88, 148], anL: [90, 176],
+};
+/* Chest from twist(). Hands are then placed on the bell and the knee so the
+   row still meets the hip after the shoulder rises. */
+function armOn(pose, side, el, ha, bell) {
+  const out = { ...pose, ...(side === "R" ? { elR: el, haR: ha } : { elL: el, haL: ha }) };
+  if (bell) out.bell = bell;
+  return out;
+}
+const rotSquare = twist(withHold(FS({ ...ROT_BODY }), "R"), 0);
+const rotHangR = armOn(
+  armOn(rotSquare, "R", [rotSquare.shR[0], 124], [106, 154], [104, 162]),
+  "L", [rotSquare.shL[0], 118], [90, 146],
+);
+const rotTurn = twist(withHold(FS({ ...ROT_BODY }), "R"), 40);
+const rotRowR = armOn(
+  armOn(rotTurn, "R", [rotTurn.shR[0] + 14, rotTurn.shR[1] + 18], [112, 118], [112, 126]),
+  "L", [rotTurn.shL[0], rotTurn.shL[1] + 24], [90, 148],
+);
+
+/* Unilateral shrug — resting V, then one collarbone rises toward the ear.
+   Neck stays, so the head stays level. */
+const shrugRestR = twist(withHold(FS({
+  elR: [100, 102], haR: [100, 134],
+  elL: [100, 102], haL: [100, 134],
+  bell: [100, 142],
+}), "R"), 0);
+const shrugUpR = shrug(shrugRestR, "R", 20);
+const S_SHRUG = P([100, 106], [100, 68], [102, 102], [104, 134], [100, 141], [100, 176], { bell: [108, 140], hold: "R" });
+const S_SHRUG_UP = shrug(S_SHRUG, "R", 14);
 
 const STANDARD = [
   {
@@ -586,6 +624,37 @@ const STANDARD = [
       FS({ hip: [100, 112], sh: [100, 82], elR: [126, 96], haR: [112, 116], elL: [82, 110], haL: [78, 132], knR: [108, 144], anR: [110, 176], knL: [92, 144], anL: [90, 176], bell: [100, 94], hold: "air", t: 0.3 }),
       FS({ hip: [100, 112], sh: [100, 82], elR: [124, 94], haR: [112, 100], elL: [86, 100], haL: [86, 122], knR: [108, 144], anR: [110, 176], knL: [92, 144], anL: [90, 176], bell: [112, 106], hold: "R", t: 0.55 }),
     ],
+  },
+  {
+    id: "rotational_gorilla_row", name: "Rotational gorilla row", tags: ["upper"], pattern: "Pull",
+    reps: "8 / side", dur: 3.2,
+    pools: ["standard"],
+    variantGroup: "row",
+    pending: true,
+    cue: "Deep hinge, free hand on your knee. Row the bell to your hip and turn that side of your chest up. Square the shoulders before you switch hands.",
+    grip: "One hand on the handle, knuckles down. The other hand braces on your knee.",
+    poses: [
+      P([92, 122], [126, 102], [130, 128], [130, 152], [102, 150], [100, 176], { bell: [130, 160], hold: "R" }),
+      P([92, 122], [126, 102], [112, 110], [118, 122], [102, 150], [100, 176], { bell: [118, 128], hold: "R" }),
+      P([92, 122], [126, 102], [130, 128], [130, 152], [102, 150], [100, 176], { bell: [130, 160], hold: "L" }),
+      P([92, 122], [126, 102], [112, 110], [118, 122], [102, 150], [100, 176], { bell: [118, 128], hold: "L" }),
+    ],
+    posesF: [rotHangR, rotRowR, mirror(rotHangR), mirror(rotRowR)],
+  },
+  {
+    id: "unilateral_shrug", name: "Unilateral shrug", tags: ["upper"], pattern: "Pull",
+    reps: "10 / side", dur: 2.6,
+    pools: ["standard"],
+    pending: true,
+    cue: "Stand tall, arm straight. Lift one shoulder toward your ear, then set it down. Keep your head level — don't tilt it toward the bell.",
+    grip: "One hand on the handle, arm long, knuckles forward.",
+    poses: [
+      S_SHRUG,
+      S_SHRUG_UP,
+      { ...S_SHRUG, hold: "L" },
+      shrug({ ...S_SHRUG, hold: "L" }, "L", 14),
+    ],
+    posesF: [shrugRestR, shrugUpR, mirror(shrugRestR), shrug(mirror(shrugRestR), "L", 20)],
   },
   {
     id: "upright_row", name: "Upright row", tags: ["upper"], pattern: "Pull",
