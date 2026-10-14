@@ -1,6 +1,6 @@
 # Plan: putting the rig in the app
 
-Status: **revised after review, for Joe's approval.** No app code until Joe approves it (see `AGENTS.md`).
+Status: **approved by Joe, 2026-10-14.** Step 1a built (rig, blocks, checks, review page; no change to the workout screen).
 Author: Claude, 2026-10-14. Reviewed by an independent Claude subagent the same day; its findings are folded in below (§7 lists them).
 Builds on: [`rig-animation.md`](./rig-animation.md) §0 (the rig), [`rig-ingest.md`](./rig-ingest.md) (the flow and checks), and the five prototypes in `docs/prototypes/`.
 

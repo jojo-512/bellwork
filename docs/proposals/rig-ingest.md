@@ -61,7 +61,7 @@ These run on every movement, on both sides:
 - **Planted feet:** feet that should stay planted don't move.
 - **Mechanics:** a phase-by-phase visual check of every phase in all three views against the notes, the cue and how a coach teaches each position. Anything Claude couldn't get right is stated on the review page. Anything the notes marked `uncertain` is asked of Joe, not invented.
 
-The numeric checks are a script today, written for the clean + squat + press trial. It moves into the repo as part of the app plan, so every agent runs the same one.
+The numeric checks run in `npm run check` (`checkRig` in `rig.js`), so every agent runs the same ones. The review page is the contact sheet: `contact.html?id=<movement>`.
 
 ## 5. Cursor's role
 

@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: app plan revised after review, waiting on Joe's approval.** [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Joe agreed in chat with: canvas, ship per batch, views any two of side/front/three-quarter chosen per movement and confirmed on his phone, right side for one-sided movements and right-then-left for alternating ones. Next: Joe approves the plan, then step 1a (rig, checks, review page; no app change). New videos wait for conversion; the notes flow is ready ([proposals/rig-ingest.md](./proposals/rig-ingest.md)).
+0. **Animation: step 1a built, waiting on Joe's review.** Plan approved ([proposals/rig-app-plan.md](./proposals/rig-app-plan.md)). Step 1a: `rig.js`, `blocks.js`, rig checks in `npm run check`, and the contact sheet's rig mode as the review page (`contact.html?id=clean_squat_press`). Nothing on the workout screen changes. Next: Joe reviews the page on his phone; then step 1b (`RigFigure` in the app with clean + squat + press, clean + press, thruster).
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -13,7 +13,14 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 6. Slot template (whole-body guarantee) — Batch 3, after the remaining pending approvals land in rotation.
 7. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
 
-## Last session (2026-10-14, Claude, app plan)
+## Last session (2026-10-14, Claude, rig step 1a)
+
+- Joe approved the app plan. Built step 1a on `claude/pensive-cori-xlhxdn`: `rig.js` (one rig merged from the prototypes: IK, per-phase bell hand as blend weights, monotone sampler, fixed framing at 80 px/m with ground at 178, fixed depth shading, drawing, checks), `blocks.js` (bodies, hands, elbow presets, stances), `checkRig`/`validateRig` wired into `npm run check`, and a rig mode on the contact sheet.
+- Clean + squat + press now carries `rig` data (blocks plus overrides; block targets land within 1.4 cm of the prototype's). The app still draws its old figure.
+- The new checks caught three faults in the approved trial and they're fixed: the hike hand was 2.3 cm out of reach (`between_legs` moved to where the hand lands), the legs over-straightened between Pull to rack and Rack (sampler overshoot; slopes are now monotone), and the elbow snapped at 6 m/s from Bottom to Drive + press (the press is now about halfway at the mid-drive phase, hand [0.12, 1.5, 0.2]; elbow peak under 5 m/s).
+- The prototype pages in `docs/prototypes/` are kept for the record; the contact sheet replaces them for review.
+
+## Earlier (2026-10-14, Claude, app plan)
 
 - Drafted [proposals/rig-app-plan.md](./proposals/rig-app-plan.md) for Joe's approval. Recommended: canvas renderer, ship Complex per batch, three-quarter view only on the review page, right side only in the app.
 - An independent Claude subagent reviewed the plan against the code and prototypes. Main finds: bell hand must be per phase (Complex changes hands mid-rep), the speed check must cover every joint (the elbow peaks fastest in clean + squat + press), fixed framing and shading, phone canvas memory, split slice 1 into rig-only and app PRs, estimates roughly doubled. Plan revised; §7 lists the changes. Decision 4 changed to right-then-left for alternating movements; decision 3 widened to any two views per movement.
