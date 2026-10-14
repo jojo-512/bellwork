@@ -1,11 +1,46 @@
 # Proposal: joint-angle rig for movement animation
 
-Status: **proposal, not approved.** Nothing in the app changes until Joe approves a plan (see `AGENTS.md`).
-Author: Claude, 2026-10-13. Reviewer: Cursor agent, then Joe.
-Prototype: [`docs/prototypes/swing-rig.html`](../prototypes/swing-rig.html) (standalone page, not part of the build).
+Status: **direction chosen, implementation plan not approved.** On 2026-10-14 Joe chose the rig as the way Bellwork animates, after comparing prototypes. This reopens the Rig v2 decision of 2026-10-07. Nothing in the app changes until Joe approves an implementation plan (see `AGENTS.md`).
+Author: Claude, 2026-10-13, revised 2026-10-14. Reviewer: Cursor agent, then Joe.
+Prototypes (standalone pages, not part of the build): [`lunge-twist-rig.html`](../prototypes/lunge-twist-rig.html), [`floor-press-rig.html`](../prototypes/floor-press-rig.html), [`dead-bug-rig.html`](../prototypes/dead-bug-rig.html). The original [`swing-rig.html`](../prototypes/swing-rig.html) is superseded.
 Also covers: a proposed change to the Batch 3 slot template, five slots to six (§5).
 
 ---
+
+## 0. Revision 2 (2026-10-14): what changed after review
+
+Sections 1 to 8 below are the original proposal, kept for the record. Where they conflict with this section, this section wins.
+
+**The rig that was chosen** is the one in the three prototypes above, not the swing prototype. It answers the review's technical objections:
+
+| Review objection (swing prototype) | Revised rig |
+|---|---|
+| Sagittal-only joint angles (shin, knee, hip, shoulder) | 3D skeleton. Legs and arms are solved with two-bone IK from foot and hand targets, so split stances, single-arm work and lateral positions are targets, not new angle fields. |
+| Ankle-rooted FK | Rooted at the pelvis. Split stances, lifted feet and floor work all work from the same root. |
+| No thoracic twist | Spine lean and twist are separate from a square pelvis (lunge + twist). |
+| Bell oriented along the forearm | Bell hangs under gravity: from the handle (goblet, horns) or resting on the outside of the forearm (rack). |
+| Floor work untested | Lying down is the same skeleton with pelvis and ribcage tilted to -90° (floor press, dead bug). |
+| Left and right authored separately | The other side is computed by mirroring. |
+
+**Withdrawn from the original proposal:**
+
+- **§3.1, one figure plus drag-to-rotate.** Accepted the review point: the phone is on the floor and hands are busy. The workout screen keeps side and front. Each movement can choose its camera for each view (a lying body needs a different "front" than a standing one), and three-quarter is available for a Library detail view.
+- **§4, MediaPipe and video files.** Dropped. The Research Rob notes workflow stays as the ingest source.
+- **§2 field shape.** Replaced by per-phase targets (below).
+
+**What one movement stores** in the prototypes: a list of phases, each with a relative time `t`, the pelvis position, pelvis pitch, spine lean and twist, foot targets (flat, on toes, or in the air), hand targets, and per-movement constants (how the bell is held, which way each elbow bends). Shared code does the rest: skeleton, IK, bell hang, mirroring, smooth interpolation.
+
+**Known gaps** (from the prototype notes): floor contact is authored, not enforced, so a check is needed to keep limbs above the floor; the spine is one rigid segment, so cues like "low back stays down" can't be shown; each arm needs a bend-direction value; a lying body has no single front view that works for every movement.
+
+**Questions for the second Cursor review:**
+
+1. **Renderer.** The prototypes draw to canvas with `requestAnimationFrame`. Is canvas the simpler path for the app, or should the rig be sampled into `Figure`'s SMIL frames? Pause, reduced motion and the contact sheet need to keep working either way.
+2. **Rig v2 carry-over.** Which parts of Slice 1 and Slice 2 carry over (`t` timing, `hold` vocabulary, `checkAir`, `twist`/`shrug`/`mirror` helpers) and which are superseded (Slice 3 arc interpolation)?
+3. **Migration without two systems.** The review's objection to dual authoring stands. What's the cleanest path: convert the whole pool in batches behind a flag before any new authoring, or something else?
+4. **Authoring and `INGEST.md`.** Can a worker compose phases reliably from named building blocks (standing, lying, split stance, goblet, rack, table-top legs) the way it composes `S_*`/`F_*` primitives today?
+5. **`check.mjs`.** Proposed checks: every target within limb reach, nothing below the floor, bell clear of the floor, `hold` rules preserved. Anything missing?
+
+**Six slots (§5)** stay proposed, sequenced after the pending carries are approved and Standard has a couple of plain carries, per the review's pool-depth finding.
 
 ## 1. The problem
 

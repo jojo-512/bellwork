@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **PR #1 under review** (`claude/rig-animation-proposal`): rig animation proposal plus six workout slots. Cursor's review is in (redirect: fold into Rig v2, sequence six slots behind pool depth). Joe is reconsidering Rig v2 after comparing prototypes: the pelvis-rooted rig in [prototypes/lunge-twist-rig.html](./prototypes/lunge-twist-rig.html) looked clearly better than the current reverse lunge + twist. Next: prototype dead bug and floor press on the same rig (floor work is the open question), then reply to the review. No reply posted yet.
+0. **PR #1: rig chosen as the animation direction** (`claude/rig-animation-proposal`). Joe decided on 2026-10-14, after comparing prototypes, that the pelvis-rooted rig is how Bellwork animates; this reopens the Rig v2 decision of Oct 7. Proposal revised (§0 of [proposals/rig-animation.md](./proposals/rig-animation.md)) with five questions for a second Cursor review. Reply to Cursor's review drafted, **waiting on Joe's approval before posting**. After that: Cursor's second review, then an implementation plan for Joe to approve. Nothing in the app changes until then.
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -13,7 +13,14 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 6. Slot template (whole-body guarantee) — Batch 3, after the remaining pending approvals land in rotation.
 7. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
 
-## Last session (2026-10-13, Claude, later)
+## Last session (2026-10-14, Claude)
+
+- Floor work tested on the rig: [prototypes/floor-press-rig.html](./prototypes/floor-press-rig.html) and [prototypes/dead-bug-rig.html](./prototypes/dead-bug-rig.html), each beside the current app's poses. Lying down is the same skeleton tilted to -90°; bell hangs under gravity (rack on the forearm, horns from the handle); other side mirrored. Gaps noted on the pages: floor contact authored not enforced, rigid spine, no single front view works for every floor movement (floor press reads from the feet, dead bug from above).
+- Joe's call: the rig looks better than the current app in every view and is the way to animate. Not every movement will get a perfect camera; side plus three-quarter give the context.
+- Proposal revised (§0): withdrawn drag-to-rotate and MediaPipe; side and front stay on the workout screen; six slots stay, sequenced after pending carries are approved and Standard has a couple of plain carries.
+- Still missing from the repo: `animation-ingest-redesign.md`, `lift-ingest-workflow.md`, `video-ingest-trial-2026-10-07.md`, and the Rig v2 Slice 2 branch. The reply asks Cursor to commit and push them.
+
+## Earlier (2026-10-13, Claude, later)
 
 - Cursor reviewed PR #1. Valid points accepted: the swing prototype was sagittal-only, ankle-rooted, and oriented the bell along the forearm; MediaPipe was trialled and rejected; drag-to-rotate doesn't suit a phone on the floor. Pool depth confirmed on `main`: Complex has no approved Carry, Anti-lean, Anti-extension or Anti-rotation; Standard's two Anti-lean marches share `variantGroup: "march"`.
 - Joe said the Rig v2 approval (Oct 7) was made quickly while travelling and is open to revisit.
