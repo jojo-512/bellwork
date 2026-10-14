@@ -24,6 +24,7 @@ Product context: [`docs/vision-roadmap.md`](./docs/vision-roadmap.md), [`docs/pu
 - Claude authors rig animations by default: it was faster and simpler in a side-by-side trial, and doesn't use Cursor credits. Cursor can author one when Joe asks, with Opus selected by hand (not Auto).
 - Every movement, whoever authors it, is checked by Claude before it goes into the app: each phase in side, front and three-quarter views, against the movement mechanics and its `cue`, plus the numeric checks (reach, floor, bell clear of the body, no snaps).
 - Joe approves each movement on his phone before it ships.
+- Movement notes from video arrive as a PR following `docs/ingest/notes-spec.md` (any agent that can watch the video). The flow is in `docs/proposals/rig-ingest.md`.
 
 ## Build and deploy
 

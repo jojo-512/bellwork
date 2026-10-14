@@ -19,7 +19,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 - **Decision (Joe):** Claude authors rig animations. Cursor stays available with Opus picked by hand when timing doesn't matter, and Claude checks any movement Cursor authors. Recorded in a new `AGENTS.md` Animation section. The repo stays public for now (no private folders exist in a public repo); added the public-repo rule to `AGENTS.md`.
 - **`CLAUDE.md` added:** it points Claude sessions to `AGENTS.md`, so both agents read one rulebook.
 - **Clean + squat + press revised:** a deeper hike (hips back, shins near vertical) and a per-phase elbow preset (hang, pull, rack, press) on the bell arm, which keeps the elbow tucked in the clean and steadies the press. Both Cursor runs also found the elbow needs a per-phase direction; named presets keep the data small. Carry this into the shared rig.
-- Drafted [proposals/rig-ingest.md](./proposals/rig-ingest.md): Rob notes v2 (phases as named body and hand positions), building blocks, the checks every movement passes, and three open questions.
+- Drafted [proposals/rig-ingest.md](./proposals/rig-ingest.md) and the notes contract [ingest/notes-spec.md](./ingest/notes-spec.md). Any agent that can watch a video writes one notes file per video (often five or six movements) and opens a PR; Claude reviews it, Joe picks movements, Claude animates on that PR, Joe approves on his phone, and the notes file is deleted before a squash merge. Text-only notes in the public repo first; a private notes repo is the fallback if renders suffer.
 - The three Cursor trial branches are to be deleted; this session can't delete remote branches, so Joe is doing it on GitHub.
 
 ## Earlier (2026-10-14, Claude, clean + squat + press rig trial)
