@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **PR #1: rig chosen as the animation direction** (`claude/rig-animation-proposal`). Joe decided on 2026-10-14, after comparing prototypes, that the pelvis-rooted rig is how Bellwork animates; this reopens the Rig v2 decision of Oct 7. Proposal revised (§0 of [proposals/rig-animation.md](./proposals/rig-animation.md)) with five questions for a second Cursor review. Reply to Cursor's review posted 2026-10-14 ([comment](https://github.com/jojo-512/bellwork/pull/1#issuecomment-6159696755)): asks Cursor to commit the cited decision docs, push the Rig v2 Slice 2 branch, and do a second review. Next: Cursor's second review, then an implementation plan for Joe to approve. Nothing in the app changes until then.
+0. **PR #1: rig chosen as the animation direction** (`claude/rig-animation-proposal`). Joe chose the pelvis-rooted rig over Rig v2 on 2026-10-14. Second review is posted ([review](https://github.com/jojo-512/bellwork/pull/1#pullrequestreview-5512574578)). Slice 2 and the Oct 7 ingest docs are on [`cursor/rig-v2-shoulders-9b80`](https://github.com/jojo-512/bellwork/tree/cursor/rig-v2-shoulders-9b80) (`f489208`). Next: Joe approves an implementation plan. No app build yet.
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -13,7 +13,13 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 6. Slot template (whole-body guarantee) — Batch 3, after the remaining pending approvals land in rotation.
 7. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
 
-## Last session (2026-10-14, Claude)
+## Last session (2026-10-14, Cursor)
+
+- Joe chose the joint-angle rig over Rig v2. No app code in this pass.
+- Pushed `cursor/rig-v2-shoulders-9b80` at `f489208` with `docs/animation-ingest-redesign.md`, `docs/lift-ingest-workflow.md`, and `docs/video-ingest-trial-2026-10-07.md`. Shoulder tree restored as `7ab15cb` from local `aa8b049` (that commit was never on origin). Not merged to `main`.
+- Second review posted on PR #1: [review](https://github.com/jojo-512/bellwork/pull/1#pullrequestreview-5512574578), with notes on the proposal and the three rig prototypes. No build until Joe approves a plan.
+
+## Earlier (2026-10-14, Claude)
 
 - Floor work tested on the rig: [prototypes/floor-press-rig.html](./prototypes/floor-press-rig.html) and [prototypes/dead-bug-rig.html](./prototypes/dead-bug-rig.html), each beside the current app's poses. Lying down is the same skeleton tilted to -90°; bell hangs under gravity (rack on the forearm, horns from the handle); other side mirrored. Gaps noted on the pages: floor contact authored not enforced, rigid spine, no single front view works for every floor movement (floor press reads from the feet, dead bug from above).
 - Joe's call: the rig looks better than the current app in every view and is the way to animate. Not every movement will get a perfect camera; side plus three-quarter give the context.
