@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: rig chosen, Claude authors.** Clean + squat + press is the first standing complex on the rig ([page](./prototypes/clean-squat-press-rig.html), branch `claude/pensive-cori-xlhxdn`). Next: a short proposal for the rig ingestion process (Research Rob notes → rig phases → Claude check → Joe's phone approval), then an implementation plan for Joe to approve. PR #1 (`claude/rig-animation-proposal`) holds the direction; Cursor's second review is [here](https://github.com/jojo-512/bellwork/pull/1#pullrequestreview-5512574578). No app build yet.
+0. **Animation: rig chosen, Claude authors.** Clean + squat + press is the first standing complex on the rig ([page](./prototypes/clean-squat-press-rig.html), branch `claude/pensive-cori-xlhxdn`). Next: Joe reviews the ingestion proposal ([proposals/rig-ingest.md](./proposals/rig-ingest.md)), then an implementation plan for Joe to approve. PR #1 (`claude/rig-animation-proposal`) holds the direction; Cursor's second review is [here](https://github.com/jojo-512/bellwork/pull/1#pullrequestreview-5512574578). No app build yet.
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -19,6 +19,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 - **Decision (Joe):** Claude authors rig animations. Cursor stays available with Opus picked by hand when timing doesn't matter, and Claude checks any movement Cursor authors. Recorded in a new `AGENTS.md` Animation section. The repo stays public for now (no private folders exist in a public repo); added the public-repo rule to `AGENTS.md`.
 - **`CLAUDE.md` added:** it points Claude sessions to `AGENTS.md`, so both agents read one rulebook.
 - **Clean + squat + press revised:** a deeper hike (hips back, shins near vertical) and a per-phase elbow preset (hang, pull, rack, press) on the bell arm, which keeps the elbow tucked in the clean and steadies the press. Both Cursor runs also found the elbow needs a per-phase direction; named presets keep the data small. Carry this into the shared rig.
+- Drafted [proposals/rig-ingest.md](./proposals/rig-ingest.md): Rob notes v2 (phases as named body and hand positions), building blocks, the checks every movement passes, and three open questions.
 - The three Cursor trial branches are to be deleted; this session can't delete remote branches, so Joe is doing it on GitHub.
 
 ## Earlier (2026-10-14, Claude, clean + squat + press rig trial)
