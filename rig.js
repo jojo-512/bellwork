@@ -68,8 +68,9 @@ function unflat(a) {
   return s;
 }
 
-// Who holds the bell: one hand (R, L), both hands on the handle, both hands on the horns, or the floor.
-const ON = { R: "wR", L: "wL", handle: "wB", horns: "wH", floor: "wF" };
+/* Who holds the bell: one hand (R, L), both hands on the handle, both hands on the horns, or the floor.
+   `air` is a bell let go for a moment (a pop to a catch): it sits at floorAt, off the floor. */
+const ON = { R: "wR", L: "wL", handle: "wB", horns: "wH", floor: "wF", air: "wF" };
 
 /* Expand a movement's authored phases (block names plus overrides) into raw states.
    Authored as right-handed; the left side is a mirror. */
@@ -105,7 +106,7 @@ export function expand(rig) {
       handL: hand(p.handL || "thigh", -1), handR: hand(p.handR || "thigh", 1),
       poleL: pole(p.elL || "free"), poleR: pole(p.elR || "free"),
       rack, fling: p.fling || 0,
-      wR: on === "R" ? 1 : 0, wL: on === "L" ? 1 : 0, wB: on === "handle" ? 1 : 0, wH: on === "horns" ? 1 : 0, wF: on === "floor" ? 1 : 0,
+      wR: on === "R" ? 1 : 0, wL: on === "L" ? 1 : 0, wB: on === "handle" ? 1 : 0, wH: on === "horns" ? 1 : 0, wF: on === "floor" || on === "air" ? 1 : 0,
       floorAt: p.floorAt || [0.3, B.bellR, 0],
       name: p.name, t: p.t, lock: p.lock || [], on,
     };
@@ -168,11 +169,17 @@ export function solve(s, m = {}) {
   };
   const horns = mul(add(arms.L.hand, arms.R.hand), 0.5);
   const both = hangFrom(horns, norm(add(norm(sub(arms.L.hand, arms.L.elbow)), norm(sub(arms.R.hand, arms.R.elbow)))));
+  /* On the horns the bell hangs under the hands. `fling` tips it outward, away from the neck,
+     and up: 0.5 points it straight out, 1 is bottoms-up (a halo, a bottoms-up press-out). */
+  const outH = v(horns[0] - neck[0], 0, horns[2] - neck[2]);
+  const outDir = len(outH) > 0.02 ? norm(outH) : norm(v(fwd[0], 0, fwd[2]));
+  const tip = s.fling * Math.PI;
+  const onHorns = add(horns, mul(add(mul(down, Math.cos(tip)), mul(outDir, Math.sin(tip))), B.bellDrop));
   const holds = [
     [s.wR, oneHand("R", 1)],
     [s.wL, oneHand("L", -1)],
     [s.wB, { handle: horns, bell: both }],
-    [s.wH, { handle: horns, bell: add(horns, v(0, -B.bellDrop, 0)) }],
+    [s.wH, { handle: horns, bell: onHorns }],
     [s.wF, { handle: add(s.floorAt, v(0, B.bellR + 0.05, 0)), bell: s.floorAt }],
   ];
   const wt = holds.reduce((n, [w]) => n + Math.max(0, w), 0) || 1;
@@ -279,9 +286,12 @@ export function draw(ctx, r, view, bellColor, frame) {
   items.sort((a, b) => a.d - b.d);
   for (const it of items) {
     if (it.kind === "bell") {
-      const h = P2(r.handle);
+      const h = P2(r.handle), behind = bellP.d < hd.d;
+      // Behind the head (a halo), the head hides the bell.
+      if (behind) { ctx.save(); ctx.beginPath(); ctx.rect(0, 0, 200, 200); ctx.arc(hd.x, hd.y, B.headR * FRAME.S + 1.5, 0, Math.PI * 2); ctx.clip("evenodd"); }
       ctx.globalAlpha = 1; line(ctx, h, bellP, bellColor, 2.2);
       disc(ctx, bellP, B.bellR * FRAME.S, bellColor); ring(ctx, h, 3.6, bellColor, 2.4);
+      if (behind) ctx.restore();
     } else if (it.kind === "head") {
       ctx.globalAlpha = 1; ring(ctx, hd, B.headR * FRAME.S, C.chalk, 3);
       line(ctx, P2(add(r.head, mul(r.fwd, B.headR * 0.9))), P2(add(r.head, mul(r.fwd, B.headR * 1.45))), C.chalk, 2.4);
@@ -319,7 +329,7 @@ export function validateRig(ex) {
   const errs = [], rig = ex.rig, names = new Set();
   if (!rig || !Array.isArray(rig.phases) || rig.phases.length < 2) return ["rig.phases needs at least two phases"];
   if (!(typeof rig.feet === "string" ? FEET[rig.feet] : rig.feet && rig.feet.footL && rig.feet.footR)) errs.push(`rig.feet "${rig.feet}" unknown`);
-  if (!ON[rig.on]) errs.push(`rig.on must be R, L, handle, horns or floor`);
+  if (!ON[rig.on]) errs.push(`rig.on must be R, L, handle, horns, floor or air`);
   if (!["right", "alternate"].includes(rig.sides)) errs.push(`rig.sides must be "right" or "alternate"`);
   const views = rig.views || [];
   if (!views.length || views.length > 2 || views.some((w) => !VIEWS[w])) errs.push(`rig.views must name one or two of ${Object.keys(VIEWS).join(", ")}`);
@@ -332,7 +342,7 @@ export function validateRig(ex) {
     for (const k of ["handR", "handL"]) if (p[k] && !Array.isArray(p[k]) && !HANDS[p[k]]) errs.push(`${at}: unknown ${k} "${p[k]}"`);
     for (const k of ["elR", "elL"]) if (p[k] && !Array.isArray(p[k]) && !ELBOWS[p[k]]) errs.push(`${at}: unknown ${k} "${p[k]}"`);
     if (p.bell != null && typeof p.bell !== "number" && !(p.bell in BELL_STATES)) errs.push(`${at}: unknown bell "${p.bell}"`);
-    if (p.on && !ON[p.on]) errs.push(`${at}: on must be R, L, handle, horns or floor`);
+    if (p.on && !ON[p.on]) errs.push(`${at}: on must be R, L, handle, horns, floor or air`);
     if (p.fling != null && !(p.fling >= 0 && p.fling <= 1)) errs.push(`${at}: fling must be 0 to 1`);
     if (p.lock && (!Array.isArray(p.lock) || p.lock.some((k) => k !== "R" && k !== "L"))) errs.push(`${at}: lock must list R and/or L`);
   });
@@ -405,7 +415,8 @@ export function checkRig(ex, N = 600) {
         for (const [st, nm] of [[p, p.name], [nx, nx.name]]) {
           const rr = solve(smp.at(smp.starts[cycle.indexOf(st)]).state, m);
           const gap = len(sub(rr.arms.L.hand, rr.arms.R.hand));
-          if ((p.on === "floor" || nx.on === "floor") ? false : gap > L.handOff) out.push(`${tag}: bell changes hands ${p.name} → ${nx.name} with the hands ${(gap * 100).toFixed(0)} cm apart at ${nm}`);
+          const free = (o) => o === "floor" || o === "air";
+          if (!free(p.on) && !free(nx.on) && gap > L.handOff) out.push(`${tag}: bell changes hands ${p.name} → ${nx.name} with the hands ${(gap * 100).toFixed(0)} cm apart at ${nm}`);
         }
       }
     });

@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: batch 3 (hinge and pull) built ([PR #6](https://github.com/jojo-512/bellwork/pull/6)), in Joe's phone review.** Batch 2 is on `main` ([PR #5](https://github.com/jojo-512/bellwork/pull/5)). Batch 3 puts swing + goblet squat, RDL + row, swing + high pull and gorilla row + sumo deadlift on the rig; Joe confirms each on his phone, then it merges with his go-ahead. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Next: batch 4 (halos and figure-8s).
+0. **Animation: batch 4 (halos and figure-8s) is on branch `claude/pensive-cori-xlhxdn`, PR open for Joe's phone review.** Batch 3 is merged (PR #6, ae3fc9f). With batch 4, 15 movements are on the rig. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). After batch 4 merges: batch 5 (sit-up + press, snatch + lunge, renegade, bottoms-up press, squat press-out, the two carries).
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -13,7 +13,23 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 6. Slot template (whole-body guarantee) — Batch 3, after the remaining pending approvals land in rotation.
 7. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
 
-## Last session (2026-10-15, Claude, rig batch 3: hinge and pull)
+## Last session (2026-10-15, Claude, rig batch 4: halos and figure-8s)
+
+- **Rig:** on the horns, `fling` tips the bell outward and up from hanging (1 is bottoms-up). With `fling` 0 it hangs under the hands as before, so earlier movements don't change. `on: "air"` lets go of the bell for a moment (it sits at `floorAt`) for a pop to a catch.
+- **Drawing:** when the bell passes behind the head, the head hides it, so the halo reads in the front view.
+- **Halo:** eight points around the head, written as world positions for both hands, because both hands sit on the same side of the head as the bell goes round. The elbows lift and point forward behind the head. Halo + press, curl + halo and halo march share the same path.
+- **Halo + press:** chest, halo, back to the chest, press straight out with the bell bottoms-up. One direction on the card.
+- **Curl + halo:** a curl on the horns (the bell turns with the forearms), the halo, back to the chest, lower. It alternates direction each rep, as the cue says.
+- **Halo march:** the halo, lower, regrip to the right hand, suitcase at the side, march (right knee, left knee), regrip on the horns. It is still `pending` in the app.
+- **Around the world + squat:** right hip, both hands meet behind the back to pass, left hip, catch in front onto the horns, goblet squat, stand, release to the right hand.
+- **Figure 8 to hold:** wide quarter squat. Each pass goes in front of the knee, between the legs, to the other hand reaching round behind that leg, then round the outside back to the front. After both legs, the bell swings up and is caught at the chest. The rig has no hold on the ball of the bell, so the catch is shown on the horns.
+- **Joe's phone review:** around the world + squat approved; the suitcase part of halo march is fine. Changes from his notes:
+  - Halo: the elbows now go up, so the arms pass over the head. This applies to all three halo movements.
+  - Curl + halo: the bell stays upright, horns up, through the curl and at the chest, and tips back a little during the halo. Halo + press and halo march keep the bottoms-up halo from their grip notes.
+  - Figure 8 to hold: the hips stay at quarter-squat depth through the catch, and the bell leaves the hand for a moment at the pop, so the end no longer reads as a stand-up or a clean. Second pass: the phases either side of the pop set the same `floorAt`, so the bell rises and settles in one arc. Without it, `floorAt` blends in from its floor default and the bell dips.
+- Card views: front + three-quarter for all five.
+
+## Earlier (2026-10-15, Claude, rig batch 3: hinge and pull)
 
 - **Rig:** a two-hand handle hold (`on: "handle"`), where the bell hangs from the middle of both hands. A per-phase `fling` (0 to 1) swings the bell out in line with the forearms, as at the top of a swing. A `shoulder` hand frame gives an arm hanging straight down (`hang`), and the floor bell's handle sits 2 cm higher.
   - The hand-off check now applies only where one hand is involved, so regripping from the handle to the horns isn't treated as a pass.
@@ -30,7 +46,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
   - Gorilla row: the elbow drives up and out (`row_wide`) and the torso opens 22° toward the rowing arm.
   - Clean + reverse lunge: views changed to side + three-quarter.
   - Clean & press: a knee dip when the bell lands in the rack (`Catch`). Joe picks side or three-quarter once he has seen it.
-- **Second review:** Joe approved all of batch 3 and the revisions. Views: swing + high pull front + three-quarter; gorilla + sumo front + three-quarter; clean & press three-quarter + front.
+- **Second review:** Joe approved all of batch 3 and the revisions. Views: swing + high pull front + three-quarter; gorilla + sumo front + three-quarter; clean & press three-quarter + front. Merged by Claude with Joe's go-ahead (merge commit ae3fc9f).
 - The contact sheet gained a movement menu at the top of each sheet, since the published review page could not reach the picker.
 
 ## Earlier (2026-10-14, Claude, rig batch 2: lunges)

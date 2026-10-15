@@ -36,6 +36,7 @@ Named positions Claude composes a movement from. Each one is a small set of rig 
   - two hands: `goblet`, `horns_overhead`, `backswing`, `halo_side`
 - **Elbow presets:** `hang`, `pull`, `rack`, `press`, `row`, `high_pull`, `goblet`.
 - **Bell:** `hanging`, `racked`, `horns`, `handle` (both hands on it), `bottoms_up`, `floor`.
+  On the horns, `fling` in the rig data tips the bell out and up from hanging: 1 is `bottoms_up` (halo + press), a little tips it back (curl + halo). `on: "air"` is a bell let go for a moment, as in a pop to a catch. The halo path is written as world positions for both hands, because both hands sit on the same side of the head.
 
 The list grows only when a real movement needs it. Clean + squat + press already needed `hike`, `squat_bottom`, `rack`, `overhead` and the elbow presets.
 
