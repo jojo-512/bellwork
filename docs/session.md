@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: batch 3 (hinge and pull) built, in Joe's phone review.** Batch 2 is on `main` ([PR #5](https://github.com/jojo-512/bellwork/pull/5)). Batch 3 puts swing + goblet squat, RDL + row, swing + high pull and gorilla row + sumo deadlift on the rig; Joe confirms each on his phone, then it merges with his go-ahead. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Next: batch 4 (halos and figure-8s).
+0. **Animation: batch 3 (hinge and pull) built ([PR #6](https://github.com/jojo-512/bellwork/pull/6)), in Joe's phone review.** Batch 2 is on `main` ([PR #5](https://github.com/jojo-512/bellwork/pull/5)). Batch 3 puts swing + goblet squat, RDL + row, swing + high pull and gorilla row + sumo deadlift on the rig; Joe confirms each on his phone, then it merges with his go-ahead. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Next: batch 4 (halos and figure-8s).
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
