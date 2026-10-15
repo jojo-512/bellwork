@@ -266,7 +266,7 @@ const STANDARD = [
     ],
     posesF: [F_HINGE, F_RACK, F_OH, F_RACK],
     rig: {
-      feet: "hip_width", on: "R", kneeOut: 0.4, sides: "right", views: ["side", "front"], still: "Rack",
+      feet: "hip_width", on: "R", kneeOut: 0.4, sides: "right", views: ["quarter", "front"], still: "Rack",
       phases: [
         { name: "Hike", t: 0.4, body: "hike", handR: "between_legs", handL: [0.02, 0.58, -0.22], elR: "hang", bell: "hanging" },
         { name: "Drive", t: 0.25, pelvis: [-0.04, 0.9], lean: 22, handR: [0.16, 0.84, 0.06], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging" },
@@ -987,7 +987,7 @@ const HYBRIDS = [
       FS({ hip: [100, 118], sh: [100, 82], elR: [108, 104], haR: [104, 126], elL: [92, 104], haL: [96, 126], knR: [112, 148], knL: [88, 148], bell: [100, 134] }),
     ],
     rig: {
-      feet: "hip_width", on: "handle", kneeOut: 0.3, sides: "right", views: ["side", "front"], still: "Pull",
+      feet: "hip_width", on: "handle", kneeOut: 0.3, sides: "right", views: ["front", "quarter"], still: "Pull",
       phases: [
         { name: "Hike", t: 0.35, body: "hike", handR: "backswing", handL: "backswing", elR: "hang", elL: "hang", fling: 1 },
         { name: "Drive", t: 0.2, pelvis: [-0.08, 0.9], lean: 24, handR: [0.33, 0.88, 0.05], handL: [0.33, 0.88, -0.05], elR: "hang", elL: "hang", fling: 0.5 },
@@ -1017,7 +1017,7 @@ const HYBRIDS = [
       FS({ elR: [106, 92], haR: [104, 112], elL: [94, 92], haL: [96, 112], knR: [114, 142], anR: [118, 176], knL: [86, 142], anL: [82, 176], bell: [100, 120] }),
     ],
     rig: {
-      feet: "wide", on: "floor", kneeOut: 0.6, sides: "alternate", views: ["front", "side"], still: "Row", floorAt: [0.2, 0.08, 0],
+      feet: "wide", on: "floor", kneeOut: 0.6, sides: "alternate", views: ["front", "quarter"], still: "Row", floorAt: [0.2, 0.08, 0],
       phases: [
         { name: "Set", t: 0.4, body: "sumo_bottom", handR: [0.2, 0.21, 0.03], handL: [0.2, 0.21, -0.03], elR: "hang", elL: "hang", floorAt: [0.2, 0.08, 0] },
         { name: "Row", t: 0.4, body: "sumo_bottom", twist: -22, on: "R", handR: [0.05, 0.68, 0.2], handL: [0.15, 0.42, -0.28], elR: "row_wide", elL: "hang", floorAt: [0.2, 0.08, 0] },

@@ -30,6 +30,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
   - Gorilla row: the elbow drives up and out (`row_wide`) and the torso opens 22° toward the rowing arm.
   - Clean + reverse lunge: views changed to side + three-quarter.
   - Clean & press: a knee dip when the bell lands in the rack (`Catch`). Joe picks side or three-quarter once he has seen it.
+- **Second review:** Joe approved all of batch 3 and the revisions. Views: swing + high pull front + three-quarter; gorilla + sumo front + three-quarter; clean & press three-quarter + front.
 - The contact sheet gained a movement menu at the top of each sheet, since the published review page could not reach the picker.
 
 ## Earlier (2026-10-14, Claude, rig batch 2: lunges)
