@@ -29,13 +29,13 @@ Until the app implementation plan is approved and built, the animations land as 
 Named positions Claude composes a movement from. Each one is a small set of rig values, so the same name means the same position in every movement. The notes use the same words (spec §5).
 
 - **Bodies:**
-  - standing: `stand`, `hinge`, `hike`, `quarter_squat`, `squat_bottom`, `split_front`, `split_back`, `lateral_lunge`
+  - standing: `stand`, `hinge`, `hike`, `quarter_squat`, `squat_bottom`, `sumo_bottom`, `split_front`, `split_back`, `lateral_lunge`
   - floor: `half_kneel`, `tall_kneel`, `lying`, `table_top`, `plank`, `side_plank`
 - **Hands**, placed relative to the shoulder so they follow the torso:
   - one hand: `hang`, `between_legs`, `rack`, `chin`, `overhead`, `row_top`, `over_chest`
-  - two hands: `goblet`, `horns_overhead`, `halo_side`
-- **Elbow presets:** `hang`, `pull`, `rack`, `press`, `row`.
-- **Bell:** `hanging`, `racked`, `horns`, `bottoms_up`, `floor`.
+  - two hands: `goblet`, `horns_overhead`, `backswing`, `halo_side`
+- **Elbow presets:** `hang`, `pull`, `rack`, `press`, `row`, `high_pull`, `goblet`.
+- **Bell:** `hanging`, `racked`, `horns`, `handle` (both hands on it), `bottoms_up`, `floor`.
 
 The list grows only when a real movement needs it. Clean + squat + press already needed `hike`, `squat_bottom`, `rack`, `overhead` and the elbow presets.
 

@@ -8,19 +8,24 @@ export const BODIES = {
   stand: { pelvis: [0, 0.94], lean: 2 },
   hike: { pelvis: [-0.24, 0.84], lean: 64 },
   squat_bottom: { pelvis: [-0.16, 0.5], lean: 20 },
+  hinge: { pelvis: [-0.2, 0.86], lean: 68 },
+  sumo_bottom: { pelvis: [-0.2, 0.52], lean: 66 },
 };
 
 /* Hands, authored for the right hand (z is the figure's right; the left hand mirrors z).
    frame "torso": [forward, up, out] from the neck, so it follows the ribcage (rack, overhead).
    frame "pelvis": [x, y, z] from the pelvis in world axes (hands hanging by the body).
+   frame "shoulder": [x, y, z] from the shoulder in world axes (an arm hanging straight down).
    frame "world": fixed in the room, under gravity (between the legs). */
 export const HANDS = {
   between_legs: { frame: "world", at: [0.01, 0.56, 0.045] },
+  backswing: { frame: "world", at: [-0.05, 0.6, 0.04] },
   rack: { frame: "torso", at: [0.146, -0.075, 0.06] },
   overhead: { frame: "torso", at: [0.0, 0.53, 0.17] },
   thigh: { frame: "pelvis", at: [0.04, -0.06, 0.26] },
   goblet: { frame: "torso", at: [0.2, -0.13, 0.06] },
-  overhead_horns: { frame: "torso", at: [0.08, 0.5, 0.06] },
+  hang: { frame: "shoulder", at: [0.02, -0.5, 0.02] },
+  horns_overhead: { frame: "torso", at: [0.08, 0.5, 0.06] },
 };
 
 /* Elbow bend directions: [up, out, forward] in the ribcage frame. Picked per phase.
@@ -31,6 +36,9 @@ export const ELBOWS = {
   rack: [-1, 0.08, 0],
   press: [-1, 0.12, 0.2],
   goblet: [-1, 0.35, 0],
+  row: [-0.6, 0.15, -1],
+  row_wide: [-0.3, 0.9, -0.8],
+  high_pull: [0.4, 1, -0.3],
   free: [-0.3, 0.3, -1],
   floor_press: [-0.6, 0.8, -0.5],
   dead_bug: [-0.2, 0.8, -0.2],
@@ -42,4 +50,5 @@ export const BELL_STATES = { hanging: 0, racked: 1 };
 // Stances. Feet: ankle target, toes (0 flat, 1 on the toes), air (0 planted, 1 lifted).
 export const FEET = {
   hip_width: { footL: { at: [0, 0.08, -0.16], toes: 0, air: 0 }, footR: { at: [0, 0.08, 0.16], toes: 0, air: 0 } },
+  wide: { footL: { at: [0, 0.08, -0.36], toes: 0, air: 0 }, footR: { at: [0, 0.08, 0.36], toes: 0, air: 0 } },
 };

@@ -307,7 +307,7 @@ function LoopRow({ side, front, dur, color, bellFlip }) {
   );
 }
 
-function Picker({ missing }) {
+function Picker({ missing, onPick }) {
   const onRig = EXERCISES.filter((e) => e.rig);
   const pending = EXERCISES.filter((e) => e.pending && !e.rig);
   const rest = EXERCISES.filter((e) => !e.pending && !e.rig);
@@ -322,14 +322,14 @@ function Picker({ missing }) {
       <p style={{ color: COLORS.chalkDim, fontSize: 18, lineHeight: 1.45, marginTop: 0 }}>
         Open one lift with <span style={{ color: COLORS.chalk }}>?id=swing_high_pull</span>. This page is not the workout.
       </p>
-      <Group title="On the rig" items={onRig} />
-      <Group title="Pending" items={pending} />
-      <Group title="In rotation" items={rest} />
+      <Group title="On the rig" items={onRig} onPick={onPick} />
+      <Group title="Pending" items={pending} onPick={onPick} />
+      <Group title="In rotation" items={rest} onPick={onPick} />
     </div>
   );
 }
 
-function Group({ title, items }) {
+function Group({ title, items, onPick }) {
   if (!items.length) return null;
   return (
     <section style={{ marginTop: 22 }}>
@@ -337,7 +337,7 @@ function Group({ title, items }) {
       <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
         {items.map((ex) => (
           <li key={ex.id} style={{ borderTop: `1px solid ${COLORS.panelEdge}` }}>
-            <a href={`?id=${ex.id}`} style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "10px 0", color: COLORS.chalk, textDecoration: "none", fontSize: 18 }}>
+            <a href={`?id=${ex.id}`} onClick={(e) => { e.preventDefault(); onPick(ex.id); }} style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "10px 0", color: COLORS.chalk, textDecoration: "none", fontSize: 18 }}>
               <span>{ex.name}</span>
               <span style={{ color: COLORS.chalkDim }}>{ex.id}</span>
             </a>
@@ -348,14 +348,44 @@ function Group({ title, items }) {
   );
 }
 
+/* Movement switcher at the top of every sheet. It switches in place, so it also works where
+   the page can't navigate to a new address (the published review page). */
+function Switcher({ id, onPick }) {
+  const onRig = EXERCISES.filter((e) => e.rig);
+  const rest = EXERCISES.filter((e) => !e.rig);
+  return (
+    <div style={{ maxWidth: 1100, margin: "0 auto", padding: "14px 20px 0" }}>
+      <label style={{ display: "flex", alignItems: "center", gap: 10, color: COLORS.chalkDim, fontSize: 15 }}>
+        Movement
+        <select value={id} onChange={(e) => onPick(e.target.value)}
+          style={{ flex: "0 1 360px", minWidth: 0, background: COLORS.panel, color: COLORS.chalk, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 8, padding: "8px 10px", fontSize: 16 }}>
+          {!id && <option value="">Pick a movement</option>}
+          <optgroup label="On the rig">{onRig.map((e) => <option key={e.id} value={e.id}>{e.name}</option>)}</optgroup>
+          <optgroup label="Old figures">{rest.map((e) => <option key={e.id} value={e.id}>{e.name}</option>)}</optgroup>
+        </select>
+      </label>
+    </div>
+  );
+}
+
 function App() {
-  const id = useMemo(() => new URLSearchParams(window.location.search).get("id") || "", []);
+  const [id, setId] = useState(() => new URLSearchParams(window.location.search).get("id") || "");
   const ex = EXERCISES.find((e) => e.id === id);
+  const pick = (next) => {
+    setId(next);
+    window.scrollTo(0, 0);
+    try { window.history.replaceState(null, "", `?id=${next}`); } catch (e) {}
+  };
   useEffect(() => {
     document.title = ex ? `${ex.name} · contact sheet` : "Bellwork contact sheet";
   }, [ex]);
-  if (!id || !ex) return <Picker missing={id || null} />;
-  return <Sheet ex={ex} />;
+  if (!id || !ex) return <Picker missing={id || null} onPick={pick} />;
+  return (
+    <>
+      <Switcher id={id} onPick={pick} />
+      <Sheet key={id} ex={ex} />
+    </>
+  );
 }
 
 createRoot(document.getElementById("root")).render(<App />);
