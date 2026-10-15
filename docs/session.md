@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: batch 4 (halos and figure-8s) merged to `main` ([PR #7](https://github.com/jojo-512/bellwork/pull/7), merge commit 2555e2e).** 15 movements are on the rig, all approved by Joe on his phone. Halo march stays `pending` in the app as before. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Next: batch 5 (sit-up + press, snatch + lunge, renegade, bottoms-up press, squat press-out, the two carries).
+0. **Animation: batch 5 (the last Complex movements) is on branch `claude/pensive-cori-xlhxdn`, PR open for Joe's phone review.** Batch 4 is merged (PR #7, 2555e2e). With batch 5, 22 movements are on the rig. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). After batch 5: the 36 Standard-only movements, then delete the old figure system.
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -13,7 +13,18 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 6. Slot template (whole-body guarantee) — Batch 3, after the remaining pending approvals land in rotation.
 7. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
 
-## Last session (2026-10-15, Claude, rig batch 4: halos and figure-8s)
+## Last session (2026-10-15, Claude, rig batch 5: floor, snatch, carries)
+
+- **Contact sheet:** a "To review" group at the top of the movement menu and the picker lists only the open batch (`TO_REVIEW` in `contact.jsx`; update it when a batch opens or merges). Joe asked for it.
+- **Sit-up to press:** lying (pelvis 0.1 m, pitch and lean -90, knees bent), curl up, sit tall, press overhead on the horns, lower, roll down. The press goes up in front of the face, not through it.
+- **Push-up + row (renegade):** plank on the toes, feet wide. The right hand is on the handle of the bell parked on the floor, the left flat on the floor. Push-up, then row to the ribs with the hips square, set it down. It alternates sides. The rig has no sideways roll, so the hand on the raised handle stays bent at the top.
+- **Bottoms-up press:** one hand, `fling: 1`, so the bell sits upside down above the fist from the rack to lockout and back.
+- **Squat + press-out:** goblet, squat to the bottom, press straight out and hold, pull back, stand.
+- **Snatch:** the clean's hike and drive, a high pull, a punch-through with the bell rolling onto the forearm, then lockout. Snatch + lunge reverse-lunges with the arm locked; snatch + overhead carry walks in place. Both tip the bell over in front and drop to the hike. With the arm straight overhead, the elbow bends out to the side, because the press direction lies along a straight arm and snapped.
+- **Clean + racked carry:** the clean, then walking in place with the bell racked.
+- Views: side + three-quarter for the sit-up, renegade, snatch + lunge and squat + press-out; side + front for the bottoms-up press and both carries.
+
+## Earlier (2026-10-15, Claude, rig batch 4: halos and figure-8s)
 
 - **Rig:** on the horns, `fling` tips the bell outward and up from hanging (1 is bottoms-up). With `fling` 0 it hangs under the hands as before, so earlier movements don't change. `on: "air"` lets go of the bell for a moment (it sits at `floorAt`) for a pop to a catch.
 - **Drawing:** when the bell passes behind the head, the head hides it, so the halo reads in the front view.
