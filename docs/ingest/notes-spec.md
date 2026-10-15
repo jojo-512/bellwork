@@ -100,12 +100,12 @@ movements:
 ## 5. Vocabulary
 
 - **body:**
-  - standing: `stand`, `hinge`, `hike`, `quarter_squat`, `squat_bottom`, `split_front`, `split_back`, `lateral_lunge`
+  - standing: `stand`, `hinge`, `hike`, `quarter_squat`, `squat_bottom`, `sumo_bottom`, `split_front`, `split_back`, `lateral_lunge`
   - floor: `half_kneel`, `tall_kneel`, `lying`, `table_top`, `plank`, `side_plank`
 - **bell_hand:**
   - one hand: `hang`, `between_legs`, `rack`, `chin`, `overhead`, `row_top`, `over_chest`
-  - two hands: `goblet`, `horns_overhead`, `halo_side`
-- **bell:** `hanging`, `racked`, `horns`, `bottoms_up`, `floor`
+  - two hands: `goblet`, `horns_overhead`, `backswing`, `halo_side`
+- **bell:** `hanging`, `racked`, `horns`, `handle` (both hands on it), `bottoms_up`, `floor`
 - **free_hand:** `thigh`, `side`, `forward`, `out`, `on_bell`, `floor`
 
 The rendering agent adds words as movements need them.

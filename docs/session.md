@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: batch 2 (lunges) merged to `main` ([PR #5](https://github.com/jojo-512/bellwork/pull/5), merge commit ef713b4).** Six Complex movements are on the rig: clean + squat + press, clean & press, thruster, reverse lunge + twist, clean + reverse lunge, lateral lunge + press. All approved by Joe on his phone, views confirmed. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Next: batch 3 (hinge and pull: swing + squat, RDL + row, swing + high pull, gorilla + sumo).
+0. **Animation: batch 3 (hinge and pull) built, in Joe's phone review.** Batch 2 is on `main` ([PR #5](https://github.com/jojo-512/bellwork/pull/5)). Batch 3 puts swing + goblet squat, RDL + row, swing + high pull and gorilla row + sumo deadlift on the rig; Joe confirms each on his phone, then it merges with his go-ahead. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Next: batch 4 (halos and figure-8s).
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -13,7 +13,18 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 6. Slot template (whole-body guarantee) — Batch 3, after the remaining pending approvals land in rotation.
 7. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
 
-## Last session (2026-10-14, Claude, rig batch 2: lunges)
+## Last session (2026-10-15, Claude, rig batch 3: hinge and pull)
+
+- **Rig:** a two-hand handle hold (`on: "handle"`), where the bell hangs from the middle of both hands. A per-phase `fling` (0 to 1) swings the bell out in line with the forearms, as at the top of a swing. A `shoulder` hand frame gives an arm hanging straight down (`hang`), and the floor bell's handle sits 2 cm higher.
+  - The hand-off check now applies only where one hand is involved, so regripping from the handle to the horns isn't treated as a pass.
+- **New blocks:** `hinge` and `sumo_bottom` bodies; `backswing` and `hang` hands; `row` and `high_pull` elbows; `wide` stance. `overhead_horns` is renamed `horns_overhead` to match the notes vocabulary, which now lists the new words.
+- **Swing + high pull and swing + goblet squat:** a two-hand swing (deeper backswing, the bell in line with the arms at the float). The high pull drives the elbows high and outside; the squat catches the bell onto the horns at the float.
+- **RDL + row:** a one-hand hinge with the arms hanging, a hold, a row to the hip with the elbow back, then stand.
+- **Gorilla row + sumo deadlift:** wide stance, alternating the rowing hand each rep (right rep, then left). Row, park the bell on the floor, regrip with both hands, sumo-deadlift to stand, lower.
+- **Timing:** a phase's `t` is the time to move from that phase to the next one, not time spent in it. Missing that first gave the sumo stand-up 0.15 s, which the speed check caught.
+- Card views: side + front for all four; gorilla + sumo leads with front.
+
+## Earlier (2026-10-14, Claude, rig batch 2: lunges)
 
 - Reverse lunge + twist, clean + reverse lunge and lateral lunge + press carry `rig` and pass the checks. The lunges reuse the blocks (no new body blocks): the back foot is a per-phase `footR` target, flat or on its toes, and the front foot stays planted.
 - Reverse lunge + twist follows the prototype, alternating right then left (`sides: "alternate"`). The twist turns the ribcage over the front leg with the hips square.

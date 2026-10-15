@@ -59,7 +59,7 @@ const KEYS = [
   ["pelvis", 3], ["pitch", 1], ["lean", 1], ["twist", 1],
   ["footL", 3], ["toesL", 1], ["airL", 1], ["footR", 3], ["toesR", 1], ["airR", 1],
   ["handL", 3], ["handR", 3], ["poleL", 3], ["poleR", 3],
-  ["rack", 1], ["wR", 1], ["wL", 1], ["wH", 1], ["wF", 1], ["floorAt", 3],
+  ["rack", 1], ["fling", 1], ["wR", 1], ["wL", 1], ["wB", 1], ["wH", 1], ["wF", 1], ["floorAt", 3],
 ];
 const flat = (s) => KEYS.flatMap(([k, n]) => (n === 1 ? [s[k]] : s[k]));
 function unflat(a) {
@@ -68,7 +68,8 @@ function unflat(a) {
   return s;
 }
 
-const ON = { R: "wR", L: "wL", horns: "wH", floor: "wF" };
+// Who holds the bell: one hand (R, L), both hands on the handle, both hands on the horns, or the floor.
+const ON = { R: "wR", L: "wL", handle: "wB", horns: "wH", floor: "wF" };
 
 /* Expand a movement's authored phases (block names plus overrides) into raw states.
    Authored as right-handed; the left side is a mirror. */
@@ -85,6 +86,10 @@ export function expand(rig) {
       const blk = HANDS[h];
       if (blk.frame === "world") return [blk.at[0], blk.at[1], side * blk.at[2]];
       if (blk.frame === "pelvis") return [pelvis[0] + blk.at[0], pelvis[1] + blk.at[1], side * blk.at[2]];
+      if (blk.frame === "shoulder") {
+        const sh = add(add(rib.neck, mul(rib.right, side * B.shW)), mul(rib.up, -0.02));
+        return [sh[0] + blk.at[0], sh[1] + blk.at[1], sh[2] + side * blk.at[2]];
+      }
       // torso: offset from the neck along the ribcage's forward, up and right
       const [f, u, r] = blk.at;
       return add(rib.neck, add(add(mul(rib.fwd, f), mul(rib.up, u)), mul(rib.right, side * r)));
@@ -99,7 +104,8 @@ export function expand(rig) {
       footR: fr.at, toesR: fr.toes || 0, airR: fr.air || 0,
       handL: hand(p.handL || "thigh", -1), handR: hand(p.handR || "thigh", 1),
       poleL: pole(p.elL || "free"), poleR: pole(p.elR || "free"),
-      rack, wR: on === "R" ? 1 : 0, wL: on === "L" ? 1 : 0, wH: on === "horns" ? 1 : 0, wF: on === "floor" ? 1 : 0,
+      rack, fling: p.fling || 0,
+      wR: on === "R" ? 1 : 0, wL: on === "L" ? 1 : 0, wB: on === "handle" ? 1 : 0, wH: on === "horns" ? 1 : 0, wF: on === "floor" ? 1 : 0,
       floorAt: p.floorAt || [0.3, B.bellR, 0],
       name: p.name, t: p.t, lock: p.lock || [], on,
     };
@@ -147,19 +153,27 @@ export function solve(s, m = {}) {
   }
   /* The bell hangs under gravity. One hand blends two holds by `rack`:
      0 hangs from the handle, trailing the forearm when the arm points down;
-     1 rests on the outside of the forearm. In between it rolls round the hand. */
+     1 rests on the outside of the forearm. In between it rolls round the hand.
+     `fling` (0 to 1) swings it out in line with the forearm, as at the top of a swing. */
+  const down = v(0, -1, 0);
+  const hangFrom = (handle, fore) => {
+    const w = Math.max(0, dot(fore, down), s.fling);
+    return add(handle, mul(norm(add(mul(down, 1 - w), mul(fore, w))), B.hangDrop));
+  };
   const oneHand = (name, side) => {
-    const a = arms[name], down = v(0, -1, 0), fore = norm(sub(a.hand, a.elbow)), w = Math.max(0, dot(fore, down));
-    const hang = add(a.hand, mul(norm(add(mul(down, 1 - w), mul(fore, w))), B.hangDrop));
+    const a = arms[name], fore = norm(sub(a.hand, a.elbow));
+    const hang = hangFrom(a.hand, fore);
     const rest = add(add(a.hand, v(0, -0.075, 0)), mul(right, side * 0.065));
     return { handle: a.hand, bell: add(mul(hang, 1 - s.rack), mul(rest, s.rack)) };
   };
   const horns = mul(add(arms.L.hand, arms.R.hand), 0.5);
+  const both = hangFrom(horns, norm(add(norm(sub(arms.L.hand, arms.L.elbow)), norm(sub(arms.R.hand, arms.R.elbow)))));
   const holds = [
     [s.wR, oneHand("R", 1)],
     [s.wL, oneHand("L", -1)],
+    [s.wB, { handle: horns, bell: both }],
     [s.wH, { handle: horns, bell: add(horns, v(0, -B.bellDrop, 0)) }],
-    [s.wF, { handle: add(s.floorAt, v(0, B.bellR + 0.03, 0)), bell: s.floorAt }],
+    [s.wF, { handle: add(s.floorAt, v(0, B.bellR + 0.05, 0)), bell: s.floorAt }],
   ];
   const wt = holds.reduce((n, [w]) => n + Math.max(0, w), 0) || 1;
   let handle = [0, 0, 0], bell = [0, 0, 0];
@@ -305,7 +319,7 @@ export function validateRig(ex) {
   const errs = [], rig = ex.rig, names = new Set();
   if (!rig || !Array.isArray(rig.phases) || rig.phases.length < 2) return ["rig.phases needs at least two phases"];
   if (!(typeof rig.feet === "string" ? FEET[rig.feet] : rig.feet && rig.feet.footL && rig.feet.footR)) errs.push(`rig.feet "${rig.feet}" unknown`);
-  if (!ON[rig.on]) errs.push(`rig.on must be R, L, horns or floor`);
+  if (!ON[rig.on]) errs.push(`rig.on must be R, L, handle, horns or floor`);
   if (!["right", "alternate"].includes(rig.sides)) errs.push(`rig.sides must be "right" or "alternate"`);
   const views = rig.views || [];
   if (!views.length || views.length > 2 || views.some((w) => !VIEWS[w])) errs.push(`rig.views must name one or two of ${Object.keys(VIEWS).join(", ")}`);
@@ -318,7 +332,8 @@ export function validateRig(ex) {
     for (const k of ["handR", "handL"]) if (p[k] && !Array.isArray(p[k]) && !HANDS[p[k]]) errs.push(`${at}: unknown ${k} "${p[k]}"`);
     for (const k of ["elR", "elL"]) if (p[k] && !Array.isArray(p[k]) && !ELBOWS[p[k]]) errs.push(`${at}: unknown ${k} "${p[k]}"`);
     if (p.bell != null && typeof p.bell !== "number" && !(p.bell in BELL_STATES)) errs.push(`${at}: unknown bell "${p.bell}"`);
-    if (p.on && !ON[p.on]) errs.push(`${at}: on must be R, L, horns or floor`);
+    if (p.on && !ON[p.on]) errs.push(`${at}: on must be R, L, handle, horns or floor`);
+    if (p.fling != null && !(p.fling >= 0 && p.fling <= 1)) errs.push(`${at}: fling must be 0 to 1`);
     if (p.lock && (!Array.isArray(p.lock) || p.lock.some((k) => k !== "R" && k !== "L"))) errs.push(`${at}: lock must list R and/or L`);
   });
   if (rig.still && !names.has(rig.still)) errs.push(`rig.still "${rig.still}" is not a phase`);
@@ -384,7 +399,9 @@ export function checkRig(ex, N = 600) {
         if (reach < L.lock) out.push(`${tag}: ${k} arm at ${(reach * 100).toFixed(0)}% of reach at lockout ${p.name} (min ${L.lock * 100}%)`);
       }
       const nx = cycle[(i + 1) % cycle.length];
-      if (nx.on !== p.on) {
+      // A pass between hands needs the hands together; a regrip with both hands on (handle to horns) doesn't.
+      const oneHanded = (o) => o === "R" || o === "L";
+      if (nx.on !== p.on && (oneHanded(p.on) || oneHanded(nx.on))) {
         for (const [st, nm] of [[p, p.name], [nx, nx.name]]) {
           const rr = solve(smp.at(smp.starts[cycle.indexOf(st)]).state, m);
           const gap = len(sub(rr.arms.L.hand, rr.arms.R.hand));
