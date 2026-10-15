@@ -26,7 +26,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 - **Joe's phone review:** around the world + squat approved; the suitcase part of halo march is fine. Changes from his notes:
   - Halo: the elbows now go up, so the arms pass over the head. This applies to all three halo movements.
   - Curl + halo: the bell stays upright, horns up, through the curl and at the chest, and tips back a little during the halo. Halo + press and halo march keep the bottoms-up halo from their grip notes.
-  - Figure 8 to hold: the hips stay at quarter-squat depth through the catch, and the bell leaves the hand for a moment at the pop, so the end no longer reads as a stand-up or a clean.
+  - Figure 8 to hold: the hips stay at quarter-squat depth through the catch, and the bell leaves the hand for a moment at the pop, so the end no longer reads as a stand-up or a clean. Second pass: the phases either side of the pop set the same `floorAt`, so the bell rises and settles in one arc. Without it, `floorAt` blends in from its floor default and the bell dips.
 - Card views: front + three-quarter for all five.
 
 ## Earlier (2026-10-15, Claude, rig batch 3: hinge and pull)
