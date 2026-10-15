@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: batch 4 (halos and figure-8s) is on branch `claude/pensive-cori-xlhxdn`, PR open for Joe's phone review.** Batch 3 is merged (PR #6, ae3fc9f). With batch 4, 15 movements are on the rig. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). After batch 4 merges: batch 5 (sit-up + press, snatch + lunge, renegade, bottoms-up press, squat press-out, the two carries).
+0. **Animation: batch 4 (halos and figure-8s) merged to `main` ([PR #7](https://github.com/jojo-512/bellwork/pull/7), merge commit 2555e2e).** 15 movements are on the rig, all approved by Joe on his phone. Halo march stays `pending` in the app as before. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Next: batch 5 (sit-up + press, snatch + lunge, renegade, bottoms-up press, squat press-out, the two carries).
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -27,6 +27,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
   - Halo: the elbows now go up, so the arms pass over the head. This applies to all three halo movements.
   - Curl + halo: the bell stays upright, horns up, through the curl and at the chest, and tips back a little during the halo. Halo + press and halo march keep the bottoms-up halo from their grip notes.
   - Figure 8 to hold: the hips stay at quarter-squat depth through the catch, and the bell leaves the hand for a moment at the pop, so the end no longer reads as a stand-up or a clean. Second pass: the phases either side of the pop set the same `floorAt`, so the bell rises and settles in one arc. Without it, `floorAt` blends in from its floor default and the bell dips.
+- **Final review:** Joe approved all five with the revisions. Merged by Claude with Joe's go-ahead (merge commit 2555e2e).
 - Card views: front + three-quarter for all five.
 
 ## Earlier (2026-10-15, Claude, rig batch 3: hinge and pull)
