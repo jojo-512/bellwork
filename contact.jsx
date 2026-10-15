@@ -17,6 +17,12 @@ const COLORS = {
   warn: "#E0AE1E",
 };
 
+/* The open batch, listed first in the menu so Joe reviews only these.
+   Update when a batch opens or merges. */
+const TO_REVIEW = ["situp_press", "snatch_lunge", "renegade", "bottoms_up_press", "squat_pressout", "clean_carry", "snatch_oh_carry"];
+const reviewItems = () => TO_REVIEW.map((id) => EXERCISES.find((e) => e.id === id)).filter(Boolean);
+const notReview = (e) => !TO_REVIEW.includes(e.id);
+
 function colorFor(ex) {
   const tag = ex && ex.tags && ex.tags[0];
   return COLORS[tag] || COLORS.chalk;
@@ -308,9 +314,10 @@ function LoopRow({ side, front, dur, color, bellFlip }) {
 }
 
 function Picker({ missing, onPick }) {
-  const onRig = EXERCISES.filter((e) => e.rig);
-  const pending = EXERCISES.filter((e) => e.pending && !e.rig);
-  const rest = EXERCISES.filter((e) => !e.pending && !e.rig);
+  const review = reviewItems();
+  const onRig = EXERCISES.filter((e) => e.rig && notReview(e));
+  const pending = EXERCISES.filter((e) => e.pending && !e.rig && notReview(e));
+  const rest = EXERCISES.filter((e) => !e.pending && !e.rig && notReview(e));
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", padding: "28px 20px 64px" }}>
       <p style={{ margin: "0 0 8px", color: COLORS.chalkDim, letterSpacing: "0.14em", textTransform: "uppercase", fontSize: 13, fontWeight: 600 }}>
@@ -322,6 +329,7 @@ function Picker({ missing, onPick }) {
       <p style={{ color: COLORS.chalkDim, fontSize: 18, lineHeight: 1.45, marginTop: 0 }}>
         Open one lift with <span style={{ color: COLORS.chalk }}>?id=swing_high_pull</span>. This page is not the workout.
       </p>
+      <Group title="To review" items={review} onPick={onPick} />
       <Group title="On the rig" items={onRig} onPick={onPick} />
       <Group title="Pending" items={pending} onPick={onPick} />
       <Group title="In rotation" items={rest} onPick={onPick} />
@@ -351,8 +359,9 @@ function Group({ title, items, onPick }) {
 /* Movement switcher at the top of every sheet. It switches in place, so it also works where
    the page can't navigate to a new address (the published review page). */
 function Switcher({ id, onPick }) {
-  const onRig = EXERCISES.filter((e) => e.rig);
-  const rest = EXERCISES.filter((e) => !e.rig);
+  const review = reviewItems();
+  const onRig = EXERCISES.filter((e) => e.rig && notReview(e));
+  const rest = EXERCISES.filter((e) => !e.rig && notReview(e));
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: "14px 20px 0" }}>
       <label style={{ display: "flex", alignItems: "center", gap: 10, color: COLORS.chalkDim, fontSize: 15 }}>
@@ -360,6 +369,7 @@ function Switcher({ id, onPick }) {
         <select value={id} onChange={(e) => onPick(e.target.value)}
           style={{ flex: "0 1 360px", minWidth: 0, background: COLORS.panel, color: COLORS.chalk, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 8, padding: "8px 10px", fontSize: 16 }}>
           {!id && <option value="">Pick a movement</option>}
+          {review.length > 0 && <optgroup label="To review">{review.map((e) => <option key={e.id} value={e.id}>{e.name}</option>)}</optgroup>}
           <optgroup label="On the rig">{onRig.map((e) => <option key={e.id} value={e.id}>{e.name}</option>)}</optgroup>
           <optgroup label="Old figures">{rest.map((e) => <option key={e.id} value={e.id}>{e.name}</option>)}</optgroup>
         </select>
