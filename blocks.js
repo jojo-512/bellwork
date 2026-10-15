@@ -37,6 +37,7 @@ export const ELBOWS = {
   press: [-1, 0.12, 0.2],
   goblet: [-1, 0.35, 0],
   row: [-0.6, 0.15, -1],
+  row_wide: [-0.3, 0.9, -0.8],
   high_pull: [0.4, 1, -0.3],
   free: [-0.3, 0.3, -1],
   floor_press: [-0.6, 0.8, -0.5],

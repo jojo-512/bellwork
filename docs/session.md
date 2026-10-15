@@ -23,6 +23,14 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 - **Gorilla row + sumo deadlift:** wide stance, alternating the rowing hand each rep (right rep, then left). Row, park the bell on the floor, regrip with both hands, sumo-deadlift to stand, lower.
 - **Timing:** a phase's `t` is the time to move from that phase to the next one, not time spent in it. Missing that first gave the sumo stand-up 0.15 s, which the speed check caught.
 - Card views: side + front for all four; gorilla + sumo leads with front.
+- **Joe's phone review:** approved RDL + row, lateral lunge + press, clean + squat + press, reverse lunge + twist and thruster. Swing + goblet squat was approved with a nit.
+- **Changes from his notes:**
+  - Swing + high pull: the bell now stays hanging, handle up, from the float through the pull and release.
+  - Swing + goblet squat: less fling at the float, so the bell shows more gravity.
+  - Gorilla row: the elbow drives up and out (`row_wide`) and the torso opens 22° toward the rowing arm.
+  - Clean + reverse lunge: views changed to side + three-quarter.
+  - Clean & press: a knee dip when the bell lands in the rack (`Catch`). Joe picks side or three-quarter once he has seen it.
+- The contact sheet gained a movement menu at the top of each sheet, since the published review page could not reach the picker.
 
 ## Earlier (2026-10-14, Claude, rig batch 2: lunges)
 
