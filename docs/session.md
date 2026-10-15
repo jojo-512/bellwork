@@ -15,7 +15,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Last session (2026-10-15, Claude, rig batch 4: halos and figure-8s)
 
-- **Rig:** on the horns, `fling` now turns the bell with the forearms, bottoms-up (`fling: 1`), as in a halo or a curl on the horns. With `fling` 0 the bell sits under the hands as before, so earlier movements don't change.
+- **Rig:** on the horns, `fling` tips the bell outward and up from hanging (1 is bottoms-up). With `fling` 0 it hangs under the hands as before, so earlier movements don't change. `on: "air"` lets go of the bell for a moment (it sits at `floorAt`) for a pop to a catch.
 - **Drawing:** when the bell passes behind the head, the head hides it, so the halo reads in the front view.
 - **Halo:** eight points around the head, written as world positions for both hands, because both hands sit on the same side of the head as the bell goes round. The elbows lift and point forward behind the head. Halo + press, curl + halo and halo march share the same path.
 - **Halo + press:** chest, halo, back to the chest, press straight out with the bell bottoms-up. One direction on the card.
@@ -23,6 +23,10 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 - **Halo march:** the halo, lower, regrip to the right hand, suitcase at the side, march (right knee, left knee), regrip on the horns. It is still `pending` in the app.
 - **Around the world + squat:** right hip, both hands meet behind the back to pass, left hip, catch in front onto the horns, goblet squat, stand, release to the right hand.
 - **Figure 8 to hold:** wide quarter squat. Each pass goes in front of the knee, between the legs, to the other hand reaching round behind that leg, then round the outside back to the front. After both legs, the bell swings up and is caught at the chest. The rig has no hold on the ball of the bell, so the catch is shown on the horns.
+- **Joe's phone review:** around the world + squat approved; the suitcase part of halo march is fine. Changes from his notes:
+  - Halo: the elbows now go up, so the arms pass over the head. This applies to all three halo movements.
+  - Curl + halo: the bell stays upright, horns up, through the curl and at the chest, and tips back a little during the halo. Halo + press and halo march keep the bottoms-up halo from their grip notes.
+  - Figure 8 to hold: the hips stay at quarter-squat depth through the catch, and the bell leaves the hand for a moment at the pop, so the end no longer reads as a stand-up or a clean.
 - Card views: front + three-quarter for all five.
 
 ## Earlier (2026-10-15, Claude, rig batch 3: hinge and pull)
