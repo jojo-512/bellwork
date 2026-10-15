@@ -167,12 +167,15 @@ export function solve(s, m = {}) {
     return { handle: a.hand, bell: add(mul(hang, 1 - s.rack), mul(rest, s.rack)) };
   };
   const horns = mul(add(arms.L.hand, arms.R.hand), 0.5);
-  const both = hangFrom(horns, norm(add(norm(sub(arms.L.hand, arms.L.elbow)), norm(sub(arms.R.hand, arms.R.elbow)))));
+  const fore2 = norm(add(norm(sub(arms.L.hand, arms.L.elbow)), norm(sub(arms.R.hand, arms.R.elbow))));
+  const both = hangFrom(horns, fore2);
+  // On the horns the bell sits under the hands; `fling` turns it with the forearms, bottoms-up (halo, curl).
+  const onHorns = add(horns, mul(norm(add(mul(down, 1 - s.fling), mul(fore2, s.fling))), B.bellDrop));
   const holds = [
     [s.wR, oneHand("R", 1)],
     [s.wL, oneHand("L", -1)],
     [s.wB, { handle: horns, bell: both }],
-    [s.wH, { handle: horns, bell: add(horns, v(0, -B.bellDrop, 0)) }],
+    [s.wH, { handle: horns, bell: onHorns }],
     [s.wF, { handle: add(s.floorAt, v(0, B.bellR + 0.05, 0)), bell: s.floorAt }],
   ];
   const wt = holds.reduce((n, [w]) => n + Math.max(0, w), 0) || 1;
@@ -279,9 +282,12 @@ export function draw(ctx, r, view, bellColor, frame) {
   items.sort((a, b) => a.d - b.d);
   for (const it of items) {
     if (it.kind === "bell") {
-      const h = P2(r.handle);
+      const h = P2(r.handle), behind = bellP.d < hd.d;
+      // Behind the head (a halo), the head hides the bell.
+      if (behind) { ctx.save(); ctx.beginPath(); ctx.rect(0, 0, 200, 200); ctx.arc(hd.x, hd.y, B.headR * FRAME.S + 1.5, 0, Math.PI * 2); ctx.clip("evenodd"); }
       ctx.globalAlpha = 1; line(ctx, h, bellP, bellColor, 2.2);
       disc(ctx, bellP, B.bellR * FRAME.S, bellColor); ring(ctx, h, 3.6, bellColor, 2.4);
+      if (behind) ctx.restore();
     } else if (it.kind === "head") {
       ctx.globalAlpha = 1; ring(ctx, hd, B.headR * FRAME.S, C.chalk, 3);
       line(ctx, P2(add(r.head, mul(r.fwd, B.headR * 0.9))), P2(add(r.head, mul(r.fwd, B.headR * 1.45))), C.chalk, 2.4);
