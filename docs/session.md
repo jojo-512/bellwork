@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: batch 5 merged to `main` ([PR #8](https://github.com/jojo-512/bellwork/pull/8), merge commit df2a106). Every Complex movement is now on the rig (22 movements in all), approved by Joe on his phone.** The two carries and halo march stay `pending` in the app. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Next: the 36 Standard-only movements, then delete the old figure system. Fill `TO_REVIEW` in `contact.jsx` when the next batch opens.
+0. **Animation: batch 5 merged to `main` ([PR #8](https://github.com/jojo-512/bellwork/pull/8), merge commit df2a106). Every Complex movement is now on the rig (22 movements in all), approved by Joe on his phone.** Halo march and the two carries are approved in data (`pending` removed), so they enter the draw on every device without a tap. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Next: the 36 Standard-only movements, then delete the old figure system. Fill `TO_REVIEW` in `contact.jsx` when the next batch opens.
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -13,7 +13,11 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 6. Slot template (whole-body guarantee) — Batch 3, after the remaining pending approvals land in rotation.
 7. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
 
-## Last session (2026-10-15, Claude, rig batch 5: floor, snatch, carries)
+## Last session (2026-11-04, Claude, approvals in data)
+
+- Joe approved halo march, clean + racked carry and snatch + overhead carry in the preview. Approvals there are saved only in that preview's own browser storage, so `pending` is removed from all three in `movements.js` instead. No movement is pending now. `check.mjs` now only warns about an old figure's geometry when the movement is on the rig, since the app no longer shows that figure. That had made the two carries' old stepping leg fail once they left pending.
+
+## Earlier (2026-10-15, Claude, rig batch 5: floor, snatch, carries)
 
 - **Contact sheet:** a "To review" group at the top of the movement menu and the picker lists only the open batch (`TO_REVIEW` in `contact.jsx`; update it when a batch opens or merges). Joe asked for it.
 - **Sit-up to press:** lying (pelvis 0.1 m, pitch and lean -90, knees bent), curl up, sit tall, press overhead on the horns, lower, roll down. The press goes up in front of the face, not through it.

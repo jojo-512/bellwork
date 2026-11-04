@@ -420,9 +420,10 @@ async function main() {
         }
       }
       if (!errors.some((e) => e.startsWith(`${label}:`) || e.startsWith(`${label}.`))) {
+        // On the rig the old figure is no longer shown, so its geometry only warns.
         for (const msg of poseGeometry(ex)) {
           const line = `${label}: ${msg}`;
-          if (ex.pending) warnings.push(line);
+          if (ex.pending || ex.rig) warnings.push(line);
           else errors.push(line);
         }
       }
