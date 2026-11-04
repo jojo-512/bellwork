@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: batch 5 (the last Complex movements) is on branch `claude/pensive-cori-xlhxdn`, PR open for Joe's phone review.** Batch 4 is merged (PR #7, 2555e2e). With batch 5, 22 movements are on the rig. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). After batch 5: the 36 Standard-only movements, then delete the old figure system.
+0. **Animation: batch 5 merged to `main` ([PR #8](https://github.com/jojo-512/bellwork/pull/8), merge commit df2a106). Every Complex movement is now on the rig (22 movements in all), approved by Joe on his phone.** The two carries and halo march stay `pending` in the app. Battery and heat are an open punchlist item, to be judged in the gym. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md). Next: the 36 Standard-only movements, then delete the old figure system. Fill `TO_REVIEW` in `contact.jsx` when the next batch opens.
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -24,6 +24,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 - **Clean + racked carry:** the clean, then walking in place with the bell racked.
 - **Joe's phone review:** approved push-up + row, squat + press-out, bottoms-up press, snatch + overhead lunge, snatch + overhead carry and clean + racked carry. Sit-up to press: the sit-up was approved, but the press looked like a swing. It now rises straight up in front of the chin, with the bell tipped forward (`fling: 0.5`) as it passes the face.
 - Sit-up to press approved after the change. `TO_REVIEW` is emptied for the merge, so the review page shows no "To review" group until the next batch fills it.
+- Merged by Claude with Joe's go-ahead (merge commit df2a106).
 - Views: side + three-quarter for the sit-up, renegade, snatch + lunge and squat + press-out; side + front for the bottoms-up press and both carries.
 
 ## Earlier (2026-10-15, Claude, rig batch 4: halos and figure-8s)
