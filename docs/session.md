@@ -22,6 +22,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 - **Squat + press-out:** goblet, squat to the bottom, press straight out and hold, pull back, stand.
 - **Snatch:** the clean's hike and drive, a high pull, a punch-through with the bell rolling onto the forearm, then lockout. Snatch + lunge reverse-lunges with the arm locked; snatch + overhead carry walks in place. Both tip the bell over in front and drop to the hike. With the arm straight overhead, the elbow bends out to the side, because the press direction lies along a straight arm and snapped.
 - **Clean + racked carry:** the clean, then walking in place with the bell racked.
+- **Joe's phone review:** approved push-up + row, squat + press-out, bottoms-up press, snatch + overhead lunge, snatch + overhead carry and clean + racked carry. Sit-up to press: the sit-up was approved, but the press looked like a swing. It now rises straight up in front of the chin, with the bell tipped forward (`fling: 0.5`) as it passes the face.
 - Views: side + three-quarter for the sit-up, renegade, snatch + lunge and squat + press-out; side + front for the bottoms-up press and both carries.
 
 ## Earlier (2026-10-15, Claude, rig batch 4: halos and figure-8s)
