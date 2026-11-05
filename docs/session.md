@@ -15,7 +15,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Last session (2026-11-04, Claude, approvals in data)
 
-- Joe approved halo march, clean + racked carry and snatch + overhead carry in the preview. Approvals there are saved only in that preview's own browser storage, so `pending` is removed from all three in `movements.js` instead. No movement is pending now. `check.mjs` now only warns about an old figure's geometry when the movement is on the rig, since the app no longer shows that figure. That had made the two carries' old stepping leg fail once they left pending.
+- Joe approved halo march, clean + racked carry and snatch + overhead carry in the preview. Approvals there are saved only in that preview's own browser storage, so `pending` is removed from all three in `movements.js` instead. No movement is pending now. `check.mjs` now only warns about an old figure's geometry when the movement is on the rig, since the app no longer shows that figure. That had made the two carries' old stepping leg fail once they left pending. Merged by Claude with Joe's go-ahead ([PR #9](https://github.com/jojo-512/bellwork/pull/9), merge commit cf8a1bd).
 
 ## Earlier (2026-10-15, Claude, rig batch 5: floor, snatch, carries)
 
