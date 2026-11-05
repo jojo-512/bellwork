@@ -1162,7 +1162,6 @@ const HYBRIDS = [
     reps: "20 steps", twoBell: true, dur: 2.8,
     pools: ["complex"],
     variantGroup: "racked_carry",
-    pending: true,
     cue: "Clean to the rack, then walk tall. Ribs down — the carry is the work, not the clean.",
     grip: "Loose hook on the clean, rack grip — bell on the forearm — through the walk.",
     poses: [
@@ -1197,7 +1196,6 @@ const HYBRIDS = [
     reps: "20 steps", dur: 3.0,
     pools: ["complex"],
     variantGroup: "oh_carry",
-    pending: true,
     cue: "Snatch to lockout, then walk under the bell. If the elbow softens, park it and reset — the carry only counts locked out.",
     grip: "Loose hook through the snatch; locked-out rack-style grip overhead for the walk.",
     poses: [
@@ -1233,7 +1231,6 @@ const HYBRIDS = [
     id: "halo_march", name: "Halo + suitcase march", tags: ["core"], pattern: "Anti-lean",
     reps: "6 / dir", dur: 3.2,
     pools: ["complex"],
-    pending: true,
     cue: "Full halo around the head, then park the bell in a suitcase carry and march tall. Don't lean into the loaded side.",
     grip: "Horns for the halo; switch to a handle grip at your side for the march.",
     poses: [
