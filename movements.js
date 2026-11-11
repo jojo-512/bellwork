@@ -287,6 +287,17 @@ const STANDARD = [
       FS({ hip: [100, 134], sh: [100, 100], elR: [106, 122], haR: [104, 148], elL: [94, 122], haL: [96, 148], knR: [128, 150], anR: [134, 176], knL: [72, 150], anL: [66, 176], bell: [100, 156] }),
       FS({ elR: [106, 92], haR: [104, 112], elL: [94, 92], haL: [96, 112], knR: [114, 142], anR: [118, 176], knL: [86, 142], anL: [82, 176], bell: [100, 120] }),
     ],
+    rig: {
+      feet: "wide", on: "handle", kneeOut: 0.6, sides: "right", views: ["front", "quarter"], still: "Drive", floorAt: [0.2, 0.08, 0],
+      phases: [
+        { name: "Grip", t: 0.28, body: "sumo_bottom", handR: [0.2, 0.21, 0.03], handL: [0.2, 0.21, -0.03], elR: "hang", elL: "hang", floorAt: [0.2, 0.08, 0] },
+        { name: "Drive", t: 0.27, pelvis: [-0.12, 0.68], lean: 35, handR: [0.2, 0.57, 0.04], handL: [0.2, 0.57, -0.04], elR: "hang", elL: "hang", floorAt: [0.2, 0.08, 0] },
+        { name: "Stand", t: 0.25, pelvis: [0, 0.88], lean: 2, handR: [0.1, 0.9, 0.04], handL: [0.1, 0.9, -0.04], elR: "hang", elL: "hang", floorAt: [0.2, 0.08, 0] },
+        { name: "Lowering", t: 0.25, pelvis: [-0.12, 0.68], lean: 35, handR: [0.2, 0.57, 0.04], handL: [0.2, 0.57, -0.04], elR: "hang", elL: "hang", floorAt: [0.2, 0.08, 0] },
+        { name: "Lower", t: 0.07, body: "sumo_bottom", handR: [0.2, 0.21, 0.03], handL: [0.2, 0.21, -0.03], elR: "hang", elL: "hang", floorAt: [0.2, 0.08, 0] },
+        { name: "Touch down", t: 0.08, body: "sumo_bottom", on: "floor", handR: [0.2, 0.21, 0.03], handL: [0.2, 0.21, -0.03], elR: "hang", elL: "hang", floorAt: [0.2, 0.08, 0] },
+      ],
+    },
   },
   {
     id: "clean", name: "Kettlebell clean", tags: ["upper", "full"], pattern: "Hinge",
