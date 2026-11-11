@@ -197,6 +197,16 @@ const STANDARD = [
       F_GOBLET,
       FS({ hip: [116, 134], sh: [108, 96], elR: [122, 114], haR: [114, 104], elL: [94, 114], haL: [102, 104], knR: [136, 152], anR: [142, 176], knL: [93, 153], anL: [70, 176], bell: [108, 102] }),
     ],
+    rig: {
+      feet: "hip_width", on: "horns", kneeOut: 0.3, sides: "right", views: ["front", "quarter"], still: "Bottom",
+      phases: [
+        { name: "Goblet", t: 0.3, body: "stand", handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Step out", t: 0.35, pelvis: [-0.03, 0.9, 0.1], lean: 6, footR: { at: [0, 0.15, 0.42], toes: 0.3 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Lunge", t: 0.45, pelvis: [-0.14, 0.57, 0.42], lean: 28, footR: { at: [0, 0.08, 0.76] }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Bottom", t: 0.3, pelvis: [-0.15, 0.55, 0.43], lean: 30, footR: { at: [0, 0.08, 0.76] }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Drive", t: 0.35, pelvis: [-0.04, 0.86, 0.12], lean: 8, footR: { at: [0, 0.15, 0.42], toes: 0.3 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+      ],
+    },
   },
   {
     id: "rdl", name: "Romanian deadlift", tags: ["lower"], pattern: "Hinge",
