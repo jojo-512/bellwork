@@ -31,6 +31,15 @@ const STANDARD = [
     grip: "Hold the horns (sides of the handle), bell hanging below your hands.",
     poses: [S_GOBLET, S_SQUAT],
     posesF: [F_GOBLET, F_SQUAT],
+    rig: {
+      feet: "hip_width", on: "horns", kneeOut: 0.4, sides: "right", views: ["side", "front"], still: "Bottom",
+      phases: [
+        { name: "Goblet", t: 0.25, body: "stand", handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Squat", t: 0.35, pelvis: [-0.08, 0.72], lean: 10, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Bottom", t: 0.3, body: "squat_bottom", handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Drive", t: 0.25, pelvis: [-0.06, 0.8], lean: 8, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+      ],
+    },
   },
   {
     id: "ohp", name: "Overhead press", tags: ["upper"], pattern: "Push",
