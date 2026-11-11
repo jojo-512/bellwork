@@ -179,6 +179,20 @@ const STANDARD = [
       FS({ elR: [88, 58], haR: [88, 44], elL: [108, 62], haL: [102, 50], bell: [86, 40] }),
       FS({ elR: [104, 64], haR: [102, 52], elL: [96, 64], haL: [98, 54], bell: [104, 48] }),
     ],
+    rig: {
+      feet: "hip_width", on: "horns", sides: "alternate", views: ["front", "quarter"], still: "Halo right",
+      phases: [
+        { name: "Chest", t: 0.25, body: "stand", handR: [0.2, 1.32, 0.05], handL: [0.2, 1.32, -0.05], elR: "goblet", elL: "goblet", fling: 1 },
+        { name: "Halo front-right", t: 0.2, body: "stand", handR: [0.15, 1.50, 0.19], handL: [0.22, 1.50, 0.12], elR: [-0.3, 1, 0.3], elL: [0.3, 0, 1], on: "horns", fling: 0.95 },
+        { name: "Halo right", t: 0.2, body: "stand", handR: [-0.02, 1.58, 0.22], handL: [0.08, 1.58, 0.22], elR: [1, 0.8, 0.2], elL: [1, -0.2, 0.2], on: "horns", fling: 0.9 },
+        { name: "Halo back-right", t: 0.2, body: "stand", handR: [-0.16, 1.57, 0.19], handL: [-0.09, 1.57, 0.12], elR: [1, 0.5, 0.3], elL: [1, 0, 0.3], on: "horns", fling: 0.55 },
+        { name: "Halo back", t: 0.2, body: "stand", handR: [-0.19, 1.54, 0.05], handL: [-0.19, 1.54, -0.05], elR: [1, 0.3, 0.4], elL: [1, 0.3, 0.4], on: "horns", fling: 0.2 },
+        { name: "Halo back-left", t: 0.2, body: "stand", handR: [-0.09, 1.57, -0.12], handL: [-0.16, 1.57, -0.19], elR: [1, 0, 0.3], elL: [1, 0.5, 0.3], on: "horns", fling: 0.55 },
+        { name: "Halo left", t: 0.2, body: "stand", handR: [0.08, 1.58, -0.22], handL: [-0.02, 1.58, -0.22], elR: [1, -0.2, 0.2], elL: [1, 0.8, 0.2], on: "horns", fling: 0.9 },
+        { name: "Halo front-left", t: 0.2, body: "stand", handR: [0.22, 1.50, -0.12], handL: [0.15, 1.50, -0.19], elR: [0.3, 0, 1], elL: [-0.3, 1, 0.3], on: "horns", fling: 0.95 },
+        { name: "Back to chest", t: 0.15, body: "stand", handR: [0.2, 1.32, 0.05], handL: [0.2, 1.32, -0.05], elR: "goblet", elL: "goblet", fling: 1 },
+      ],
+    },
   },
   {
     id: "rev_lunge", name: "Reverse lunge", tags: ["lower"], pattern: "Lunge",
