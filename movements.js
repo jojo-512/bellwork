@@ -327,6 +327,19 @@ const STANDARD = [
       FS({ elR: [124, 60], haR: [106, 64], bell: [104, 72] }),
       F_OH,
     ],
+    rig: {
+      feet: "hip_width", on: "R", kneeOut: 0.2, sides: "right", views: ["side", "quarter"], still: "Lockout",
+      phases: [
+        { name: "Hike", t: 0.4, body: "hike", handR: "between_legs", handL: [0.02, 0.58, -0.22], elR: "hang", bell: "hanging" },
+        { name: "Drive", t: 0.22, pelvis: [-0.04, 0.9], lean: 22, handR: [0.16, 0.86, 0.06], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging" },
+        { name: "High pull", t: 0.26, pelvis: [0, 0.94], lean: 2, handR: [0.16, 1.22, 0.2], elR: "high_pull", bell: "hanging", fling: 0.3 },
+        { name: "Punch through", t: 0.28, body: "stand", lean: 1, handR: [0.08, 1.6, 0.22], elR: "press", bell: 0.7 },
+        { name: "Lockout", t: 0.3, body: "stand", lean: 0, handR: "overhead", handL: [0.02, 0.88, -0.3], elR: [-0.6, 0.6, 0.4], bell: "racked", lock: ["R"] },
+        { name: "Hold", t: 0.25, body: "stand", lean: 0, handR: "overhead", handL: [0.02, 0.88, -0.3], elR: [-0.6, 0.6, 0.4], bell: "racked", lock: ["R"] },
+        { name: "Tip over", t: 0.22, body: "stand", lean: 4, handR: [0.34, 1.36, 0.18], elR: [-0.6, 0.6, 0.4], bell: 0.3 },
+        { name: "Drop", t: 0.3, pelvis: [-0.08, 0.88], lean: 30, handR: [0.17, 0.84, 0.06], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging" },
+      ],
+    },
   },
   {
     id: "russian_twist", name: "Russian twist", tags: ["core"], pattern: "Rotation",
