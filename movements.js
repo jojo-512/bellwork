@@ -21,6 +21,15 @@ const STANDARD = [
       FS({ hip: [100, 118], sh: [100, 82], elR: [108, 104], haR: [104, 126], elL: [92, 104], haL: [96, 126], knR: [112, 148], knL: [88, 148], bell: [100, 134] }),
       FS({ elR: [110, 76], haR: [104, 82], elL: [90, 76], haL: [96, 82], bell: [100, 90] }),
     ],
+    rig: {
+      feet: "hip_width", on: "handle", kneeOut: 0.4, sides: "right", views: ["side", "front"], still: "Float",
+      phases: [
+        { name: "Hike", t: 0.35, body: "hike", handR: "backswing", handL: "backswing", elR: "hang", elL: "hang", fling: 1 },
+        { name: "Drive", t: 0.2, pelvis: [-0.08, 0.9], lean: 24, handR: [0.33, 0.88, 0.05], handL: [0.33, 0.88, -0.05], elR: "hang", elL: "hang", fling: 1 },
+        { name: "Float", t: 0.3, body: "stand", lean: 0, handR: [0.51, 1.27, 0.05], handL: [0.51, 1.27, -0.05], elR: "hang", elL: "hang", fling: 0.5 },
+        { name: "Drop", t: 0.2, pelvis: [-0.1, 0.88], lean: 30, handR: [0.26, 0.78, 0.05], handL: [0.26, 0.78, -0.05], elR: "hang", elL: "hang", fling: 1 },
+      ],
+    },
   },
   {
     id: "goblet_squat", name: "Goblet squat", tags: ["lower"], pattern: "Squat",
