@@ -182,6 +182,18 @@ const STANDARD = [
       P([98, 130], [100, 92], [112, 108], [114, 96], [112, 150], [112, 176], { bell: [119, 96], kn2: [80, 162], an2: [66, 176] }),
     ],
     posesF: [F_GOBLET, F_LUNGE],
+    rig: {
+      feet: "hip_width", on: "horns", sides: "alternate", views: ["side", "quarter"], still: "Lunge",
+      phases: [
+        { name: "Stand", t: 0.45, body: "stand", lean: 3, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Step back", t: 0.4, pelvis: [-0.04, 0.92], lean: 4, footR: { at: [-0.3, 0.17, 0.16], toes: 0.5 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Land on toes", t: 0.4, pelvis: [-0.2, 0.72], lean: 6, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Lunge", t: 0.15, pelvis: [-0.32, 0.52], lean: 6, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Hold", t: 0.45, pelvis: [-0.32, 0.52], lean: 6, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Drive up", t: 0.4, pelvis: [-0.2, 0.72], lean: 5, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Step in", t: 0.4, pelvis: [-0.04, 0.92], lean: 4, footR: { at: [-0.3, 0.17, 0.16], toes: 0.5 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+      ],
+    },
   },
   {
     id: "lateral_lunge", name: "Lateral lunge", tags: ["lower"], pattern: "Lunge",
