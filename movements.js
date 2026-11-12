@@ -21,6 +21,15 @@ const STANDARD = [
       FS({ hip: [100, 118], sh: [100, 82], elR: [108, 104], haR: [104, 126], elL: [92, 104], haL: [96, 126], knR: [112, 148], knL: [88, 148], bell: [100, 134] }),
       FS({ elR: [110, 76], haR: [104, 82], elL: [90, 76], haL: [96, 82], bell: [100, 90] }),
     ],
+    rig: {
+      feet: "hip_width", on: "handle", kneeOut: 0.4, sides: "right", views: ["side", "front"], still: "Float",
+      phases: [
+        { name: "Hike", t: 0.35, body: "hike", handR: "backswing", handL: "backswing", elR: "hang", elL: "hang", fling: 1 },
+        { name: "Drive", t: 0.2, pelvis: [-0.08, 0.9], lean: 24, handR: [0.33, 0.88, 0.05], handL: [0.33, 0.88, -0.05], elR: "hang", elL: "hang", fling: 1 },
+        { name: "Float", t: 0.3, body: "stand", lean: 0, handR: [0.51, 1.27, 0.05], handL: [0.51, 1.27, -0.05], elR: "hang", elL: "hang", fling: 0.3 },
+        { name: "Drop", t: 0.2, pelvis: [-0.1, 0.88], lean: 30, handR: [0.26, 0.78, 0.05], handL: [0.26, 0.78, -0.05], elR: "hang", elL: "hang", fling: 1 },
+      ],
+    },
   },
   {
     id: "goblet_squat", name: "Goblet squat", tags: ["lower"], pattern: "Squat",
@@ -31,6 +40,15 @@ const STANDARD = [
     grip: "Hold the horns (sides of the handle), bell hanging below your hands.",
     poses: [S_GOBLET, S_SQUAT],
     posesF: [F_GOBLET, F_SQUAT],
+    rig: {
+      feet: "hip_width", on: "horns", kneeOut: 0.4, sides: "right", views: ["side", "front"], still: "Bottom",
+      phases: [
+        { name: "Goblet", t: 0.25, body: "stand", handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Squat", t: 0.35, pelvis: [-0.08, 0.72], lean: 10, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Bottom", t: 0.3, body: "squat_bottom", handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Drive", t: 0.25, pelvis: [-0.06, 0.8], lean: 8, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+      ],
+    },
   },
   {
     id: "ohp", name: "Overhead press", tags: ["upper"], pattern: "Push",
@@ -170,6 +188,20 @@ const STANDARD = [
       FS({ elR: [88, 58], haR: [88, 44], elL: [108, 62], haL: [102, 50], bell: [86, 40] }),
       FS({ elR: [104, 64], haR: [102, 52], elL: [96, 64], haL: [98, 54], bell: [104, 48] }),
     ],
+    rig: {
+      feet: "hip_width", on: "horns", sides: "alternate", views: ["front", "quarter"], still: "Halo right",
+      phases: [
+        { name: "Chest", t: 0.25, body: "stand", handR: [0.2, 1.32, 0.05], handL: [0.2, 1.32, -0.05], elR: "goblet", elL: "goblet", fling: 1 },
+        { name: "Halo front-right", t: 0.2, body: "stand", handR: [0.15, 1.50, 0.19], handL: [0.22, 1.50, 0.12], elR: [-0.3, 1, 0.3], elL: [0.3, 0, 1], on: "horns", fling: 0.95 },
+        { name: "Halo right", t: 0.2, body: "stand", handR: [-0.02, 1.58, 0.22], handL: [0.08, 1.58, 0.22], elR: [1, 0.8, 0.2], elL: [1, -0.2, 0.2], on: "horns", fling: 0.9 },
+        { name: "Halo back-right", t: 0.2, body: "stand", handR: [-0.16, 1.57, 0.19], handL: [-0.09, 1.57, 0.12], elR: [1, 0.5, 0.3], elL: [1, 0, 0.3], on: "horns", fling: 0.55 },
+        { name: "Halo back", t: 0.2, body: "stand", handR: [-0.19, 1.54, 0.05], handL: [-0.19, 1.54, -0.05], elR: [1, 0.3, 0.4], elL: [1, 0.3, 0.4], on: "horns", fling: 0.2 },
+        { name: "Halo back-left", t: 0.2, body: "stand", handR: [-0.09, 1.57, -0.12], handL: [-0.16, 1.57, -0.19], elR: [1, 0, 0.3], elL: [1, 0.5, 0.3], on: "horns", fling: 0.55 },
+        { name: "Halo left", t: 0.2, body: "stand", handR: [0.08, 1.58, -0.22], handL: [-0.02, 1.58, -0.22], elR: [1, -0.2, 0.2], elL: [1, 0.8, 0.2], on: "horns", fling: 0.9 },
+        { name: "Halo front-left", t: 0.2, body: "stand", handR: [0.22, 1.50, -0.12], handL: [0.15, 1.50, -0.19], elR: [0.3, 0, 1], elL: [-0.3, 1, 0.3], on: "horns", fling: 0.95 },
+        { name: "Back to chest", t: 0.15, body: "stand", handR: [0.2, 1.32, 0.05], handL: [0.2, 1.32, -0.05], elR: "goblet", elL: "goblet", fling: 1 },
+      ],
+    },
   },
   {
     id: "rev_lunge", name: "Reverse lunge", tags: ["lower"], pattern: "Lunge",
@@ -182,6 +214,18 @@ const STANDARD = [
       P([98, 130], [100, 92], [112, 108], [114, 96], [112, 150], [112, 176], { bell: [119, 96], kn2: [80, 162], an2: [66, 176] }),
     ],
     posesF: [F_GOBLET, F_LUNGE],
+    rig: {
+      feet: "hip_width", on: "horns", sides: "alternate", views: ["side", "quarter"], still: "Lunge",
+      phases: [
+        { name: "Stand", t: 0.45, body: "stand", lean: 3, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Step back", t: 0.4, pelvis: [-0.04, 0.92], lean: 4, footR: { at: [-0.3, 0.17, 0.16], toes: 0.5 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Land on toes", t: 0.4, pelvis: [-0.2, 0.72], lean: 6, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Lunge", t: 0.15, pelvis: [-0.32, 0.52], lean: 6, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Hold", t: 0.45, pelvis: [-0.32, 0.52], lean: 6, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Drive up", t: 0.4, pelvis: [-0.2, 0.72], lean: 5, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Step in", t: 0.4, pelvis: [-0.04, 0.92], lean: 4, footR: { at: [-0.3, 0.17, 0.16], toes: 0.5 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+      ],
+    },
   },
   {
     id: "lateral_lunge", name: "Lateral lunge", tags: ["lower"], pattern: "Lunge",
@@ -197,6 +241,16 @@ const STANDARD = [
       F_GOBLET,
       FS({ hip: [116, 134], sh: [108, 96], elR: [122, 114], haR: [114, 104], elL: [94, 114], haL: [102, 104], knR: [136, 152], anR: [142, 176], knL: [93, 153], anL: [70, 176], bell: [108, 102] }),
     ],
+    rig: {
+      feet: "hip_width", on: "horns", kneeOut: 0.3, sides: "right", views: ["front", "quarter"], still: "Bottom",
+      phases: [
+        { name: "Goblet", t: 0.3, body: "stand", handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Step out", t: 0.35, pelvis: [-0.03, 0.9, 0.1], lean: 6, footR: { at: [0, 0.15, 0.42], toes: 0.3 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Lunge", t: 0.45, pelvis: [-0.14, 0.57, 0.42], lean: 28, footR: { at: [0, 0.08, 0.76] }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Bottom", t: 0.3, pelvis: [-0.15, 0.55, 0.43], lean: 30, footR: { at: [0, 0.08, 0.76] }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Drive", t: 0.35, pelvis: [-0.04, 0.86, 0.12], lean: 8, footR: { at: [0, 0.15, 0.42], toes: 0.3 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+      ],
+    },
   },
   {
     id: "rdl", name: "Romanian deadlift", tags: ["lower"], pattern: "Hinge",
@@ -242,6 +296,17 @@ const STANDARD = [
       FS({ hip: [100, 134], sh: [100, 100], elR: [106, 122], haR: [104, 148], elL: [94, 122], haL: [96, 148], knR: [128, 150], anR: [134, 176], knL: [72, 150], anL: [66, 176], bell: [100, 156] }),
       FS({ elR: [106, 92], haR: [104, 112], elL: [94, 92], haL: [96, 112], knR: [114, 142], anR: [118, 176], knL: [86, 142], anL: [82, 176], bell: [100, 120] }),
     ],
+    rig: {
+      feet: "wide", on: "handle", kneeOut: 0.6, sides: "right", views: ["front", "quarter"], still: "Drive", floorAt: [0.2, 0.08, 0],
+      phases: [
+        { name: "Grip", t: 0.28, body: "sumo_bottom", handR: [0.2, 0.21, 0.03], handL: [0.2, 0.21, -0.03], elR: "hang", elL: "hang", floorAt: [0.2, 0.08, 0] },
+        { name: "Drive", t: 0.27, pelvis: [-0.12, 0.68], lean: 35, handR: [0.2, 0.57, 0.04], handL: [0.2, 0.57, -0.04], elR: "hang", elL: "hang", floorAt: [0.2, 0.08, 0] },
+        { name: "Stand", t: 0.25, pelvis: [0, 0.88], lean: 2, handR: [0.1, 0.9, 0.04], handL: [0.1, 0.9, -0.04], elR: "hang", elL: "hang", floorAt: [0.2, 0.08, 0] },
+        { name: "Lowering", t: 0.25, pelvis: [-0.12, 0.68], lean: 35, handR: [0.2, 0.57, 0.04], handL: [0.2, 0.57, -0.04], elR: "hang", elL: "hang", floorAt: [0.2, 0.08, 0] },
+        { name: "Lower", t: 0.07, body: "sumo_bottom", handR: [0.2, 0.21, 0.03], handL: [0.2, 0.21, -0.03], elR: "hang", elL: "hang", floorAt: [0.2, 0.08, 0] },
+        { name: "Touch down", t: 0.08, body: "sumo_bottom", on: "floor", handR: [0.2, 0.21, 0.03], handL: [0.2, 0.21, -0.03], elR: "hang", elL: "hang", floorAt: [0.2, 0.08, 0] },
+      ],
+    },
   },
   {
     id: "clean", name: "Kettlebell clean", tags: ["upper", "full"], pattern: "Hinge",
@@ -254,6 +319,18 @@ const STANDARD = [
       S_RACK,
     ],
     posesF: [F_HINGE, F_RACK],
+    rig: {
+      feet: "hip_width", on: "R", kneeOut: 0.4, sides: "right", views: ["side", "quarter"], still: "Rack",
+      phases: [
+        { name: "Hike", t: 0.4, body: "hike", handR: "between_legs", handL: [0.02, 0.58, -0.22], elR: "hang", bell: "hanging" },
+        { name: "Drive", t: 0.25, pelvis: [-0.04, 0.9], lean: 22, handR: [0.16, 0.84, 0.06], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging" },
+        { name: "Pull to rack", t: 0.2, pelvis: [0, 0.93], lean: 4, handR: [0.15, 1.2, 0.14], elR: "pull", bell: 0.6 },
+        { name: "Float", t: 0.15, pelvis: [-0.03, 0.9], lean: 5, handR: [0.15, 1.24, 0.1], elR: "pull", bell: 0.85 },
+        { name: "Catch", t: 0.3, pelvis: [-0.1, 0.81], lean: 8, handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Rack", t: 0.3, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Drop", t: 0.35, pelvis: [-0.08, 0.88], lean: 30, handR: [0.17, 0.84, 0.06], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging" },
+      ],
+    },
   },
   {
     id: "clean_press", name: "Clean & press", tags: ["upper", "full"], pattern: "Push",
@@ -327,6 +404,21 @@ const STANDARD = [
       FS({ elR: [124, 60], haR: [106, 64], bell: [104, 72] }),
       F_OH,
     ],
+    rig: {
+      feet: "hip_width", on: "R", kneeOut: 0.2, sides: "right", views: ["side", "quarter"], still: "Lockout",
+      phases: [
+        { name: "Backswing", t: 0.38, body: "hike", handR: [-0.1, 0.6, 0.05], handL: [0.02, 0.58, -0.22], elR: "hang", bell: "hanging", fling: 1 },
+        { name: "Drive", t: 0.2, pelvis: [-0.08, 0.9], lean: 24, handR: [0.33, 0.88, 0.08], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging", fling: 1 },
+        { name: "Swing out", t: 0.2, body: "stand", lean: 1, handR: [0.52, 1.3, 0.16], handL: [0.03, 0.88, -0.28], elR: [-0.7, 0.35, -0.4], bell: "hanging", fling: 0.6 },
+        { name: "Rise", t: 0.2, body: "stand", lean: 0, handR: [0.3, 1.82, 0.2], elR: [-1, 0.3, 0.2], bell: "hanging", fling: 0.4 },
+        { name: "Punch through", t: 0.2, body: "stand", lean: 0, handR: [0.12, 1.94, 0.19], elR: [-0.6, 0.6, 0.4], bell: 0.85 },
+        { name: "Lockout", t: 0.3, body: "stand", lean: 0, handR: "overhead", handL: [0.02, 0.88, -0.3], elR: [-0.6, 0.6, 0.4], bell: "racked", lock: ["R"] },
+        { name: "Hold", t: 0.22, body: "stand", lean: 0, handR: "overhead", handL: [0.02, 0.88, -0.3], elR: [-0.6, 0.6, 0.4], bell: "racked", lock: ["R"] },
+        { name: "Tip over", t: 0.2, body: "stand", lean: 0, handR: [0.3, 1.82, 0.2], elR: [-1, 0.3, 0.2], bell: 0.15, fling: 0.4 },
+        { name: "Fall", t: 0.2, body: "stand", lean: 2, handR: [0.52, 1.3, 0.16], elR: [-0.7, 0.35, -0.4], bell: "hanging", fling: 0.6 },
+        { name: "Drop", t: 0.25, pelvis: [-0.1, 0.88], lean: 30, handR: [0.26, 0.78, 0.07], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging", fling: 1 },
+      ],
+    },
   },
   {
     id: "russian_twist", name: "Russian twist", tags: ["core"], pattern: "Rotation",
