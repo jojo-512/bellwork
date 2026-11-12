@@ -30,6 +30,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
   - Swing: the bell hangs more under the hands at the float (`fling` 0.3, was 0.5).
   - Clean: the bell rises about 17 cm higher with a short "Float" phase, and the catch dips 4 cm deeper, so the body drops under the bell.
   - Snatch: a bigger swing arc. A deeper backswing behind the legs, the bell arcs out in front with a long arm, the elbow bends late ("Turn over"), then the punch-through. No near-body high pull.
+  - Snatch, second pass: Joe rejected the first rework because the bell hinged beside the face. The hand now keeps rising in front of the face with the bell trailing, and the bell rolls over the fist above the head in the last part of the punch. The way down mirrors it. Swing and clean approved.
 - The revised clean and snatch now differ from the Complex movements that contain them (clean & press, clean + lunge, clean + squat + press, clean + racked carry, snatch + lunge, snatch + overhead carry). If Joe approves the revisions, carry them into those as a follow-up.
 
 ## Earlier (2026-11-04, Claude, approvals in data)
