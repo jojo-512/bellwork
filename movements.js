@@ -26,7 +26,7 @@ const STANDARD = [
       phases: [
         { name: "Hike", t: 0.35, body: "hike", handR: "backswing", handL: "backswing", elR: "hang", elL: "hang", fling: 1 },
         { name: "Drive", t: 0.2, pelvis: [-0.08, 0.9], lean: 24, handR: [0.33, 0.88, 0.05], handL: [0.33, 0.88, -0.05], elR: "hang", elL: "hang", fling: 1 },
-        { name: "Float", t: 0.3, body: "stand", lean: 0, handR: [0.51, 1.27, 0.05], handL: [0.51, 1.27, -0.05], elR: "hang", elL: "hang", fling: 0.5 },
+        { name: "Float", t: 0.3, body: "stand", lean: 0, handR: [0.51, 1.27, 0.05], handL: [0.51, 1.27, -0.05], elR: "hang", elL: "hang", fling: 0.3 },
         { name: "Drop", t: 0.2, pelvis: [-0.1, 0.88], lean: 30, handR: [0.26, 0.78, 0.05], handL: [0.26, 0.78, -0.05], elR: "hang", elL: "hang", fling: 1 },
       ],
     },
