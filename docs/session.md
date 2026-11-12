@@ -26,6 +26,11 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 - **Sumo deadlift:** the two-hand half of gorilla + sumo. A short "Touch down" phase rests the bell on the floor each rep; without it the two-hand hold leaves the bell 1.4 cm up.
 - **For Joe to judge:** the sumo bottom uses the approved `sumo_bottom` body, which is close to a flat back and reads less "chest up" than the cue. In the goblet squat the elbows are inside the knees from the front but above them from the side, as in the thruster.
 - Views: side + front for swing and goblet squat; side + three-quarter for clean, snatch and reverse lunge; front + three-quarter for lateral lunge, halo and sumo deadlift.
+- **Joe's phone review:** approved swing, goblet squat, reverse lunge, lateral lunge, halo and sumo deadlift. Changes from his notes:
+  - Swing: the bell hangs more under the hands at the float (`fling` 0.3, was 0.5).
+  - Clean: the bell rises about 17 cm higher with a short "Float" phase, and the catch dips 4 cm deeper, so the body drops under the bell.
+  - Snatch: a bigger swing arc. A deeper backswing behind the legs, the bell arcs out in front with a long arm, the elbow bends late ("Turn over"), then the punch-through. No near-body high pull.
+- The revised clean and snatch now differ from the Complex movements that contain them (clean & press, clean + lunge, clean + squat + press, clean + racked carry, snatch + lunge, snatch + overhead carry). If Joe approves the revisions, carry them into those as a follow-up.
 
 ## Earlier (2026-11-04, Claude, approvals in data)
 
