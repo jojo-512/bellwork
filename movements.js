@@ -324,8 +324,9 @@ const STANDARD = [
       phases: [
         { name: "Hike", t: 0.4, body: "hike", handR: "between_legs", handL: [0.02, 0.58, -0.22], elR: "hang", bell: "hanging" },
         { name: "Drive", t: 0.25, pelvis: [-0.04, 0.9], lean: 22, handR: [0.16, 0.84, 0.06], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging" },
-        { name: "Pull to rack", t: 0.25, pelvis: [0, 0.93], lean: 4, handR: [0.14, 1.08, 0.14], elR: "pull", bell: 0.6 },
-        { name: "Catch", t: 0.3, pelvis: [-0.06, 0.85], lean: 6, handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Pull to rack", t: 0.2, pelvis: [0, 0.93], lean: 4, handR: [0.15, 1.2, 0.14], elR: "pull", bell: 0.6 },
+        { name: "Float", t: 0.15, pelvis: [-0.03, 0.9], lean: 5, handR: [0.15, 1.24, 0.1], elR: "pull", bell: 0.85 },
+        { name: "Catch", t: 0.3, pelvis: [-0.1, 0.81], lean: 8, handR: "rack", elR: "rack", bell: "racked" },
         { name: "Rack", t: 0.3, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
         { name: "Drop", t: 0.35, pelvis: [-0.08, 0.88], lean: 30, handR: [0.17, 0.84, 0.06], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging" },
       ],
