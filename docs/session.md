@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: Standard batch 1 is open for Joe's phone review as [PR #10](https://github.com/jojo-512/bellwork/pull/10)** (swing, clean, snatch, goblet squat, reverse lunge, lateral lunge, halo, sumo deadlift). 30 of 58 movements are on the rig; all 22 Complex movements were already merged and approved. `TO_REVIEW` in `contact.jsx` lists the eight. After approval and merge: Standard batch 2 (RDL, around the world, racked march, suitcase march, overhead press, bent-over row, gorilla row, high pull), then the new standing movements, then floor and kneeling, then delete the old figure system. Battery and heat are still an open punchlist item. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md).
+0. **Animation: Standard batch 1 merged to `main` ([PR #10](https://github.com/jojo-512/bellwork/pull/10)), approved by Joe on his phone:** swing, clean, snatch, goblet squat, reverse lunge, lateral lunge, halo, sumo deadlift. 30 of 58 movements are on the rig. Next: Standard batch 2 (RDL, around the world, racked march, suitcase march, overhead press, bent-over row, gorilla row, high pull), then the new standing movements, then floor and kneeling, then delete the old figure system. Open follow-up for Joe to decide: carry the revised clean and snatch into the six Complex movements that contain them. Battery and heat are still an open punchlist item. Fill `TO_REVIEW` in `contact.jsx` when the next batch opens. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md).
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -31,6 +31,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
   - Clean: the bell rises about 17 cm higher with a short "Float" phase, and the catch dips 4 cm deeper, so the body drops under the bell.
   - Snatch: a bigger swing arc. A deeper backswing behind the legs, the bell arcs out in front with a long arm, the elbow bends late ("Turn over"), then the punch-through. No near-body high pull.
   - Snatch, second pass: Joe rejected the first rework because the bell hinged beside the face. The hand now keeps rising in front of the face with the bell trailing, and the bell rolls over the fist above the head in the last part of the punch. The way down mirrors it. Swing and clean approved.
+- **Final review:** Joe approved the snatch, so all eight are approved. `TO_REVIEW` emptied and PR #10 merged by Claude with Joe's go-ahead.
 - The revised clean and snatch now differ from the Complex movements that contain them (clean & press, clean + lunge, clean + squat + press, clean + racked carry, snatch + lunge, snatch + overhead carry). If Joe approves the revisions, carry them into those as a follow-up.
 
 ## Earlier (2026-11-04, Claude, approvals in data)
