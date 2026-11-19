@@ -25,6 +25,8 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
   - Overhead press: rack to lockout and back, with new "Chin" phases so the forearm stays vertical and the elbow stays under the hand. Claude sent the first version back: the press copied from clean & press threw the elbow forward and angled the forearm back toward the face between the rack and the press. That flaw is still in clean & press and the other Complex presses; carry the fix over once Joe approves it.
   - Bent-over row: stays hinged, free hand braced on the left knee. Gorilla row: the row half of gorilla + sumo, alternating, bell parked on the floor.
   - High pull: a short hinge, hip snap, elbows up and out, bell straight up close to the body. Distinct from swing + high pull. The bell tops out at collarbone height, under the cue's "chin".
+- **Joe's phone review:** approved 13 of 14. High pull rejected: it should be one smooth, continuous lift where the bell never stops on the way up, and the elbows hinged in steps instead of flaring out smoothly. Sent back for one continuous pull with fewer phases and a monotone elbow path.
+- With the overhead press approved, its fix (forearm vertical, elbow under the hand) is being carried into the Complex rack presses: clean & press, clean + squat + press, and bottoms-up press if it has the same flaw.
 
 ## Earlier (2026-11-11, Claude, Standard rig batch 1)
 
