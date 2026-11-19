@@ -379,7 +379,7 @@ function Switcher({ id, onPick }) {
 }
 
 function App() {
-  const [id, setId] = useState(() => new URLSearchParams(window.location.search).get("id") || "");
+  const [id, setId] = useState(() => new URLSearchParams(window.location.search).get("id") || TO_REVIEW[0] || "");
   const ex = EXERCISES.find((e) => e.id === id);
   const pick = (next) => {
     setId(next);
