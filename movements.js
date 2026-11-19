@@ -266,6 +266,16 @@ const STANDARD = [
       FS({ elR: [106, 90], haR: [104, 110], elL: [94, 90], haL: [96, 110], bell: [100, 118] }),
       FS({ sh: [100, 88], hip: [100, 114], elR: [106, 110], haR: [104, 138], elL: [94, 110], haL: [96, 138], knR: [108, 146], knL: [92, 146], bell: [100, 146] }),
     ],
+    rig: {
+      feet: "hip_width", on: "handle", kneeOut: 0.2, sides: "right", views: ["side", "front"], still: "Bottom",
+      phases: [
+        { name: "Stand", t: 0.4, body: "stand", handR: [0.07, 0.91, 0.04], handL: [0.07, 0.91, -0.04], elR: "hang", elL: "hang" },
+        { name: "Hinge", t: 0.4, pelvis: [-0.13, 0.905], lean: 36, handR: [0.09, 0.78, 0.04], handL: [0.09, 0.78, -0.04], elR: "hang", elL: "hang" },
+        { name: "Bottom", t: 0.3, pelvis: [-0.24, 0.88], lean: 70, handR: [0.11, 0.53, 0.04], handL: [0.11, 0.53, -0.04], elR: "hang", elL: "hang" },
+        { name: "Hold", t: 0.4, pelvis: [-0.24, 0.88], lean: 70, handR: [0.11, 0.53, 0.04], handL: [0.11, 0.53, -0.04], elR: "hang", elL: "hang" },
+        { name: "Stand up", t: 0.4, pelvis: [-0.13, 0.905], lean: 36, handR: [0.09, 0.78, 0.04], handL: [0.09, 0.78, -0.04], elR: "hang", elL: "hang" },
+      ],
+    },
   },
   {
     id: "single_leg_rdl", name: "Single-leg RDL", tags: ["lower"], pattern: "Hinge",
