@@ -92,6 +92,23 @@ const STANDARD = [
       FS({ hip: [100, 118], sh: [100, 80], elR: [114, 96], haR: [110, 80], knR: [112, 148], knL: [88, 148], bell: [113, 74] }),
       F_OH,
     ],
+    rig: {
+      feet: "hip_width", on: "R", kneeOut: 0.3, sides: "right", views: ["side", "front"], still: "Lockout",
+      phases: [
+        { name: "Rack", t: 0.2, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Dip", t: 0.12, pelvis: [-0.04, 0.82], lean: 6, handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Drive", t: 0.1, body: "stand", lean: 2, handR: [0.18, 1.42, 0.1], elR: [-0.97, 0.08, 0.18], bell: "racked" },
+        { name: "Chin", t: 0.12, body: "stand", lean: 1, handR: [0.21, 1.48, 0.14], elR: [-0.94, 0.1, 0.32], bell: "racked" },
+        { name: "Press", t: 0.14, body: "stand", lean: 1, handR: [0.28, 1.6, 0.16], elR: [-0.79, 0.24, 0.56], bell: "racked" },
+        { name: "Past the head", t: 0.13, body: "stand", lean: 0.5, handR: [0.2, 1.78, 0.16], elR: [-0.22, 0.84, 0.5], bell: "racked" },
+        { name: "Lockout", t: 0.18, body: "stand", lean: 0, handR: "overhead", elR: [-0.4, 0.9, 0.1], bell: "racked", lock: ["R"] },
+        { name: "Hold", t: 0.12, body: "stand", lean: 0, handR: "overhead", elR: [-0.4, 0.9, 0.1], bell: "racked", lock: ["R"] },
+        { name: "Lower past the head", t: 0.14, body: "stand", lean: 0.5, handR: [0.2, 1.78, 0.16], elR: [-0.22, 0.84, 0.5], bell: "racked" },
+        { name: "Lower", t: 0.16, body: "stand", lean: 1, handR: [0.28, 1.6, 0.16], elR: [-0.79, 0.24, 0.56], bell: "racked" },
+        { name: "Lower to chin", t: 0.18, body: "stand", lean: 1, handR: [0.21, 1.48, 0.14], elR: [-0.94, 0.1, 0.32], bell: "racked" },
+        { name: "Lower to rack", t: 0.31, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
+      ],
+    },
   },
   {
     id: "row", name: "Bent-over row", tags: ["upper"], pattern: "Pull",
@@ -333,6 +350,16 @@ const STANDARD = [
       FS({ elR: [106, 90], haR: [104, 110], elL: [94, 90], haL: [96, 110], bell: [100, 118] }),
       FS({ sh: [100, 90], hip: [100, 116], elR: [106, 114], haR: [102, 138], elL: [94, 114], haL: [98, 138], knR: [104, 148], anR: [104, 176], knL: [92, 138], anL: [90, 158], bell: [100, 146] }),
     ],
+    rig: {
+      feet: "hip_width", on: "R", kneeOut: 0.2, sides: "right", views: ["side", "quarter"], still: "Bottom",
+      phases: [
+        { name: "Stand", t: 0.4, body: "stand", handR: [0.07, 0.91, 0.04], handL: [0.04, 0.92, -0.22], elR: "hang", elL: "free" },
+        { name: "Hinge", t: 0.55, pelvis: [-0.13, 0.905], lean: 36, footR: { at: [-0.6, 0.26, 0.13], air: 1 }, handR: [0.09, 0.78, 0.04], handL: [0.08, 0.95, -0.36], elR: "hang", elL: "free" },
+        { name: "Bottom", t: 0.3, pelvis: [-0.24, 0.88], lean: 70, footR: { at: [-1.0, 0.62, 0.12], air: 1 }, handR: [0.11, 0.53, 0.04], handL: [0.2, 1.0, -0.48], elR: "hang", elL: "free" },
+        { name: "Hold", t: 0.45, pelvis: [-0.24, 0.88], lean: 70, footR: { at: [-1.0, 0.62, 0.12], air: 1 }, handR: [0.11, 0.53, 0.04], handL: [0.2, 1.0, -0.48], elR: "hang", elL: "free" },
+        { name: "Stand up", t: 0.5, pelvis: [-0.13, 0.905], lean: 36, footR: { at: [-0.6, 0.26, 0.13], air: 1 }, handR: [0.09, 0.78, 0.04], handL: [0.08, 0.95, -0.36], elR: "hang", elL: "free" },
+      ],
+    },
   },
   {
     id: "sumo_deadlift", name: "Sumo deadlift", tags: ["lower"], pattern: "Hinge",
@@ -724,6 +751,16 @@ const STANDARD = [
     grip: "Rack grip — handle diagonal across the palm, bell resting on the forearm.",
     poses: [S_RACK, S_RACKSQ],
     posesF: [F_RACK, F_RACKSQ],
+    rig: {
+      feet: "hip_width", on: "R", kneeOut: 0.4, sides: "right", views: ["side", "front"], still: "Bottom",
+      phases: [
+        { name: "Rack", t: 0.4, body: "stand", handR: "rack", handL: "hang", elR: "rack", elL: "hang", bell: "racked" },
+        { name: "Squat", t: 0.45, pelvis: [-0.08, 0.72], lean: 10, handR: "rack", handL: "hang", elR: "rack", elL: "hang", bell: "racked" },
+        { name: "Bottom", t: 0.35, body: "squat_bottom", handR: "rack", handL: "hang", elR: "rack", elL: "hang", bell: "racked" },
+        { name: "Hold", t: 0.3, body: "squat_bottom", handR: "rack", handL: "hang", elR: "rack", elL: "hang", bell: "racked" },
+        { name: "Drive", t: 0.4, pelvis: [-0.06, 0.8], lean: 8, handR: "rack", handL: "hang", elR: "rack", elL: "hang", bell: "racked" },
+      ],
+    },
   },
   {
     id: "split_squat", name: "Split squat", tags: ["lower"], pattern: "Lunge",

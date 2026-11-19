@@ -4,13 +4,25 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Rig conversion: 38 of 58 movements are on the rig.** Every Complex movement and all three dual-pool movements (clean & press, thruster, sit-up to press) are on it. 20 Standard-only movements still use the old figure. Next, after a plan Joe approves: the standing ones (single-leg RDL, windmill, front rack squat, push press, split squat, overhead lunge, upright row, reverse fly, curl, tricep extension, ballistic row, dead-stop row, standing pullover, plank pull-through), then floor and kneeling (floor press, tall-kneeling press, push-up on the bell, Russian twist, dead bug pullover, throw over), then delete the old figure system. Push press should use the approved tucked press. Fill `TO_REVIEW` in `contact.jsx` when that batch opens. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md).
+0. **Animation: 3-movement standing Standard rig pilot is open for review, not merged.** Front rack squat (`front_squat`), push press (`push_press`), and single-leg RDL (`single_leg_rdl`) carry `rig` on this branch. `TO_REVIEW` lists those three, and `contact.html` with no id opens the front squat. Joe reviews them; Claude checks each phase in side, front, and three-quarter before anything ships. No `rig.js` or `blocks.js` changes. Still next after these: windmill, split squat, overhead lunge, upright row, reverse fly, curl, tricep extension, ballistic and dead-stop rows, pullover, pull-through, then floor and kneeling (floor press, tall-kneeling press, push-up on the bell, Russian twist, dead bug pullover, throw over), then delete the old figure system. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md).
 1. **For Joe: thruster and lateral lunge + press.** Both still tip the forearm back about 16 degrees on the way down. Decide whether that fix rides with the next review or waits. The approved overhead press is the form to match.
-2. **For Joe: Vision Batch 3 slot template.** Nothing is pending, and Complex can fill a pull slot (renegade, swing + high pull, gorilla row + sumo), so the old "wait for pending approvals" blocker is gone. The five-slot template (hinge, squat-or-lunge, push, pull, core) is not built. Sequencing call: finish the remaining 20 figures first, or plan Batch 3 now. Five slots stays the number.
+2. **For Joe: Vision Batch 3 slot template.** Nothing is pending, and Complex can fill a pull slot (renegade, swing + high pull, gorilla row + sumo), so the old "wait for pending approvals" blocker is gone. The five-slot template (hinge, squat-or-lunge, push, pull, core) is not built. Sequencing call: finish the remaining Standard figures first, or plan Batch 3 now. Five slots stays the number.
 3. **Battery and heat.** Still the open item in [punchlist.md](./punchlist.md). Needs a real gym session with the rig figures on screen, including time in the Library.
 4. Keep dropping gym bugs into [punchlist.md](./punchlist.md).
 
-## Last session (2026-11-19, Cursor, docs cleanup)
+## Last session (2026-11-19, Cursor, Grok 4.7 high fast — standing Standard rig pilot, 3 movements)
+
+- **How it was built:** one pass on a branch off `9e4ba0c` (PR #11). Reused the approved rack, squat, overhead-press, and RDL blocks. No `rig.js` or `blocks.js` changes. `npm run check` passes with the same five existing warnings, none of them on these three. 41 of 58 movements are on the rig (was 38).
+- **Front rack squat:** the rack from clean + squat (elbow in front, bell on the forearm) through the goblet squat's depth (`squat_bottom`, knees out). The free arm hangs. Card views: side + front.
+- **Push press:** a shallow dip with the bell staying racked, then a short drive into the approved overhead-press path. The fist comes in front of the face with the elbow still in front, and the arm turns out only at Past the head and lockout. The way down is the controlled press lower, with no second dip. Card views: side + front.
+- **Single-leg RDL:** the approved RDL hinge and bell height. The bell hand is opposite the standing leg. The rear leg reaches back in line with the torso and holds. Card views: side + three-quarter, because a straight-on front view hides the rear leg.
+- **For Joe to judge:**
+  - The front-squat elbow is the kettlebell rack, in front of the shoulder, not a high elbow pointed at the ceiling. The bottom uses the shared squat lean, so the chest is slightly forward.
+  - The push-press dip is about 12 cm. The drive lands on the chin position rather than popping, so it may read a little less sharp than a gym rep. The press path matches the approved overhead press, including the same turn-out past the head.
+  - Single-leg RDL hips stay level, because the rig has no side tilt. The rear foot stays flexed. The free arm is a simple reach to the side and can look stiff. The bell hangs in front of the standing leg at the same height as the two-hand RDL.
+- `TO_REVIEW` is these three. Not merged. Claude still checks before it ships.
+
+## Earlier (2026-11-19, Cursor, docs cleanup)
 
 - Docs only. [PR #12](https://github.com/jojo-512/bellwork/pull/12) on `cursor/docs-cleanup-69cf`. No app code. No remote branches deleted.
 - `docs/session.md`: Next items that were already shipped or obsolete are gone (pose cleanup, the install/export check, the Complex PR-number check, and the "later slice" that still listed swing + high pull, gorilla + sumo, carries, and halo as pending). Next is the remaining 20 Standard figures, the thruster and lateral lunge + press call, the Batch 3 sequencing call, and the battery/heat gym test.

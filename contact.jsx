@@ -19,7 +19,7 @@ const COLORS = {
 
 /* The open batch, listed first in the menu so Joe reviews only these.
    Update when a batch opens or merges. */
-const TO_REVIEW = [];
+const TO_REVIEW = ["front_squat", "push_press", "single_leg_rdl"];
 const reviewItems = () => TO_REVIEW.map((id) => EXERCISES.find((e) => e.id === id)).filter(Boolean);
 const notReview = (e) => !TO_REVIEW.includes(e.id);
 
@@ -379,7 +379,7 @@ function Switcher({ id, onPick }) {
 }
 
 function App() {
-  const [id, setId] = useState(() => new URLSearchParams(window.location.search).get("id") || "");
+  const [id, setId] = useState(() => new URLSearchParams(window.location.search).get("id") || TO_REVIEW[0] || "");
   const ex = EXERCISES.find((e) => e.id === id);
   const pick = (next) => {
     setId(next);
