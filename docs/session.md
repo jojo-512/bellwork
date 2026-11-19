@@ -4,7 +4,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: Standard batch 1 merged to `main` ([PR #10](https://github.com/jojo-512/bellwork/pull/10)), approved by Joe on his phone:** swing, clean, snatch, goblet squat, reverse lunge, lateral lunge, halo, sumo deadlift. 30 of 58 movements are on the rig. Next: Standard batch 2 (RDL, around the world, racked march, suitcase march, overhead press, bent-over row, gorilla row, high pull), then the new standing movements, then floor and kneeling, then delete the old figure system. Open follow-up for Joe to decide: carry the revised clean and snatch into the six Complex movements that contain them. Battery and heat are still an open punchlist item. Fill `TO_REVIEW` in `contact.jsx` when the next batch opens. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md).
+0. **Animation: Complex follow-up + Standard batch 2 open for Joe's phone review on `claude/kind-pasteur-l2gm0v`.** 14 movements in `TO_REVIEW`. Batch 1 (PR #10) is merged and live. 38 of 58 movements are on the rig. After this merges: the new standing movements (single-leg RDL, windmill, front squat, push press, split squat, overhead lunge, upright row, reverse fly, curl, tricep extension, ballistic and dead-stop rows, pullover, pull-through), then floor and kneeling, then delete the old figure system. Battery and heat are still an open punchlist item. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md).
 1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
 2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
 3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
@@ -13,7 +13,20 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 6. Slot template (whole-body guarantee) — Batch 3, after the remaining pending approvals land in rotation.
 7. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
 
-## Last session (2026-11-11, Claude, Standard rig batch 1)
+## Last session (2026-11-19, Claude, Complex follow-up + Standard rig batch 2)
+
+- **How it was built:** Claude orchestrated; eight subagents worked in parallel worktrees from a shared brief, each saving a frame-by-frame filmstrip of the whole rep so the reviewer checks in-between frames, not only phase stills (the gap that let the first snatch rework through). Claude integrated, ran the checks and reviewed every filmstrip. No `rig.js` or `blocks.js` changes.
+- **Complex follow-up:** the approved Standard clean (higher pull, Float, deeper Catch) is now in clean & press, clean + reverse lunge, clean + squat + press and clean + racked carry. The approved Standard snatch (swing arc, turn-over above the head) is in snatch + overhead lunge and snatch + overhead carry. The middle parts are unchanged.
+  - Timing: `dur` raised so the clean and snatch play at the Standard speed. Clean + squat + press and clean + racked carry use slightly shorter clean `t` values instead, so their approved squat, press and steps keep their speed (and the squat + press elbow stays under the speed limit). Clean + squat + press has a short "Stand" in the rack after the catch so the dip doesn't bounce into the squat. The overhead carry walks about 14% faster.
+- **Standard batch 2:**
+  - RDL: two hands on the handle, a slightly higher-hip hinge than `hinge` so the knees read soft, bell riding the thighs to just below the knee.
+  - Around the world: the pass from around the world + squat, closed by a hand-to-hand pass in front. One direction per set, like atw_squat.
+  - Suitcase march and racked march: the same legs; the knee lifts higher than in halo march (which was short of hip height). Halo march unchanged.
+  - Overhead press: rack to lockout and back, with new "Chin" phases so the forearm stays vertical and the elbow stays under the hand. Claude sent the first version back: the press copied from clean & press threw the elbow forward and angled the forearm back toward the face between the rack and the press. That flaw is still in clean & press and the other Complex presses; carry the fix over once Joe approves it.
+  - Bent-over row: stays hinged, free hand braced on the left knee. Gorilla row: the row half of gorilla + sumo, alternating, bell parked on the floor.
+  - High pull: a short hinge, hip snap, elbows up and out, bell straight up close to the body. Distinct from swing + high pull. The bell tops out at collarbone height, under the cue's "chin".
+
+## Earlier (2026-11-11, Claude, Standard rig batch 1)
 
 - **How it was built:** Claude orchestrated and eight subagents each authored one movement in its own worktree, from a brief naming the approved Complex movement to cut from. Claude integrated the eight commits, ran `npm run check`, and looked at every phase in side, front and three-quarter views. No `rig.js` or `blocks.js` changes.
 - **Swing:** the two-hand swing from swing + goblet squat (hike, drive, float, drop). The float hands are 1 cm further out and up so the arms read long.
