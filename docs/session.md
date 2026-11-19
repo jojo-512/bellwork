@@ -4,16 +4,20 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Animation: Complex follow-up + Standard batch 2 merged to `main` ([PR #11](https://github.com/jojo-512/bellwork/pull/11)), every movement approved by Joe on his phone.** 38 of 58 movements are on the rig. Next: the new standing movements (single-leg RDL, windmill, front squat, push press, split squat, overhead lunge, upright row, reverse fly, curl, tricep extension, ballistic and dead-stop rows, pullover, pull-through), then floor and kneeling, then delete the old figure system. Open for Joe: thruster and lateral lunge + press have a milder version of the old press flaw (forearm tips back about 16 degrees on the way down). Push press should use the approved tucked press. Battery and heat are still an open punchlist item. Fill `TO_REVIEW` in `contact.jsx` when the next batch opens. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md).
-1. Pose cleanup slice 1 is on `main` and will go live with the GitHub Pages deploy.
-2. Split squat, Overhead lunge, and Dead-stop row are approved in data (`pending` removed) — they enter the draw without a phone tap. Rear leg on side view is dimmer (opacity 0.28, was 0.35) anywhere `kn2`/`an2` exist, including carries.
-3. Later slice, still pending and untouched: reverse fly, swing + high pull, gorilla + sumo, carries, halo.
-4. **Export was recommended before install** — if you haven't, export the session log once, then hard-refresh / re-add Home Screen.
-5. After install: verify **Complex PR numbers** match pre-migration.
-6. Slot template (whole-body guarantee) — Batch 3, after the remaining pending approvals land in rotation.
-7. Keep dropping gym bugs into [punchlist.md](./punchlist.md)
+0. **Rig conversion: 38 of 58 movements are on the rig.** Every Complex movement and all three dual-pool movements (clean & press, thruster, sit-up to press) are on it. 20 Standard-only movements still use the old figure. Next, after a plan Joe approves: the standing ones (single-leg RDL, windmill, front rack squat, push press, split squat, overhead lunge, upright row, reverse fly, curl, tricep extension, ballistic row, dead-stop row, standing pullover, plank pull-through), then floor and kneeling (floor press, tall-kneeling press, push-up on the bell, Russian twist, dead bug pullover, throw over), then delete the old figure system. Push press should use the approved tucked press. Fill `TO_REVIEW` in `contact.jsx` when that batch opens. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md).
+1. **For Joe: thruster and lateral lunge + press.** Both still tip the forearm back about 16 degrees on the way down. Decide whether that fix rides with the next review or waits. The approved overhead press is the form to match.
+2. **For Joe: Vision Batch 3 slot template.** Nothing is pending, and Complex can fill a pull slot (renegade, swing + high pull, gorilla row + sumo), so the old "wait for pending approvals" blocker is gone. The five-slot template (hinge, squat-or-lunge, push, pull, core) is not built. Sequencing call: finish the remaining 20 figures first, or plan Batch 3 now. Five slots stays the number.
+3. **Battery and heat.** Still the open item in [punchlist.md](./punchlist.md). Needs a real gym session with the rig figures on screen, including time in the Library.
+4. Keep dropping gym bugs into [punchlist.md](./punchlist.md).
 
-## Last session (2026-11-19, Claude, Complex follow-up + Standard rig batch 2)
+## Last session (2026-11-19, Cursor, docs cleanup)
+
+- Docs only. [PR #12](https://github.com/jojo-512/bellwork/pull/12) on `cursor/docs-cleanup-69cf`. No app code. No remote branches deleted.
+- `docs/session.md`: Next items that were already shipped or obsolete are gone (pose cleanup, the install/export check, the Complex PR-number check, and the "later slice" that still listed swing + high pull, gorilla + sumo, carries, and halo as pending). Next is the remaining 20 Standard figures, the thruster and lateral lunge + press call, the Batch 3 sequencing call, and the battery/heat gym test.
+- `docs/vision-roadmap.md`: status refresh against `9e4ba0c`. v1.2 decisions unchanged. Pool and rig counts updated. Batch 1 and Batch 2 marked shipped. Batch 3 noted as unbuilt, with its pull-slot precondition met.
+- `docs/punchlist.md` left as-is. Battery and heat stays open.
+
+## Earlier (2026-11-19, Claude, Complex follow-up + Standard rig batch 2)
 
 - **How it was built:** Claude orchestrated; eight subagents worked in parallel worktrees from a shared brief, each saving a frame-by-frame filmstrip of the whole rep so the reviewer checks in-between frames, not only phase stills (the gap that let the first snatch rework through). Claude integrated, ran the checks and reviewed every filmstrip. No `rig.js` or `blocks.js` changes.
 - **Complex follow-up:** the approved Standard clean (higher pull, Float, deeper Catch) is now in clean & press, clean + reverse lunge, clean + squat + press and clean + racked carry. The approved Standard snatch (swing arc, turn-over above the head) is in snatch + overhead lunge and snatch + overhead carry. The middle parts are unchanged.
@@ -227,7 +231,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Open questions
 
-- None on Batch 2 scope. Pending movements wait on Joe's Library approvals.
+- None on product scope. No movement is `pending`. The open calls are the two in Next: the thruster and lateral lunge + press follow-up, and whether Vision Batch 3 waits until the remaining 20 figures are on the rig.
 
 ## Pointers
 

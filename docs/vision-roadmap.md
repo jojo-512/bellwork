@@ -1,6 +1,6 @@
 # Bellwork — vision and roadmap
 
-Status: v1.2 · Batch 1 shipped 2026-09-23 · Batch 2 shipped 2026-09-30 — live at https://jojo-512.github.io/bellwork/
+Status: v1.2 decisions unchanged · refreshed 2026-11-19 against `9e4ba0c` · Batch 1 shipped 2026-09-23 · Batch 2 shipped 2026-09-30 · rig conversion in progress (38 of 58 on the rig) — live at https://jojo-512.github.io/bellwork/
 Live: https://jojo-512.github.io/bellwork/ · Repo: https://github.com/jojo-512/bellwork
 Also see: [session.md](./session.md) (left off / next) · [punchlist.md](./punchlist.md) (small bugs) · [batch-2-plan.md](./batch-2-plan.md) · repo `BACKLOG.md` (feature batches)
 
@@ -76,7 +76,8 @@ miss one for 90 days and you feel it.
 | **Core / anti-movement** | dead bug, plank pull-through, halo, windmill | resisting motion, not "abs" | Splits five ways: anti-extension, anti-rotation, anti-lateral-flexion, rotation, flexion. |
 
 A seventh, and space unlocks it: **loaded carry** — suitcase, racked, overhead. The cheapest hard
-whole-body work available with one bell. The app has zero today.
+whole-body work available with one bell. Complex has two: clean + racked carry and snatch +
+overhead carry. Suitcase march and racked march are in Standard, filed as Anti-lean.
 
 **Priority for a one-bell, 20–30 minute, daily program:**
 
@@ -85,8 +86,10 @@ whole-body work available with one bell. The app has zero today.
 2. **Across the week:** vertical *and* horizontal push; bilateral *and* unilateral legs; at least
    one carry.
 3. **Ratio:** push-to-pull at least 1:1, closer to 1:1.5 favoring pull for a desk worker.
-   Bellwork's Complex pool is currently **7 press-involving to 2 pull-involving** — the biggest
-   training-quality defect in the app.
+   Complex is still press-heavy: eight chains include a press, and three are filed as Pull
+   (renegade, swing + high pull, gorilla row + sumo). RDL + row is a pull filed as Hinge. Before
+   the canon pass this was 7 press-involving to 2 pull-involving. Pull stays the pattern to
+   protect.
 
 **One honest ceiling.** With one bell and no bar, pull will never fully balance push, and there's
 no vertical pulling at all — every option is a row or a raise. That's physics, not a backlog item.
@@ -179,6 +182,10 @@ flag, because option 1 handles space better than a field could.
 
 ### Standard, Complex, and what the flags actually mean
 
+This diagnosis is the pre-Batch-2 code. The rename below shipped on 2026-09-30. The app uses
+`pools`, and the mode string is `complex` (older `"advanced"` is normalized on read). Do not
+reintroduce `hybrid` or `advancedOnly`.
+
 You asked whether I can explain `hybrid` / `advancedOnly` / Standard simply, and said that if I
 can't, we should rethink. Here's the plain version, then the honest diagnosis.
 
@@ -236,41 +243,68 @@ consistently against a rule nobody can state.
 
 ## 7. Where the bell canon is short
 
-Counted from `bellwork.jsx` at commit `d6c8610`. **46 movements total** — 32 in the Standard pool,
-17 in Complex (3 hybrids are also standard-eligible). To answer your question directly: yes, canon
-means total movements in the pool, and the additions below would take it to roughly 66.
+Canon means total movements in the pool. The additions in the list below were the way from the
+old 46 toward roughly 66. This section records that plan. The counts under "Pool now" are the
+pool on `main`.
+
+### Pool now (2026-11-19, `9e4ba0c`)
+
+**58 movements.** 39 in the Standard pool, 22 in Complex, 3 in both (clean & press, thruster,
+sit-up to press). Nothing is `pending`.
+
+**38 of 58 are on the pelvis-rooted rig** (decided 2026-10-14; plan in
+[`rig-app-plan.md`](./proposals/rig-app-plan.md)). Every Complex movement and all three dual-pool
+movements are on it. **20 Standard-only movements still use the old figure.** Order and the open
+calls are in [`session.md`](./session.md). The old figure system stays until those 20 are
+converted.
 
 | Pattern | Standard | Complex |
 |---|---|---|
 | Hinge | 7 | 3 |
 | Push | 7 | 2 |
-| Pull | **4** | **1** |
-| Squat | **2** | 3 |
-| Lunge | **2** | 3 |
+| Pull | 8 | 3 |
+| Squat | 3 | 3 |
+| Lunge | 4 | 3 |
 | Rotation | 4 | 4 |
-| Anti-extension | 2 | **0** |
-| Anti-lean | 2 | **0** |
-| Anti-rotation | 1 | **0** |
+| Anti-extension | 2 | 0 |
+| Anti-lean | 2 | 1 |
+| Anti-rotation | 1 | 0 |
 | Flexion | 1 | 1 |
-| Carry | **0** | **0** |
+| Carry | 0 | 2 |
 
-Five gaps, in priority order:
+Counts are membership, so the three dual-pool movements sit in both columns. Standard's two
+marches are Anti-lean, so the Standard Carry cell is 0. Complex Carry is clean + racked carry
+and snatch + overhead carry.
 
-1. **Complex pull: one movement.** `renegade` is the only pull-pattern hybrid; `rdl_row` has a row
-   in it but is filed as Hinge. Your primary mode has almost no pull.
-2. **Complex mode has zero anti-movement core and zero carry.** Its core work is 4 Rotation plus 1
-   Flexion, so Complex can *never* hand you an anti-rotation, an anti-extension, or a loaded
-   march. A whole category is unreachable in the mode you actually use.
-3. **No carry pattern exists**, despite space making it nearly free.
-4. **Knee-dominant is thin:** 2 squats and 2 lunges against 7 hinges.
-5. **Almost no unilateral or bottoms-up variants**, which per section 4 is where difficulty has to
-   come from.
+### What is still short
 
-**Lower body is the thinnest pool in the app:** 8 eligible movements in either mode across only 3
-patterns — so a Lower day can't even fill five unique patterns and falls through to the picker's
-repeat-anything loop, giving you 5 of the same 8 every time.
+The first count, from `bellwork.jsx` at `d6c8610`, was 46 movements: 32 Standard, 17 Complex.
+That is why the canon pass happened. Where those gaps stand now:
+
+1. **Complex pull is three movements, not one:** renegade, swing + high pull, and gorilla row +
+   sumo. RDL + row is still filed as Hinge. Eight Complex chains still include a press, so the
+   pool is still press-heavy. Pull stays the pattern to protect.
+2. **Complex has a carry and one anti-lean** (halo + suitcase march). It still has no
+   Anti-extension and no Anti-rotation.
+3. **Carry exists as a pattern.** Marches and carries both stay, and a circuit still should not
+   contain both. That rule is unchanged.
+4. **Knee-dominant is deeper than it was** (Standard squat 3 and lunge 4, against 7 hinges) and
+   still the thin side. Front rack squat, split squat, and overhead lunge are in the data and
+   still on the old figure.
+5. **Unilateral and bottoms-up** are still where a light bell gets hard (section 4). Bottoms-up
+   press is in Complex. Half get-up is still not in the pool. Full get-up stays out.
+
+Batch 3, the five-slot template, is what makes further growth safe. Its old blocker is gone:
+nothing is pending, and a Complex pull slot can draw more than renegade. The template itself is
+unbuilt. Whether it comes before the remaining 20 figures is a sequencing call in `session.md`.
+Five slots stays the number.
 
 ### The canon list, with authoring cost
+
+This list is the decided direction, not a new proposal. Canon pass 1 already landed the pull
+hybrids, the two carry-terminated complexes, and the marches. Swing + high pull and gorilla row
++ sumo are in the pool. Clean + bent row was removed in pose cleanup and is not to be re-added.
+Half get-up is still not in the pool.
 
 Nearly everything here is a standing or hinging shape, which is exactly what the existing pose
 vocabulary covers (`S_HINGE`, `S_RACK`, `S_OH`, `S_GOBLET`, `S_SQUAT`, `S_RACKSQ`, `S_LUNGE_R`,
@@ -289,9 +323,10 @@ vocabulary covers (`S_HINGE`, `S_RACK`, `S_OH`, `S_GOBLET`, `S_SQUAT`, `S_RACKSQ
   Needs new supine and propped-up shapes the vocabulary doesn't have, so it's real authoring work,
   but far less than the full get-up and it fits an AMRAP round. The full get-up stays out: one rep
   runs 30–60 seconds, which breaks a five-movement circuit.
-- **Complex hybrids** *(Tier A)* — pull-dominant (swing + high pull, clean + bent row, gorilla row
-  + sumo deadlift), carry-terminated (clean + racked carry, snatch + overhead carry), and
-  anti-movement chains, since Complex has none.
+- **Complex hybrids** *(Tier A)* — pull-dominant (swing + high pull and gorilla row + sumo
+  deadlift, both in the pool; clean + bent row was removed and stays out), carry-terminated
+  (clean + racked carry and snatch + overhead carry, both in the pool), and anti-movement
+  chains. Complex still has no Anti-extension or Anti-rotation chain.
 
 **The risk of a big pool, since "more the better."** Past a point, every movement is unfamiliar,
 and you end up reading cue text instead of training. Three things already on the roadmap defuse
@@ -303,6 +338,11 @@ far ahead of it.
 ---
 
 ## 8. The ingestion loop
+
+Shipped in Batch 2 (2026-09-30): movements live in `movements.js`, `INGEST.md` is the authority,
+`INBOX.md` is the agent's queue, and new movements stage with `pending: true`. Rig notes from
+video follow [`rig-ingest.md`](./proposals/rig-ingest.md). No footage, links, or creator details
+go into the repo. The walkthrough below is the decision record for that loop.
 
 You want to drop a link, forward an Instagram post, or just describe a movement, and have it land
 in the app. That puts ingestion back in Phase 1 — I'd removed it in v0.4 on the assumption the
@@ -319,7 +359,7 @@ it is Bellwork code, which is why it can be genuinely tight.
    UI, no GitHub, no file to open. This is the only step that needs you.
 2. **`INGEST.md` — the instruction file.** The heart of the whole thing, and the only real
    deliverable. It tells any agent session, without further context: the movement schema field by
-   field; how to classify `pattern` and `tags`; when something is `hybrid` versus `advancedOnly`;
+   field; how to classify `pattern` and `tags`; how to set `pools`;
    the `reps` and `dur` conventions; the pose vocabulary and how to compose from it; the
    `variantGroup` rule; and what to do after — build, verify, stage, never push without a
    go-ahead. This is what makes two different agent sessions produce consistent entries instead
@@ -327,8 +367,8 @@ it is Bellwork code, which is why it can be genuinely tight.
 3. **The agent keeps its own queue.** If you forward five things and it processes two, it writes
    the rest into `INBOX.md` itself. You never touch that file — it's the agent's scratchpad, not
    your inbox. That satisfies "maybe an inbox" without adding a step for you.
-4. **Movements in a data module** — `EXERCISES` moves out of `bellwork.jsx`, so adding one is a
-   small readable diff instead of an edit buried in an 80KB file.
+4. **Movements in a data module** — shipped: `EXERCISES` lives in `movements.js`, so adding one
+   is a small readable diff instead of an edit buried in the app file.
 5. **It stages for review** — see below.
 6. **You confirm**, and it joins the rotation.
 
@@ -337,9 +377,9 @@ it is Bellwork code, which is why it can be genuinely tight.
 Concretely, end to end, so the process is reviewable rather than abstract.
 
 1. **You're scrolling and you see a reel** — someone cleans the bell and walks with it racked. You
-   send the ingestion agent the link plus one line: *"clean into racked carry, 20 steps."* The
-   sentence matters because the agent can't watch the video. **This is the only step that involves
-   you until step 6.**
+   send the ingestion agent one line: *"clean into racked carry, 20 steps."* The sentence matters
+   because the notes committed to the repo are text. **This is the only step that involves you
+   until step 6.**
 2. **The agent reads `INGEST.md`** and drafts an entry: id `clean_carry`, name "Clean + racked
    carry", `pattern: "Carry"`, tags for the muscles it hits, `reps: "20 steps"`,
    `pools: ["complex"]`, `variantGroup: "racked_carry"` so it never lands alongside the racked
@@ -389,15 +429,14 @@ for a few days.
 
 ### One honest limitation
 
-An agent can't watch an Instagram video. Forwarding a post works when the caption or on-screen
-text names the movements, which kettlebell content usually does. Otherwise the practical input is
-your one-line description — *"clean into a racked carry, 20 steps"*. Naming the movement is the
-part only you can do; everything after that is mechanical.
+An agent that can watch a video writes notes and opens a PR, per `rig-ingest.md`. The notes in
+the public repo stay text. No footage, links, or creator details are committed. Naming the
+movement is still the part only you can do when there is no video — *"clean into a racked carry,
+20 steps"* — and everything after that is mechanical.
 
 **Still parked: the pose editor.** Volume is back, but bell movements are mostly Tier A, and the
 editor's value is concentrated in Tier B. If the queue starts filling with Tier B shapes, revisit
-— the cost breakdown holds (one new file, one template, a few lines in `build.mjs`, reuses the
-existing `Figure` renderer, separate entry point so it can't break the app).
+— and re-read the cost against the rig, not the old `Figure` renderer. The editor stays parked.
 
 **Still parked: an Add Movement screen in the app.** Capture on the phone is a paste into
 `INBOX.md`. Build the screen only if that turns out to be the friction point.
@@ -431,22 +470,21 @@ Four batches, in dependency order.
 
 ### Batch 1 — Make the clock trustworthy
 
+**Shipped 2026-09-23**, including the iPhone checks (lock and timer, beeps with the silent switch
+on, Wake Lock, bar height). The list is the record of what shipped.
+
 *The app is never the reason a session was short, wrong, or lost.*
 
-1. **Local dates instead of UTC.** Three lines, zero risk, first because it corrupts data while it
-   sits. In Austin the circuit flips to tomorrow's at 6–7pm and evening sessions log under the
-   wrong day.
-2. **Timestamp-anchored countdown.** Derive remaining from a stored start time. The current
-   1-second `setInterval` stalls when iOS locks or you switch apps.
-3. **Audio at 1:00 and 0:00.** There's no audio of any kind in the app today. Unlock a WebAudio
-   context inside the START tap. WebAudio is the likeliest path to sounding with the silent switch
-   on, but that has to be checked on your iPhone rather than assumed.
-4. **Wake Lock — confirmed in.** Screen stays lit while the clock runs, so it's readable at a
-   glance. Layered on #2, degrades silently where iOS doesn't support it.
+1. **Local dates instead of UTC.** Shipped. The circuit and the session log use the local date.
+2. **Timestamp-anchored countdown.** Shipped. Remaining time comes from a stored start time, so a
+   locked screen does not stall the clock.
+3. **Audio at 1:00 and 0:00.** Shipped. Beeps at 1:00 and 0:00, confirmed on the iPhone with the
+   silent switch on.
+4. **Wake Lock — shipped.** Screen stays lit while the clock runs. Confirmed on the iPhone. It
+   degrades silently where it isn't supported.
 5. **Persistence, as two mechanisms:** *sticky preferences* (mode and duration survive app close)
    and *resumable run* (salt, swaps, seconds, rounds survive a reload, with a staleness rule).
-   Today only the session log persists, so every open resets to Standard + Full body + 20 min, and
-   your primary mode costs 2–3 taps of re-setup every session.
+   Shipped. Sticky preferences and the in-progress run both persist.
 6. **Weight, NEW PR, and the bar fix:** bell weight chip (**lb: 25 / 30 / 35 / 40 / 45**,
    last-used preselected — one line to change if the range is wrong), a clear NEW PR state on
    finish, and the 375px overflow fix. The weight has to be chosen *before or during* the run,
@@ -454,6 +492,10 @@ Four batches, in dependency order.
    finish screen would come too late to be recorded.
 
 ### Batch 2 — Open the ingestion loop, then fill the canon
+
+**Shipped 2026-09-30.** Data module, `pools`, `INGEST.md`, pending staging, variant groups, text
+cards, and canon pass 1. The list is the record of what shipped. Half get-up is still not in the
+pool.
 
 *Adding a movement gets easy, then the pool gets deep.*
 
@@ -476,6 +518,11 @@ long after Batch 2 is done.*
 
 ### Batch 3 — Coverage and taste
 
+**Not started. Ready to plan.** Nothing is `pending`. Complex Pull is renegade, swing + high
+pull, and gorilla row + sumo, so a pull slot no longer collapses to renegade. The four items
+below are unchanged. Whether this batch comes before the remaining 20 rig figures is the
+sequencing call in `session.md`.
+
 *A whole-body day is whole-body, it doesn't repeat itself, and it drifts toward what you like.*
 
 1. **Recency-aware picking** — exclude last session's movements from today's draw. The picker is
@@ -488,14 +535,14 @@ long after Batch 2 is done.*
 3. **Swap-as-preference** — persist swap counts, soft-weight the draw.
 4. **Compact in-workout mode** — cards collapse to name and reps once the clock starts.
 
-*After Batch 2 on purpose:* the slot template needs a pool that can fill a pull slot, or it hands
-you `renegade` every Complex day.
+The Batch 2 precondition is met. Complex Pull is no longer only `renegade`.
 
 ### Batch 4 — See the 90 days
 
 1. **13-week dot grid.** Just the grid. Weight and rounds are already in the log; charts can wait.
 
-Last because the grid's value scales with clean data, and the data isn't clean until Batch 1.
+**Not started.** Batch 1 has shipped, so the data reason to wait is gone. Still last: the grid is
+more useful after Batch 3, and it has not been built.
 
 ### Cut and parked
 
@@ -520,13 +567,16 @@ Last because the grid's value scales with clean data, and the data isn't clean u
 - **No framework, router, or state library.** Single-file build is why deploy is one push.
 - **No streaks, badges, or notifications.** The dot grid is evidence, not a motivation system.
 - **Don't let the pool outrun Batch 3.** Growth is safe *because* of the slot template, variant
-  groups, and preference weighting.
+  groups, and preference weighting. Variant groups shipped. The slot template and preference
+  weighting have not. Batch 3 is unbuilt; see section 10.
 
 ---
 
 ## 12. Open questions
 
-None. Batch 1 is approved and ready to build (`internal/batch-1-build-brief.md`).
+None on product scope. Batch 1 and Batch 2 have shipped. v1.2 decisions below stand. Sequencing
+calls (the remaining rig figures, the two press follow-ups, and whether Batch 3 waits) live in
+[`session.md`](./session.md). They do not reopen this list.
 
 ### Decided
 
@@ -538,8 +588,8 @@ None. Batch 1 is approved and ready to build (`internal/batch-1-build-brief.md`)
 - Ingestion is an agent workflow driven by `INGEST.md`, staged with `pending: true`.
 - Ingestion pushes follow the existing rule: show the diff, wait for a go-ahead. No standing
   approval.
-- `hybrid` + `advancedOnly` become one `pools` field; the internal `advanced` mode is renamed
-  `complex`. Pure rename, no movement changes pool.
+- `hybrid` + `advancedOnly` became one `pools` field; the internal `advanced` mode is `complex`.
+  Shipped in Batch 2. Do not reintroduce the old flags.
 - Pending movements can be approved by telling the agent *or* with an "Add to rotation" button in
   the app.
 - Batch 1: bell weight is picked before START, last-used preselected.
@@ -550,6 +600,10 @@ None. Batch 1 is approved and ready to build (`internal/batch-1-build-brief.md`)
 
 ## Changelog
 
+- **2026-11-19 status refresh** — v1.2 decisions unchanged. Counts and batch status brought up to
+  `9e4ba0c`: 58 movements, 38 on the rig, every Complex and dual-pool movement converted, 20
+  Standard-only still on the old figure. Batch 3's pull-slot precondition is met; the template
+  is unbuilt.
 - **v1.2** — Joe confirmed the three Batch 1 defaults; moved them to Decided. Batch 1 ready to build.
 - **v1.1** — Batch 1 approved. Aligned Batch 1 with the build brief: weight is chosen before or
   during the run (not on the finish screen), and the silent-switch claim is now "verify on device."
