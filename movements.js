@@ -62,11 +62,13 @@ const STANDARD = [
     rig: {
       feet: "hip_width", on: "R", kneeOut: 0.4, sides: "right", views: ["side", "front"], still: "Lockout",
       phases: [
-        { name: "Rack", t: 0.3, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
-        { name: "Press", t: 0.3, body: "stand", lean: 1, handR: [0.1, 1.66, 0.22], elR: "press", bell: "racked" },
-        { name: "Lockout", t: 0.2, body: "stand", lean: 0, handR: "overhead", elR: "press", bell: "racked", lock: ["R"] },
-        { name: "Hold", t: 0.3, body: "stand", lean: 0, handR: "overhead", elR: "press", bell: "racked", lock: ["R"] },
-        { name: "Lower", t: 0.25, body: "stand", lean: 1, handR: [0.06, 1.78, 0.24], elR: "press", bell: "racked" },
+        { name: "Rack", t: 0.25, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Chin", t: 0.2, body: "stand", lean: 1, handR: [0.13, 1.48, 0.3], elR: [-0.93, 0.33, 0.15], bell: "racked" },
+        { name: "Press", t: 0.25, body: "stand", lean: 1, handR: [0.14, 1.64, 0.3], elR: [-0.56, 0.8, 0.23], bell: "racked" },
+        { name: "Lockout", t: 0.2, body: "stand", lean: 0, handR: "overhead", elR: [-0.4, 0.9, 0.1], bell: "racked", lock: ["R"] },
+        { name: "Hold", t: 0.25, body: "stand", lean: 0, handR: "overhead", elR: [-0.4, 0.9, 0.1], bell: "racked", lock: ["R"] },
+        { name: "Lower", t: 0.2, body: "stand", lean: 1, handR: [0.14, 1.64, 0.3], elR: [-0.56, 0.8, 0.23], bell: "racked" },
+        { name: "Lower to chin", t: 0.2, body: "stand", lean: 1, handR: [0.13, 1.48, 0.3], elR: [-0.93, 0.33, 0.15], bell: "racked" },
         { name: "Lower to rack", t: 0.25, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
       ],
     },
