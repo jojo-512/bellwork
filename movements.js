@@ -564,6 +564,15 @@ const STANDARD = [
       FS({ elR: [114, 92], haR: [114, 112], knL: [88, 112], anL: [88, 140], bell: [116, 120] }),
       FS({ elR: [114, 92], haR: [114, 112], bell: [116, 120] }),
     ],
+    rig: {
+      feet: "hip_width", on: "R", sides: "right", views: ["front", "side"], still: "Knee up R",
+      phases: [
+        { name: "Knee up R", t: 0.3, body: "stand", handR: [0.03, 0.92, 0.24], elR: "hang", bell: "hanging", footR: { at: [0.27, 0.5, 0.14], air: 1 } },
+        { name: "Step R", t: 0.3, body: "stand", handR: [0.03, 0.92, 0.24], elR: "hang", bell: "hanging" },
+        { name: "Knee up L", t: 0.3, body: "stand", handR: [0.03, 0.92, 0.24], elR: "hang", bell: "hanging", footL: { at: [0.27, 0.5, -0.14], air: 1 } },
+        { name: "Step L", t: 0.3, body: "stand", handR: [0.03, 0.92, 0.24], elR: "hang", bell: "hanging" },
+      ],
+    },
   },
   {
     id: "racked_march", name: "Racked march", tags: ["core"], pattern: "Anti-lean",
@@ -580,6 +589,15 @@ const STANDARD = [
       FS({ elR: [114, 84], haR: [110, 68], knL: [88, 112], anL: [88, 140], bell: [113, 62] }),
       FS({ elR: [114, 84], haR: [110, 68], bell: [113, 62] }),
     ],
+    rig: {
+      feet: "hip_width", on: "R", sides: "right", views: ["side", "front"], still: "Knee up R",
+      phases: [
+        { name: "Knee up R", t: 0.3, body: "stand", handR: "rack", elR: "rack", bell: "racked", footR: { at: [0.27, 0.5, 0.14], air: 1 } },
+        { name: "Step R", t: 0.3, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Knee up L", t: 0.3, body: "stand", handR: "rack", elR: "rack", bell: "racked", footL: { at: [0.27, 0.5, -0.14], air: 1 } },
+        { name: "Step L", t: 0.3, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
+      ],
+    },
   },
   {
     id: "standing_pullover", name: "Standing pullover", tags: ["upper", "core"], pattern: "Anti-extension",
