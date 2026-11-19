@@ -59,6 +59,17 @@ const STANDARD = [
     grip: "Rack grip — handle diagonal across the palm, bell resting on the back of the forearm.",
     poses: [S_RACK, P([100, 106], [100, 68], [103, 50], [102, 32], [100, 141], [100, 176], { bell: [106, 26] })],
     posesF: [F_RACK, F_OH],
+    rig: {
+      feet: "hip_width", on: "R", kneeOut: 0.4, sides: "right", views: ["side", "front"], still: "Lockout",
+      phases: [
+        { name: "Rack", t: 0.3, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Press", t: 0.3, body: "stand", lean: 1, handR: [0.1, 1.66, 0.22], elR: "press", bell: "racked" },
+        { name: "Lockout", t: 0.2, body: "stand", lean: 0, handR: "overhead", elR: "press", bell: "racked", lock: ["R"] },
+        { name: "Hold", t: 0.3, body: "stand", lean: 0, handR: "overhead", elR: "press", bell: "racked", lock: ["R"] },
+        { name: "Lower", t: 0.25, body: "stand", lean: 1, handR: [0.06, 1.78, 0.24], elR: "press", bell: "racked" },
+        { name: "Lower to rack", t: 0.25, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
+      ],
+    },
   },
   {
     id: "push_press", name: "Push press", tags: ["upper", "full"], pattern: "Push",
