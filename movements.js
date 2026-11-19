@@ -93,6 +93,15 @@ const STANDARD = [
       FS({ sh: [100, 82], hip: [100, 112], elR: [114, 100], haR: [114, 122], knR: [108, 144], knL: [92, 144], bell: [114, 128] }),
       FS({ sh: [100, 82], hip: [100, 112], elR: [124, 94], haR: [112, 100], knR: [108, 144], knL: [92, 144], bell: [112, 106] }),
     ],
+    rig: {
+      feet: "hip_width", on: "R", kneeOut: 0.2, sides: "right", views: ["side", "front"], still: "Row",
+      phases: [
+        { name: "Hang", t: 0.45, body: "hinge", handR: "hang", handL: [0.05, 0.59, -0.15], elR: "hang", elL: "free" },
+        { name: "Row", t: 0.2, body: "hinge", handR: [0.05, 0.82, 0.2], handL: [0.05, 0.59, -0.15], elR: "row", elL: "free" },
+        { name: "Squeeze", t: 0.45, body: "hinge", handR: [0.05, 0.82, 0.2], handL: [0.05, 0.59, -0.15], elR: "row", elL: "free" },
+        { name: "Lower", t: 0.15, body: "hinge", handR: "hang", handL: [0.05, 0.59, -0.15], elR: "hang", elL: "free" },
+      ],
+    },
   },
   {
     id: "gorilla_row", name: "Gorilla row", tags: ["upper"], pattern: "Pull",
@@ -109,6 +118,14 @@ const STANDARD = [
       FS({ sh: [100, 88], hip: [100, 116], elR: [106, 130], haR: [104, 150], elL: [94, 130], haL: [96, 150], knR: [112, 148], knL: [88, 148], bell: [100, 158] }),
       FS({ sh: [100, 88], hip: [100, 116], elR: [120, 106], haR: [110, 114], elL: [94, 130], haL: [96, 150], knR: [112, 148], knL: [88, 148], bell: [108, 120] }),
     ],
+    rig: {
+      feet: "wide", on: "floor", kneeOut: 0.6, sides: "alternate", views: ["front", "quarter"], still: "Row", floorAt: [0.2, 0.08, 0],
+      phases: [
+        { name: "Set", t: 0.4, body: "sumo_bottom", handR: [0.2, 0.21, 0.03], handL: [0.15, 0.42, -0.28], elR: "hang", elL: "hang", floorAt: [0.2, 0.08, 0] },
+        { name: "Row", t: 0.4, body: "sumo_bottom", twist: -22, on: "R", handR: [0.05, 0.68, 0.2], handL: [0.15, 0.42, -0.28], elR: "row_wide", elL: "hang", floorAt: [0.2, 0.08, 0] },
+        { name: "Park", t: 0.3, body: "sumo_bottom", handR: [0.2, 0.21, 0.03], handL: [0.15, 0.42, -0.28], elR: "hang", elL: "hang", floorAt: [0.2, 0.08, 0] },
+      ],
+    },
   },
   {
     id: "high_pull", name: "High pull", tags: ["upper", "full"], pattern: "Pull",
