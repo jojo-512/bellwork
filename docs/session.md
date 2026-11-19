@@ -30,6 +30,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 - With the overhead press approved, its fix (forearm vertical, elbow under the hand) is being carried into the Complex rack presses: clean & press, clean + squat + press, and bottoms-up press if it has the same flaw.
   - Done: all three fixed (elbow under the hand, worst 2 cm, was 19). Clean & press's press now plays at the overhead press speed, about 40% slower. Thruster and lateral lunge + press have a milder version (16 degrees) and are unchanged pending Joe.
 - `TO_REVIEW` now lists the four for the second round: high pull, clean & press, clean + squat + press, bottoms-up press. The other 13 are approved.
+- **Joe's second review:** high pull approved. Clean & press and clean + squat + press rejected: the vertical forearm is right, but the elbow flares out to the side, which is bad pressing form. Bottoms-up press is acceptable but should keep the elbow tighter. The approved overhead press has the same flare, so all four presses are being reworked together: the elbow stays in front of the body (30 to 45 degrees out from straight ahead), the fist rises in front of the face, and the arm turns toward the ear only at lockout.
 
 ## Earlier (2026-11-11, Claude, Standard rig batch 1)
 
