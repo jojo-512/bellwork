@@ -26,7 +26,10 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
   - Bent-over row: stays hinged, free hand braced on the left knee. Gorilla row: the row half of gorilla + sumo, alternating, bell parked on the floor.
   - High pull: a short hinge, hip snap, elbows up and out, bell straight up close to the body. Distinct from swing + high pull. The bell tops out at collarbone height, under the cue's "chin".
 - **Joe's phone review:** approved 13 of 14. High pull rejected: it should be one smooth, continuous lift where the bell never stops on the way up, and the elbows hinged in steps instead of flaring out smoothly. Sent back for one continuous pull with fewer phases and a monotone elbow path.
+- High pull rework: three phases on the way up (Hinge, Hips through, Pull), one elbow change from `hang` to `high_pull`, the bell's upward speed single-peaked. Cost: a shallower hinge with more knee bend and the arms starting slightly bent.
 - With the overhead press approved, its fix (forearm vertical, elbow under the hand) is being carried into the Complex rack presses: clean & press, clean + squat + press, and bottoms-up press if it has the same flaw.
+  - Done: all three fixed (elbow under the hand, worst 2 cm, was 19). Clean & press's press now plays at the overhead press speed, about 40% slower. Thruster and lateral lunge + press have a milder version (16 degrees) and are unchanged pending Joe.
+- `TO_REVIEW` now lists the four for the second round: high pull, clean & press, clean + squat + press, bottoms-up press. The other 13 are approved.
 
 ## Earlier (2026-11-11, Claude, Standard rig batch 1)
 
