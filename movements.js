@@ -467,6 +467,17 @@ const STANDARD = [
       FS({ elR: [108, 96], haR: [110, 110], elL: [84, 100], haL: [76, 116], bell: [70, 120] }),
       FS({ elR: [110, 98], haR: [108, 112], elL: [90, 98], haL: [92, 112], bell: [100, 114] }),
     ],
+    rig: {
+      feet: "hip_width", on: "R", kneeOut: 0.3, sides: "right", views: ["front", "quarter"], still: "Right hip",
+      phases: [
+        { name: "Front", t: 0.3, body: "stand", handR: [0.2, 0.96, 0.04], handL: [0.2, 0.96, -0.04], elR: "hang", elL: "hang" },
+        { name: "Right hip", t: 0.3, body: "stand", handR: [0.02, 0.92, 0.3], elR: "hang" },
+        { name: "Behind", t: 0.15, body: "stand", handR: [-0.2, 0.98, 0.04], handL: [-0.2, 0.98, -0.04], elR: [-0.3, 0.6, -1], elL: [-0.3, 0.6, -1] },
+        { name: "Pass", t: 0.3, body: "stand", handR: [-0.2, 0.98, 0.04], handL: [-0.2, 0.98, -0.04], elR: [-0.3, 0.6, -1], elL: [-0.3, 0.6, -1], on: "L" },
+        { name: "Left hip", t: 0.3, body: "stand", handL: [0.02, 0.92, -0.3], elL: "hang", on: "L" },
+        { name: "Front pass", t: 0.15, body: "stand", handR: [0.2, 0.96, 0.04], handL: [0.2, 0.96, -0.04], elR: "hang", elL: "hang", on: "L" },
+      ],
+    },
   },
   {
     id: "pull_through", name: "Plank pull-through", tags: ["core"], pattern: "Anti-rotation",
