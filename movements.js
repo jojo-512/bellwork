@@ -361,7 +361,7 @@ const STANDARD = [
   },
   {
     id: "clean_press", name: "Clean & press", tags: ["upper", "full"], pattern: "Push",
-    reps: "6 / side", twoBell: true, dur: 2.4, pools: ["standard", "complex"],
+    reps: "6 / side", twoBell: true, dur: 2.5, pools: ["standard", "complex"],
     cue: "Clean it soft to the rack, then press. Reset your breath at the rack each rep.",
     grip: "Loose hook on the clean, then rack grip — handle diagonal, bell on the forearm — for the press.",
     poses: [
@@ -374,8 +374,9 @@ const STANDARD = [
       phases: [
         { name: "Hike", t: 0.4, body: "hike", handR: "between_legs", handL: [0.02, 0.58, -0.22], elR: "hang", bell: "hanging" },
         { name: "Drive", t: 0.25, pelvis: [-0.04, 0.9], lean: 22, handR: [0.16, 0.84, 0.06], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging" },
-        { name: "Pull to rack", t: 0.25, pelvis: [0, 0.93], lean: 4, handR: [0.14, 1.08, 0.14], elR: "pull", bell: 0.6 },
-        { name: "Catch", t: 0.3, pelvis: [-0.06, 0.85], lean: 6, handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Pull to rack", t: 0.2, pelvis: [0, 0.93], lean: 4, handR: [0.15, 1.2, 0.14], elR: "pull", bell: 0.6 },
+        { name: "Float", t: 0.15, pelvis: [-0.03, 0.9], lean: 5, handR: [0.15, 1.24, 0.1], elR: "pull", bell: 0.85 },
+        { name: "Catch", t: 0.3, pelvis: [-0.1, 0.81], lean: 8, handR: "rack", elR: "rack", bell: "racked" },
         { name: "Rack", t: 0.3, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
         { name: "Press", t: 0.3, body: "stand", lean: 1, handR: [0.1, 1.66, 0.22], elR: "press", bell: "racked" },
         { name: "Lockout", t: 0.3, body: "stand", lean: 0, handR: "overhead", handL: [0.02, 0.88, -0.3], elR: "press", bell: "racked", lock: ["R"] },
@@ -906,7 +907,7 @@ const HYBRIDS = [
   },
   {
     id: "clean_lunge", name: "Clean + reverse lunge", tags: ["lower", "full"], pattern: "Lunge",
-    reps: "6 / side", twoBell: true, dur: 2.8, pools: ["complex"],
+    reps: "6 / side", twoBell: true, dur: 3.0, pools: ["complex"],
     cue: "Clean to the rack, lunge back on the same-side leg, stand, drop and repeat. The rack position has to survive the lunge.",
     grip: "Loose hook on the clean, rack grip — bell on the forearm — through the lunge.",
     poses: [
@@ -923,7 +924,9 @@ const HYBRIDS = [
       phases: [
         { name: "Hike", t: 0.4, body: "hike", handR: "between_legs", handL: [0.02, 0.58, -0.22], elR: "hang", bell: "hanging" },
         { name: "Drive", t: 0.25, pelvis: [-0.04, 0.9], lean: 22, handR: [0.16, 0.84, 0.06], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging" },
-        { name: "Pull to rack", t: 0.25, pelvis: [0, 0.93], lean: 4, handR: [0.14, 1.08, 0.14], elR: "pull", bell: 0.6 },
+        { name: "Pull to rack", t: 0.2, pelvis: [0, 0.93], lean: 4, handR: [0.15, 1.2, 0.14], elR: "pull", bell: 0.6 },
+        { name: "Float", t: 0.15, pelvis: [-0.03, 0.9], lean: 5, handR: [0.15, 1.24, 0.1], elR: "pull", bell: 0.85 },
+        { name: "Catch", t: 0.3, pelvis: [-0.1, 0.81], lean: 8, handR: "rack", elR: "rack", bell: "racked" },
         { name: "Rack", t: 0.3, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
         { name: "Step back", t: 0.3, pelvis: [-0.04, 0.92], lean: 4, footR: { at: [-0.3, 0.17, 0.16], toes: 0.5 }, handR: "rack", elR: "rack", bell: "racked" },
         { name: "Lunge", t: 0.45, pelvis: [-0.32, 0.52], lean: 6, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "rack", elR: "rack", bell: "racked" },
@@ -936,7 +939,7 @@ const HYBRIDS = [
   },
   {
     id: "clean_squat_press", name: "Clean + squat + press", tags: ["upper", "full"], pattern: "Squat",
-    reps: "5 / side", twoBell: true, dur: 3.4, pools: ["complex"],
+    reps: "5 / side", twoBell: true, dur: 3.68, pools: ["complex"],
     cue: "Clean, front squat, then press on the way up — the squat drive feeds the press. The whole chain is one breath cycle.",
     grip: "Loose hook to the clean, rack grip through the squat and press.",
     poses: [
@@ -947,9 +950,12 @@ const HYBRIDS = [
     rig: {
       feet: "hip_width", on: "R", kneeOut: 0.4, sides: "right", views: ["side", "front"], still: "Rack",
       phases: [
-        { name: "Hike", t: 0.4, body: "hike", handR: "between_legs", handL: [0.02, 0.58, -0.22], elR: "hang", bell: "hanging" },
-        { name: "Drive", t: 0.25, pelvis: [-0.04, 0.9], lean: 22, handR: [0.16, 0.84, 0.06], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging" },
-        { name: "Pull to rack", t: 0.25, pelvis: [0, 0.93], lean: 4, handR: [0.14, 1.08, 0.14], elR: "pull", bell: 0.6 },
+        { name: "Hike", t: 0.33, body: "hike", handR: "between_legs", handL: [0.02, 0.58, -0.22], elR: "hang", bell: "hanging" },
+        { name: "Drive", t: 0.2, pelvis: [-0.04, 0.9], lean: 22, handR: [0.16, 0.84, 0.06], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging" },
+        { name: "Pull to rack", t: 0.16, pelvis: [0, 0.93], lean: 4, handR: [0.15, 1.2, 0.14], elR: "pull", bell: 0.6 },
+        { name: "Float", t: 0.12, pelvis: [-0.03, 0.9], lean: 5, handR: [0.15, 1.24, 0.1], elR: "pull", bell: 0.85 },
+        { name: "Catch", t: 0.25, pelvis: [-0.1, 0.81], lean: 8, handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Stand", t: 0.12, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
         { name: "Rack", t: 0.3, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
         { name: "Squat", t: 0.4, pelvis: [-0.08, 0.72], lean: 10, handR: "rack", handL: [0.26, 0.86, -0.22], elR: "rack", bell: "racked" },
         { name: "Bottom", t: 0.3, body: "squat_bottom", handR: "rack", handL: [0.4, 0.85, -0.2], elR: "rack", bell: "racked" },
@@ -1309,7 +1315,7 @@ const HYBRIDS = [
   },
   {
     id: "clean_carry", name: "Clean + racked carry", tags: ["full", "core"], pattern: "Carry",
-    reps: "20 steps", twoBell: true, dur: 2.8,
+    reps: "20 steps", twoBell: true, dur: 2.96,
     pools: ["complex"],
     variantGroup: "racked_carry",
     cue: "Clean to the rack, then walk tall. Ribs down — the carry is the work, not the clean.",
@@ -1329,9 +1335,11 @@ const HYBRIDS = [
     rig: {
       feet: "hip_width", on: "R", kneeOut: 0.3, sides: "right", views: ["side", "front"], still: "Rack",
       phases: [
-        { name: "Hike", t: 0.4, body: "hike", handR: "between_legs", handL: [0.02, 0.58, -0.22], elR: "hang", bell: "hanging" },
-        { name: "Drive", t: 0.25, pelvis: [-0.04, 0.9], lean: 22, handR: [0.16, 0.84, 0.06], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging" },
-        { name: "Pull to rack", t: 0.25, pelvis: [0, 0.93], lean: 4, handR: [0.14, 1.08, 0.14], elR: "pull", bell: 0.6 },
+        { name: "Hike", t: 0.33, body: "hike", handR: "between_legs", handL: [0.02, 0.58, -0.22], elR: "hang", bell: "hanging" },
+        { name: "Drive", t: 0.2, pelvis: [-0.04, 0.9], lean: 22, handR: [0.16, 0.84, 0.06], handL: [0.04, 0.8, -0.25], elR: "hang", bell: "hanging" },
+        { name: "Pull to rack", t: 0.16, pelvis: [0, 0.93], lean: 4, handR: [0.15, 1.2, 0.14], elR: "pull", bell: 0.6 },
+        { name: "Float", t: 0.12, pelvis: [-0.03, 0.9], lean: 5, handR: [0.15, 1.24, 0.1], elR: "pull", bell: 0.85 },
+        { name: "Catch", t: 0.25, pelvis: [-0.1, 0.81], lean: 8, handR: "rack", elR: "rack", bell: "racked" },
         { name: "Rack", t: 0.3, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
         { name: "Step R", t: 0.3, body: "stand", footR: { at: [0.12, 0.2, 0.16], air: 0.6 }, handR: "rack", elR: "rack", bell: "racked" },
         { name: "Plant R", t: 0.3, body: "stand", handR: "rack", elR: "rack", bell: "racked" },
