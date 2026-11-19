@@ -12,7 +12,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Last session (2026-11-19, Cursor, docs cleanup)
 
-- Docs only, on `cursor/docs-cleanup-69cf`. No app code. No remote branches deleted.
+- Docs only. [PR #12](https://github.com/jojo-512/bellwork/pull/12) on `cursor/docs-cleanup-69cf`. No app code. No remote branches deleted.
 - `docs/session.md`: Next items that were already shipped or obsolete are gone (pose cleanup, the install/export check, the Complex PR-number check, and the "later slice" that still listed swing + high pull, gorilla + sumo, carries, and halo as pending). Next is the remaining 20 Standard figures, the thruster and lateral lunge + press call, the Batch 3 sequencing call, and the battery/heat gym test.
 - `docs/vision-roadmap.md`: status refresh against `9e4ba0c`. v1.2 decisions unchanged. Pool and rig counts updated. Batch 1 and Batch 2 marked shipped. Batch 3 noted as unbuilt, with its pull-slot precondition met.
 - `docs/punchlist.md` left as-is. Battery and heat stays open.
