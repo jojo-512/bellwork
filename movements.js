@@ -141,6 +141,20 @@ const STANDARD = [
       FS({ hip: [100, 114], sh: [100, 78], elR: [108, 100], haR: [102, 124], knR: [110, 146], knL: [90, 146], bell: [100, 132] }),
       FS({ elR: [126, 64], haR: [108, 68], bell: [106, 76] }),
     ],
+    rig: {
+      feet: "hip_width", on: "handle", kneeOut: 0.3, sides: "right", views: ["front", "quarter"], still: "Pull",
+      phases: [
+        { name: "Hinge", t: 0.12, pelvis: [-0.17, 0.86], lean: 58, handR: [0.24, 0.6, 0.05], handL: [0.24, 0.6, -0.05], elR: "hang", elL: "hang" },
+        { name: "Drive", t: 0.1, pelvis: [-0.1, 0.9], lean: 32, handR: [0.18, 0.8, 0.05], handL: [0.18, 0.8, -0.05], elR: "hang", elL: "hang" },
+        { name: "Snap", t: 0.14, pelvis: [-0.03, 0.92], lean: 10, handR: [0.16, 0.86, 0.05], handL: [0.16, 0.86, -0.05], elR: "hang", elL: "hang" },
+        { name: "Elbows up", t: 0.12, body: "stand", lean: 0, handR: [0.16, 1.08, 0.05], handL: [0.16, 1.08, -0.05], elR: [-0.1, 1, -0.5], elL: [-0.1, 1, -0.5] },
+        { name: "Elbows high", t: 0.12, body: "stand", lean: -1, handR: [0.22, 1.18, 0.05], handL: [0.22, 1.18, -0.05], elR: [1, 1, -0.6], elL: [1, 1, -0.6] },
+        { name: "Pull", t: 0.12, body: "stand", lean: -2, handR: [0.2, 1.4, 0.05], handL: [0.2, 1.4, -0.05], elR: "high_pull", elL: "high_pull" },
+        { name: "Float", t: 0.16, body: "stand", lean: -2, handR: [0.2, 1.41, 0.05], handL: [0.2, 1.41, -0.05], elR: "high_pull", elL: "high_pull" },
+        { name: "Elbows down", t: 0.14, body: "stand", lean: -1, handR: [0.22, 1.18, 0.05], handL: [0.22, 1.18, -0.05], elR: [1, 1, -0.6], elL: [1, 1, -0.6] },
+        { name: "Lower", t: 0.26, pelvis: [-0.02, 0.93], lean: 6, handR: [0.16, 1.02, 0.05], handL: [0.16, 1.02, -0.05], elR: [-0.1, 1, -0.5], elL: [-0.1, 1, -0.5] },
+      ],
+    },
   },
   {
     id: "floor_press", name: "Floor press", tags: ["upper"], pattern: "Push",
