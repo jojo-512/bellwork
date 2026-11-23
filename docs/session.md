@@ -4,20 +4,20 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Rig conversion: all 58 movements are on the rig, pending review.** Windmill (`windmill`), plank pull-through (`pull_through`), and tall-kneeling press (`tall_kneel_press`) are the open batch. `TO_REVIEW` lists those three. After Joe approves them, delete the old figure system. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md).
+0. **Rig conversion: all 58 movements are on the rig.** Joe approved windmill (`windmill`), plank pull-through (`pull_through`), and tall-kneeling press (`tall_kneel_press`) on [PR #19](https://github.com/jojo-512/bellwork/pull/19), with no tweaks. `TO_REVIEW` is empty. Next is deleting the old stick-figure system. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md).
 1. **For Joe: thruster and lateral lunge + press.** Both still tip the forearm back about 16 degrees on the way down. Decide whether that fix rides with the next review or waits. The approved overhead press is the form to match.
-2. **For Joe: Vision Batch 3 slot template.** Nothing is pending, and Complex can fill a pull slot (renegade, swing + high pull, gorilla row + sumo), so the old "wait for pending approvals" blocker is gone. The five-slot template (hinge, squat-or-lunge, push, pull, core) is not built. Sequencing call: wait until Joe approves the last three figures and the old figure is deleted, or plan Batch 3 now. Five slots stays the number.
+2. **For Joe: Vision Batch 3 slot template.** Nothing is pending, and Complex can fill a pull slot (renegade, swing + high pull, gorilla row + sumo), so the old "wait for pending approvals" blocker is gone. The five-slot template (hinge, squat-or-lunge, push, pull, core) is not built. Sequencing call: delete the old figure first, or plan Batch 3 now. Five slots stays the number.
 3. **Battery and heat.** Still the open item in [punchlist.md](./punchlist.md). Needs a real gym session with the rig figures on screen, including time in the Library.
 4. Keep dropping gym bugs into [punchlist.md](./punchlist.md).
 
 ## Last session (2026-11-23, Cursor — final Standard rig batch)
 
-- **How it was built:** the last three Standard movements, windmill, plank pull-through, and tall-kneeling press. `rig.js` gained an optional `roll` for the windmill. `blocks.js` is unchanged. The old stick figure stays until Joe approves these three. `npm run check`: 58 movements, 58 on the rig, the same five warnings.
+- **How it was built:** the last three Standard movements, windmill, plank pull-through, and tall-kneeling press. `rig.js` gained an optional `roll` for the windmill. `blocks.js` is unchanged. The old stick figure stays for a cleanup after this merges. `npm run check`: 58 movements, 58 on the rig, the same five warnings.
 - **Roll:** degrees, default 0. Positive roll side-bends the ribcage toward the figure's left, rotating `up` and `right` around `fwd`. It is in `KEYS`, defaults to 0 in `expand`, and flips sign in `mirror`. At 0 the ribcage matches the previous rig on every movement that was already on it.
 - **Windmill:** the bell stays locked overhead the whole rep (`lock: ["R"]`). The arm stays vertical, within 1°. Hips shift to the bell side. Roll reaches 62° toward the free leg, with a 28° hinge and a slight open-chest twist. The free hand slides down the front of the left leg to the lower shin, about 8 cm off the bone and 23 cm above the ankle. The arm is 0.56 m, so it does not reach the floor. The head follows the ribcage, so the gaze marker points along the hinge rather than up at the bell. Card views: front + three-quarter.
 - **Plank pull-through:** hips still, twist 0, pitch and lean 74, on the toes, feet wide. The bell stays on the floor and slides from one side to the other and back (`z` about ±0.22, `y` 0.08). The opposite hand tracks the handle at `y` 0.21, inside the arm's reach, then replants. Both sides are in one cycle, so `sides` stays `"right"`. The legs are a couple of centimeters short of straight, so the knees are slightly soft. Card views: front + three-quarter. The side view shows the plank line. The drag reads from the front.
 - **Tall-kneeling press:** pelvis at 0.475, pitch 0, lean 0 to 2. Both knees at about 0.04. Ankles behind, toes tucked, the toe on the floor and the heel up. The arm path is the approved overhead press, shifted down with the pelvis. From the chin through the lower, the elbow stays within about 1 cm of the hand in the forward direction. Card views: side + front.
-- `TO_REVIEW` lists the three. Not merged. [PR #19](https://github.com/jojo-512/bellwork/pull/19).
+- **Joe approved all three** (`windmill`, `pull_through`, `tall_kneel_press`) with no tweaks. `TO_REVIEW` is empty. All 58 movements are on the rig. The old stick figure is the next deletion. [PR #19](https://github.com/jojo-512/bellwork/pull/19) is ready to merge. Not merged.
 
 ## Earlier (2026-11-23, Cursor — floor rig batch)
 
@@ -291,7 +291,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Open questions
 
-- None on product scope. No movement is `pending`. The open calls are the two in Next: the thruster and lateral lunge + press follow-up, and whether Vision Batch 3 waits until Joe approves the last three figures and the old figure system is deleted.
+- None on product scope. No movement is `pending`. The open calls are the ones in Next: the old stick-figure deletion, the thruster and lateral lunge + press follow-up, and whether Vision Batch 3 waits for that deletion.
 
 ## Pointers
 
