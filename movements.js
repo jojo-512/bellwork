@@ -889,11 +889,11 @@ const STANDARD = [
     rig: {
       feet: "hip_width", on: "handle", kneeOut: 0.15, sides: "right", views: ["side", "front"], still: "Pull",
       phases: [
-        { name: "Hang", t: 0.55, body: "stand", lean: 2, handR: [0.12, 0.98, 0.05], handL: [0.12, 0.98, -0.05], elR: "hang", elL: "hang" },
-        { name: "Lead", t: 0.4, body: "stand", lean: 1, handR: [0.18, 1.12, 0.08], handL: [0.18, 1.12, -0.08], elR: [0.7, 1, -0.35], elL: [0.7, 1, -0.35] },
-        { name: "Pull", t: 0.3, body: "stand", lean: 0, handR: [0.24, 1.24, 0.1], handL: [0.24, 1.24, -0.1], elR: [0.7, 1, -0.35], elL: [0.7, 1, -0.35] },
-        { name: "Hold", t: 0.35, body: "stand", lean: 0, handR: [0.24, 1.24, 0.1], handL: [0.24, 1.24, -0.1], elR: [0.7, 1, -0.35], elL: [0.7, 1, -0.35] },
-        { name: "Lower", t: 0.5, body: "stand", lean: 1, handR: [0.18, 1.12, 0.08], handL: [0.18, 1.12, -0.08], elR: [0.7, 1, -0.35], elL: [0.7, 1, -0.35] },
+        { name: "Hang", t: 0.5, body: "stand", lean: 2, handR: [0.14, 0.98, 0.05], handL: [0.14, 0.98, -0.05], elR: "hang", elL: "hang" },
+        { name: "Lead", t: 0.42, body: "stand", lean: 1, handR: [0.26, 1.26, 0.07], handL: [0.26, 1.26, -0.07], elR: "high_pull", elL: "high_pull" },
+        { name: "Pull", t: 0.28, body: "stand", lean: 0, handR: [0.2, 1.56, 0.08], handL: [0.2, 1.56, -0.08], elR: "high_pull", elL: "high_pull" },
+        { name: "Hold", t: 0.3, body: "stand", lean: 0, handR: [0.2, 1.56, 0.08], handL: [0.2, 1.56, -0.08], elR: "high_pull", elL: "high_pull" },
+        { name: "Lower", t: 0.45, body: "stand", lean: 1, handR: [0.26, 1.26, 0.07], handL: [0.26, 1.26, -0.07], elR: "high_pull", elL: "high_pull" },
       ],
     },
   },
