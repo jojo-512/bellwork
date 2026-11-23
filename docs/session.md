@@ -4,9 +4,9 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Legacy renderer removal is up for review.** Joe approved the plan, all recommended calls. `poses.js`, the stick-figure fields, `Figure`, and the pose checks are deleted on this branch. Every movement requires `rig`. Do not merge until Joe says so. Plan: [proposals/legacy-renderer-removal.md](./proposals/legacy-renderer-removal.md).
+0. **Legacy renderer removal is up for review.** Joe approved the plan, all recommended calls. `poses.js`, the stick-figure fields, `Figure`, and the pose checks are deleted on [PR #20](https://github.com/jojo-512/bellwork/pull/20). Every movement requires `rig`. Do not merge until Joe says so. Plan: [proposals/legacy-renderer-removal.md](./proposals/legacy-renderer-removal.md).
 1. **For Joe: thruster and lateral lunge + press.** Both still tip the forearm back about 16 degrees on the way down. Decide whether that fix rides with the next review or waits. The approved overhead press is the form to match.
-2. **For Joe: Vision Batch 3 slot template.** Nothing is pending, and Complex can fill a pull slot (renegade, swing + high pull, gorilla row + sumo), so the old "wait for pending approvals" blocker is gone. The five-slot template (hinge, squat-or-lunge, push, pull, core) is not built. The old figures are gone; the deletion PR is the open code change. Five slots stays the number.
+2. **For Joe: Vision Batch 3 slot template.** Nothing is pending, and Complex can fill a pull slot (renegade, swing + high pull, gorilla row + sumo), so the old "wait for pending approvals" blocker is gone. The five-slot template (hinge, squat-or-lunge, push, pull, core) is not built. The old figures are gone; [PR #20](https://github.com/jojo-512/bellwork/pull/20) is the open code change. Five slots stays the number.
 3. **Battery and heat.** Still the open item in [punchlist.md](./punchlist.md). Needs a real gym session with the rig figures on screen, including time in the Library.
 4. Keep dropping gym bugs into [punchlist.md](./punchlist.md).
 
@@ -18,7 +18,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 - The contact sheet no longer imports `bellwork.jsx`. The non-rig sheet, the "Before" loop (it was still on 56 of 58 review pages), and the empty "Old figures" group are gone. `TO_REVIEW` stays empty.
 - `npm run check` requires `rig` on every movement, rejects the four legacy fields, and still runs `validateRig` and `checkRig` with the same thresholds. Result: 58 movements, 58 on the rig, 0 warnings.
 - The workout and Library already drew the rig for all 58, so those screens should look the same. The review page loses the old SVG comparison.
-- PR link filled in when the PR opened.
+- Opened [PR #20](https://github.com/jojo-512/bellwork/pull/20) on `cursor/remove-legacy-renderer-fa61`. Not merged. Pushing `main` would deploy.
 
 ## Earlier (2026-11-23, Cursor — final Standard rig batch)
 
