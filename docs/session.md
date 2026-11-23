@@ -4,13 +4,23 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Rig conversion: 41 of 58 movements are on the rig.** Joe approved the standing Standard pilot on [PR #13](https://github.com/jojo-512/bellwork/pull/13): front rack squat (`front_squat`), push press (`push_press`), and single-leg RDL (`single_leg_rdl`). `TO_REVIEW` is empty. 17 Standard-only movements still use the old figure: 11 standing (windmill, split squat, overhead lunge, upright row, reverse fly, curl, tricep extension, ballistic row, dead-stop row, standing pullover, plank pull-through) and 6 floor and kneeling (floor press, tall-kneeling press, push-up on the bell, Russian twist, dead bug pullover, throw over), then delete the old figure system. Fill `TO_REVIEW` in `contact.jsx` when that batch opens. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md).
+0. **Rig conversion: 45 of 58 movements are on the rig.** Joe approved standing batch 1 on [PR #16](https://github.com/jojo-512/bellwork/pull/16): split squat (`split_squat`), overhead lunge (`overhead_lunge`), upright row (`upright_row`), and super slow curl (`slow_curl`). `TO_REVIEW` is empty. The standing pilot is on [PR #13](https://github.com/jojo-512/bellwork/pull/13) (`front_squat`, `push_press`, `single_leg_rdl`). 13 Standard-only movements still use the old figure: 7 standing (windmill, reverse fly, tricep extension, ballistic row, dead-stop row, standing pullover, throw over) and 6 floor and kneeling (floor press, tall-kneeling press, push-up on the bell, Russian twist, dead bug pullover, plank pull-through), then delete the old figure system. Plan: [proposals/rig-app-plan.md](./proposals/rig-app-plan.md).
 1. **For Joe: thruster and lateral lunge + press.** Both still tip the forearm back about 16 degrees on the way down. Decide whether that fix rides with the next review or waits. The approved overhead press is the form to match.
 2. **For Joe: Vision Batch 3 slot template.** Nothing is pending, and Complex can fill a pull slot (renegade, swing + high pull, gorilla row + sumo), so the old "wait for pending approvals" blocker is gone. The five-slot template (hinge, squat-or-lunge, push, pull, core) is not built. Sequencing call: finish the remaining Standard figures first, or plan Batch 3 now. Five slots stays the number.
 3. **Battery and heat.** Still the open item in [punchlist.md](./punchlist.md). Needs a real gym session with the rig figures on screen, including time in the Library.
 4. Keep dropping gym bugs into [punchlist.md](./punchlist.md).
 
-## Last session (2026-11-23, Claude, AGENTS.md: Cursor's authoring model)
+## Last session (2026-11-23, Cursor — standing rig batch 1)
+
+- **How it was built:** four Standard standing movements, `movements.js` only. Reused the approved goblet, reverse lunge, overhead lockout, and the curl on the horns. No `rig.js` or `blocks.js` changes. `npm run check` passes with the same five warnings, none of them on these four. 45 of 58 movements are on the rig (was 41).
+- **Split squat:** planted goblet version of the reverse lunge. The feet stay split the whole rep (`sides: "right"`, same stance for the set). Rear knee drops to about 7 cm. Card views: side + three-quarter, because the front view hides the stride.
+- **Overhead lunge:** the reverse-lunge steps with the arm locked the whole time, the same lockout as the overhead press. The free arm hangs. `sides: "right"`. Alternating would swing the locked bell from one hand to the other through the head between reps. Card views: side + three-quarter.
+- **Upright row:** standing, both hands on the handle. Elbows rise up and out and the bell finishes at the chin. No hip snap. One elbow change on the way up. Card views: side + front. Joe sent the first pass back: the bell stopped around the belly. The hands now finish at chin height and the bell hangs just under them, elbows above the hands.
+- **Super slow curl:** the curl half of curl + halo. Horns up, elbows stay at the ribs. `dur` stays 5.0, so the loop is about 2.3 s up and 2.3 s down.
+- **For review:** in the side view the racked overhead bell stacks on the head, because it sits beside the fist. Front and three-quarter show the gap. Same note as the overhead press. In the front view the upright-row bell stacks on the chin because it is centered in front of the face; three-quarter shows the gap. The elbows sit high and out. At the bottom of the split squat the front knee is about 2 cm past the toe.
+- **Joe approved all four** and gave the go-ahead to merge. `TO_REVIEW` is empty. [PR #16](https://github.com/jojo-512/bellwork/pull/16) merged to `main`. 45 of 58 movements are on the rig.
+
+## Earlier (2026-11-23, Claude, AGENTS.md: Cursor's authoring model)
 
 - Joe asked Grok on Cursor to author the standing pilot (PR #13) to compare it with Opus and to use his Cursor allowance. `AGENTS.md` still required Opus for Cursor, so it now says Cursor authors on the model Joe picks, and records the Grok trial. Claude still checks every movement whoever authors it. Joe is running a larger Grok sample on the next round. Docs only.
 

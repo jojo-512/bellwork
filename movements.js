@@ -738,6 +738,16 @@ const STANDARD = [
       FS({ elR: [110, 92], haR: [106, 112], elL: [90, 92], haL: [94, 112], bell: [100, 118] }),
       FS({ elR: [112, 88], haR: [106, 74], elL: [88, 88], haL: [94, 74], bell: [100, 70] }),
     ],
+    rig: {
+      feet: "hip_width", on: "horns", sides: "right", views: ["side", "front"], still: "Top",
+      phases: [
+        { name: "Hang", t: 1.6, body: "stand", handR: [0.14, 0.94, 0.06], handL: [0.14, 0.94, -0.06], elR: "hang", elL: "hang" },
+        { name: "Curl", t: 1.6, body: "stand", handR: [0.24, 1.14, 0.08], handL: [0.24, 1.14, -0.08], elR: "rack", elL: "rack" },
+        { name: "Top", t: 0.4, body: "stand", handR: [0.2, 1.32, 0.07], handL: [0.2, 1.32, -0.07], elR: "rack", elL: "rack" },
+        { name: "Hold", t: 1.6, body: "stand", handR: [0.2, 1.32, 0.07], handL: [0.2, 1.32, -0.07], elR: "rack", elL: "rack" },
+        { name: "Lower", t: 1.6, body: "stand", handR: [0.24, 1.14, 0.08], handL: [0.24, 1.14, -0.08], elR: "rack", elL: "rack" },
+      ],
+    },
   },
 
   {
@@ -774,6 +784,16 @@ const STANDARD = [
       FS({ hip: [100, 110], sh: [100, 72], elR: [114, 86], haR: [106, 76], elL: [86, 86], haL: [94, 76], knR: [122, 140], anR: [128, 176], knL: [86, 160], anL: [78, 176], bell: [100, 74] }),
       FS({ hip: [100, 138], sh: [100, 100], elR: [116, 116], haR: [106, 106], elL: [84, 116], haL: [94, 106], knR: [130, 156], anR: [128, 176], knL: [80, 170], anL: [78, 176], bell: [100, 104] }),
     ],
+    rig: {
+      feet: "hip_width", on: "horns", kneeOut: 0.2, sides: "right", views: ["side", "quarter"], still: "Bottom",
+      phases: [
+        { name: "Split", t: 0.45, pelvis: [-0.12, 0.84], lean: 3, footL: { at: [0.22, 0.08, -0.14] }, footR: { at: [-0.5, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Lower", t: 0.5, pelvis: [-0.04, 0.66], lean: 6, footL: { at: [0.22, 0.08, -0.14] }, footR: { at: [-0.5, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Bottom", t: 0.3, pelvis: [-0.02, 0.48], lean: 8, footL: { at: [0.22, 0.08, -0.14] }, footR: { at: [-0.5, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Hold", t: 0.4, pelvis: [-0.02, 0.48], lean: 8, footL: { at: [0.22, 0.08, -0.14] }, footR: { at: [-0.5, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Drive", t: 0.5, pelvis: [-0.04, 0.66], lean: 6, footL: { at: [0.22, 0.08, -0.14] }, footR: { at: [-0.5, 0.12, 0.16], toes: 1 }, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+      ],
+    },
   },
   {
     id: "overhead_lunge", name: "Overhead lunge", tags: ["lower", "full"], pattern: "Lunge",
@@ -791,6 +811,18 @@ const STANDARD = [
       FS({ hip: [100, 132], sh: [100, 96], elR: [110, 72], haR: [108, 54], elL: [84, 116], haL: [82, 134], knR: [116, 156], anR: [110, 176], knL: [82, 168], anL: [70, 176], bell: [110, 48] }),
       F_OH,
     ],
+    rig: {
+      feet: "hip_width", on: "R", sides: "right", views: ["side", "quarter"], still: "Lunge",
+      phases: [
+        { name: "Lockout", t: 0.5, body: "stand", lean: 0, handR: "overhead", handL: "hang", elR: [-0.4, 0.9, 0.1], elL: "hang", bell: "racked", lock: ["R"] },
+        { name: "Step back", t: 0.4, pelvis: [-0.04, 0.92], lean: 2, footR: { at: [-0.3, 0.17, 0.16], toes: 0.5 }, handR: "overhead", handL: "hang", elR: [-0.4, 0.9, 0.1], elL: "hang", bell: "racked", lock: ["R"] },
+        { name: "Land on toes", t: 0.4, pelvis: [-0.2, 0.72], lean: 3, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "overhead", handL: "hang", elR: [-0.4, 0.9, 0.1], elL: "hang", bell: "racked", lock: ["R"] },
+        { name: "Lunge", t: 0.25, pelvis: [-0.32, 0.52], lean: 4, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "overhead", handL: "hang", elR: [-0.4, 0.9, 0.1], elL: "hang", bell: "racked", lock: ["R"] },
+        { name: "Hold", t: 0.45, pelvis: [-0.32, 0.52], lean: 4, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "overhead", handL: "hang", elR: [-0.4, 0.9, 0.1], elL: "hang", bell: "racked", lock: ["R"] },
+        { name: "Drive up", t: 0.4, pelvis: [-0.2, 0.72], lean: 3, footR: { at: [-0.72, 0.12, 0.16], toes: 1 }, handR: "overhead", handL: "hang", elR: [-0.4, 0.9, 0.1], elL: "hang", bell: "racked", lock: ["R"] },
+        { name: "Step in", t: 0.45, pelvis: [-0.04, 0.92], lean: 2, footR: { at: [-0.3, 0.17, 0.16], toes: 0.5 }, handR: "overhead", handL: "hang", elR: [-0.4, 0.9, 0.1], elL: "hang", bell: "racked", lock: ["R"] },
+      ],
+    },
   },
   {
     id: "dead_stop_row", name: "Dead-stop row", tags: ["upper"], pattern: "Pull",
@@ -854,6 +886,16 @@ const STANDARD = [
       FS({ elR: [110, 92], haR: [106, 112], elL: [90, 92], haL: [94, 112], bell: [100, 118] }),
       FS({ elR: [126, 72], haR: [112, 68], elL: [74, 72], haL: [88, 68], bell: [100, 74] }),
     ],
+    rig: {
+      feet: "hip_width", on: "handle", kneeOut: 0.15, sides: "right", views: ["side", "front"], still: "Pull",
+      phases: [
+        { name: "Hang", t: 0.5, body: "stand", lean: 2, handR: [0.14, 0.98, 0.05], handL: [0.14, 0.98, -0.05], elR: "hang", elL: "hang" },
+        { name: "Lead", t: 0.42, body: "stand", lean: 1, handR: [0.26, 1.26, 0.07], handL: [0.26, 1.26, -0.07], elR: "high_pull", elL: "high_pull" },
+        { name: "Pull", t: 0.28, body: "stand", lean: 0, handR: [0.2, 1.56, 0.08], handL: [0.2, 1.56, -0.08], elR: "high_pull", elL: "high_pull" },
+        { name: "Hold", t: 0.3, body: "stand", lean: 0, handR: [0.2, 1.56, 0.08], handL: [0.2, 1.56, -0.08], elR: "high_pull", elL: "high_pull" },
+        { name: "Lower", t: 0.45, body: "stand", lean: 1, handR: [0.26, 1.26, 0.07], handL: [0.26, 1.26, -0.07], elR: "high_pull", elL: "high_pull" },
+      ],
+    },
   },
   {
     id: "reverse_fly", name: "Bent-over reverse fly", tags: ["upper"], pattern: "Pull",
