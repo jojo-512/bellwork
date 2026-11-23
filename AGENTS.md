@@ -2,7 +2,7 @@
 
 ## WHAT IT IS
 
-Bellwork is my kettlebell AMRAP workout timer, built for real gym use on my iPhone. Daily seeded 5-exercise circuit, animated stick figures (side and front views), Standard pool of single movements and Complex pool of chained hybrids, focus chips (Upper/Lower/Core/Full body, up to two), sticky timer bar (15 to 30 min), +1 ROUND, session history with PRs scoped per focus and mode, partial session saving, warm-up primer, Library view. Complex mode is my primary use case and design priority.
+Bellwork is my kettlebell AMRAP workout timer, built for real gym use on my iPhone. Daily seeded 5-exercise circuit, rig figures (two views per movement, chosen from side, front, and three-quarter), Standard pool of single movements and Complex pool of chained hybrids, focus chips (Upper/Lower/Core/Full body, up to two), sticky timer bar (15 to 30 min), +1 ROUND, session history with PRs scoped per focus and mode, partial session saving, warm-up primer, Library view. Complex mode is my primary use case and design priority.
 
 The product promise: an easy 20 to 30 minute workout you can do day after day, working the whole body, and end up in a much better place 90 days later. Judge changes against that.
 
@@ -34,12 +34,12 @@ npm run build
 npm run check
 ```
 
-- `bellwork.jsx` is the app source of truth. Movement data lives in `movements.js` (pose vocabulary in `poses.js`).
-- Rig movements carry `rig` in `movements.js`. The rig is `rig.js` (skeleton, sampler, drawing, checks); named building blocks are in `blocks.js`. Review one at `contact.html?id=<movement>`.
+- `bellwork.jsx` is the app source of truth. Movement data lives in `movements.js`. Every movement carries `rig`.
+- The rig is `rig.js` (skeleton, sampler, drawing, checks); named building blocks are in `blocks.js`. Review one at `contact.html?id=<movement>`.
 - `INGEST.md` is the authority for adding movements. `INBOX.md` is the agent's drop queue.
 - Mode strings are `standard` / `complex` (older `"advanced"` is normalized on read).
 - `npm run build` compiles with esbuild and writes a single self-contained `index.html` (Pages entry).
-- `npm run check` validates movement data (ids, pools, poses, patterns, and the rig checks) with no extra dependencies.
+- `npm run check` validates movement data (ids, pools, patterns, and the rig checks) with no extra dependencies. A movement without `rig` fails. Legacy stick-figure fields (`poses`, `posesF`, `frontOnly`, `bellFlip`) fail.
 - Google Fonts stay as `<link>` tags in the HTML shell (do not self-host unless asked).
 - Default workout mode is `standard`.
 - When a GitHub remote exists, push to `main` deploys via GitHub Pages — only with explicit go-ahead.

@@ -1,6 +1,6 @@
 # Bellwork — vision and roadmap
 
-Status: v1.2 decisions unchanged · refreshed 2026-11-19 against `9e4ba0c` · Batch 1 shipped 2026-09-23 · Batch 2 shipped 2026-09-30 · rig conversion in progress (38 of 58 on the rig) — live at https://jojo-512.github.io/bellwork/
+Status: v1.2 decisions unchanged · refreshed 2026-11-23 · Batch 1 shipped 2026-09-23 · Batch 2 shipped 2026-09-30 · all 58 on the rig, old stick figure removed — live at https://jojo-512.github.io/bellwork/
 Live: https://jojo-512.github.io/bellwork/ · Repo: https://github.com/jojo-512/bellwork
 Also see: [session.md](./session.md) (left off / next) · [punchlist.md](./punchlist.md) (small bugs) · [batch-2-plan.md](./batch-2-plan.md) · repo `BACKLOG.md` (feature batches)
 
@@ -247,16 +247,14 @@ Canon means total movements in the pool. The additions in the list below were th
 old 46 toward roughly 66. This section records that plan. The counts under "Pool now" are the
 pool on `main`.
 
-### Pool now (2026-11-19, `9e4ba0c`)
+### Pool now (membership as of 2026-11-19, `9e4ba0c`; rig status 2026-11-23)
 
 **58 movements.** 39 in the Standard pool, 22 in Complex, 3 in both (clean & press, thruster,
 sit-up to press). Nothing is `pending`.
 
-**38 of 58 are on the pelvis-rooted rig** (decided 2026-10-14; plan in
-[`rig-app-plan.md`](./proposals/rig-app-plan.md)). Every Complex movement and all three dual-pool
-movements are on it. **20 Standard-only movements still use the old figure.** Order and the open
-calls are in [`session.md`](./session.md). The old figure system stays until those 20 are
-converted.
+**All 58 are on the pelvis-rooted rig** (decided 2026-10-14; plan in
+[`rig-app-plan.md`](./proposals/rig-app-plan.md)). The old stick-figure renderer is deleted.
+Open calls are in [`session.md`](./session.md).
 
 | Pattern | Standard | Complex |
 |---|---|---|
@@ -289,14 +287,13 @@ That is why the canon pass happened. Where those gaps stand now:
 3. **Carry exists as a pattern.** Marches and carries both stay, and a circuit still should not
    contain both. That rule is unchanged.
 4. **Knee-dominant is deeper than it was** (Standard squat 3 and lunge 4, against 7 hinges) and
-   still the thin side. Front rack squat, split squat, and overhead lunge are in the data and
-   still on the old figure.
+   still the thin side. Front rack squat, split squat, and overhead lunge are in the data, on the rig.
 5. **Unilateral and bottoms-up** are still where a light bell gets hard (section 4). Bottoms-up
    press is in Complex. Half get-up is still not in the pool. Full get-up stays out.
 
 Batch 3, the five-slot template, is what makes further growth safe. Its old blocker is gone:
 nothing is pending, and a Complex pull slot can draw more than renegade. The template itself is
-unbuilt. Whether it comes before the remaining 20 figures is a sequencing call in `session.md`.
+unbuilt. The remaining figures are done. Whether to plan Batch 3 next is in `session.md`.
 Five slots stays the number.
 
 ### The canon list, with authoring cost
@@ -520,8 +517,8 @@ long after Batch 2 is done.*
 
 **Not started. Ready to plan.** Nothing is `pending`. Complex Pull is renegade, swing + high
 pull, and gorilla row + sumo, so a pull slot no longer collapses to renegade. The four items
-below are unchanged. Whether this batch comes before the remaining 20 rig figures is the
-sequencing call in `session.md`.
+below are unchanged. The old figures are converted. Whether to start this batch is the
+call in `session.md`.
 
 *A whole-body day is whole-body, it doesn't repeat itself, and it drifts toward what you like.*
 
@@ -600,6 +597,7 @@ calls (the remaining rig figures, the two press follow-ups, and whether Batch 3 
 
 ## Changelog
 
+- **2026-11-23** — All 58 movements are on the rig. The old stick-figure renderer is deleted. v1.2 decisions unchanged. Pool membership is the same as the 2026-11-19 count.
 - **2026-11-19 status refresh** — v1.2 decisions unchanged. Counts and batch status brought up to
   `9e4ba0c`: 58 movements, 38 on the rig, every Complex and dual-pool movement converted, 20
   Standard-only still on the old figure. Batch 3's pull-slot precondition is met; the template
