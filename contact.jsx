@@ -19,7 +19,7 @@ const COLORS = {
 
 /* The open batch, listed first in the menu so Joe reviews only these.
    Update when a batch opens or merges. */
-const TO_REVIEW = [];
+const TO_REVIEW = ["windmill", "pull_through", "tall_kneel_press"];
 const reviewItems = () => TO_REVIEW.map((id) => EXERCISES.find((e) => e.id === id)).filter(Boolean);
 const notReview = (e) => !TO_REVIEW.includes(e.id);
 

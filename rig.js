@@ -41,12 +41,18 @@ function ik(root, target, a, b, pole) {
 // A body frame tilted in the sagittal plane: 0 is upright, -90 is lying on the back.
 const tilt = (deg) => { const a = rad(deg); return { up: v(Math.sin(a), Math.cos(a), 0), fwd: v(Math.cos(a), -Math.sin(a), 0) }; };
 
-// Ribcage frame for a pelvis position, lean and twist (positive twist turns toward the figure's left).
-function ribcage(pelvis, lean, twist) {
+// Ribcage frame for a pelvis position, lean, twist and roll.
+// Positive twist turns toward the figure's left.
+// Positive roll side-bends toward the figure's left: up and right rotate around fwd.
+// roll 0 leaves up, fwd and right identical to lean and twist alone.
+function ribcage(pelvis, lean, twist, roll = 0) {
   const T = tilt(lean), tw = rad(twist), r0 = v(0, 0, 1);
-  const up = T.up;
   const fwd = add(mul(T.fwd, Math.cos(tw)), mul(r0, -Math.sin(tw)));
-  const right = add(mul(r0, Math.cos(tw)), mul(T.fwd, Math.sin(tw)));
+  const up0 = T.up;
+  const right0 = add(mul(r0, Math.cos(tw)), mul(T.fwd, Math.sin(tw)));
+  const a = rad(roll), c = Math.cos(a), s = Math.sin(a);
+  const up = add(mul(up0, c), mul(right0, -s));
+  const right = add(mul(right0, c), mul(up0, s));
   const neck = add(pelvis, mul(up, B.spine));
   return { up, fwd, right, neck };
 }
@@ -56,7 +62,7 @@ function ribcage(pelvis, lean, twist) {
    (right hand, left hand, both hands on the horns, on the floor) so a hand-off blends
    instead of jumping; the check requires the hands to be together where it happens. */
 const KEYS = [
-  ["pelvis", 3], ["pitch", 1], ["lean", 1], ["twist", 1],
+  ["pelvis", 3], ["pitch", 1], ["lean", 1], ["twist", 1], ["roll", 1],
   ["footL", 3], ["toesL", 1], ["airL", 1], ["footR", 3], ["toesR", 1], ["airR", 1],
   ["handL", 3], ["handR", 3], ["poleL", 3], ["poleR", 3],
   ["rack", 1], ["fling", 1], ["wR", 1], ["wL", 1], ["wB", 1], ["wH", 1], ["wF", 1], ["floorAt", 3],
@@ -80,8 +86,8 @@ export function expand(rig) {
     const body = { pitch: 0, twist: 0, ...(p.body ? BODIES[p.body] : {}) };
     const pv = p.pelvis || body.pelvis;
     const pelvis = [pv[0], pv[1], pv[2] || 0];
-    const lean = p.lean ?? body.lean, pitch = p.pitch ?? body.pitch, twist = p.twist ?? body.twist;
-    const rib = ribcage(pelvis, lean, twist);
+    const lean = p.lean ?? body.lean, pitch = p.pitch ?? body.pitch, twist = p.twist ?? body.twist, roll = p.roll ?? 0;
+    const rib = ribcage(pelvis, lean, twist, roll);
     const hand = (h, side) => {
       if (Array.isArray(h)) return h;                                    // world coordinates as written
       const blk = HANDS[h];
@@ -100,7 +106,7 @@ export function expand(rig) {
     const rack = typeof p.bell === "number" ? p.bell : BELL_STATES[p.bell || "hanging"];
     const fl = p.footL || feet.footL, fr = p.footR || feet.footR;
     return {
-      pelvis, pitch, lean, twist,
+      pelvis, pitch, lean, twist, roll,
       footL: fl.at, toesL: fl.toes || 0, airL: fl.air || 0,
       footR: fr.at, toesR: fr.toes || 0, airR: fr.air || 0,
       handL: hand(p.handL || "thigh", -1), handR: hand(p.handR || "thigh", 1),
@@ -113,12 +119,12 @@ export function expand(rig) {
   });
 }
 
-// Mirror: swap sides, flip z, reverse the twist.
+// Mirror: swap sides, flip z, reverse the twist and the roll.
 export function mirror(st) {
   const sw = { R: "L", L: "R" };
   return {
     ...st,
-    pelvis: flipZ(st.pelvis), twist: -st.twist,
+    pelvis: flipZ(st.pelvis), twist: -st.twist, roll: -st.roll,
     footL: flipZ(st.footR), toesL: st.toesR, airL: st.airR,
     footR: flipZ(st.footL), toesR: st.toesL, airR: st.airL,
     handL: flipZ(st.handR), handR: flipZ(st.handL),
@@ -132,7 +138,7 @@ export function mirror(st) {
 export function solve(s, m = {}) {
   const pel = s.pelvis;
   const P = tilt(s.pitch);
-  const { up, fwd, right, neck } = ribcage(pel, s.lean, s.twist);
+  const { up, fwd, right, neck } = ribcage(pel, s.lean, s.twist, s.roll);
   const hip = (side) => add(pel, v(0, 0, side * B.hipW));           // pelvis stays square: hips never twist
   const shoulder = (side) => add(add(neck, mul(right, side * B.shW)), mul(up, -0.02));
   const head = add(neck, mul(up, B.neck));

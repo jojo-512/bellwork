@@ -222,6 +222,22 @@ const STANDARD = [
       FS({ hip: [100, 124], sh: [100, 86], elR: [114, 102], haR: [110, 86], elL: [88, 104], haL: [86, 120], knR: [110, 170], anR: [112, 174], knL: [90, 170], anL: [88, 174], bell: [113, 80] }),
       FS({ hip: [100, 124], sh: [100, 86], elR: [110, 64], haR: [108, 44], elL: [88, 104], haL: [86, 120], knR: [110, 170], anR: [112, 174], knL: [90, 170], anL: [88, 174], bell: [110, 38] }),
     ],
+    rig: {
+      feet: { footL: { at: [-0.4, 0.13, -0.11], toes: 1 }, footR: { at: [-0.4, 0.13, 0.11], toes: 1 } },
+      on: "R", kneeOut: 0.02, sides: "right", views: ["side", "front"], still: "Lockout",
+      phases: [
+        { name: "Rack", t: 0.25, pelvis: [0, 0.475], pitch: 0, lean: 2, handR: "rack", elR: "rack", bell: "racked" },
+        { name: "Chin", t: 0.17, pelvis: [0, 0.475], pitch: 0, lean: 1, handR: [0.21, 1.015, 0.14], elR: [-0.94, 0.1, 0.32], bell: "racked" },
+        { name: "Press", t: 0.15, pelvis: [0, 0.475], pitch: 0, lean: 1, handR: [0.28, 1.135, 0.16], elR: [-0.79, 0.24, 0.56], bell: "racked" },
+        { name: "Past the head", t: 0.13, pelvis: [0, 0.475], pitch: 0, lean: 0.5, handR: [0.2, 1.315, 0.16], elR: [-0.22, 0.84, 0.5], bell: "racked" },
+        { name: "Lockout", t: 0.2, pelvis: [0, 0.475], pitch: 0, lean: 0, handR: "overhead", elR: [-0.4, 0.9, 0.1], bell: "racked", lock: ["R"] },
+        { name: "Hold", t: 0.13, pelvis: [0, 0.475], pitch: 0, lean: 0, handR: "overhead", elR: [-0.4, 0.9, 0.1], bell: "racked", lock: ["R"] },
+        { name: "Lower past the head", t: 0.15, pelvis: [0, 0.475], pitch: 0, lean: 0.5, handR: [0.2, 1.315, 0.16], elR: [-0.22, 0.84, 0.5], bell: "racked" },
+        { name: "Lower", t: 0.17, pelvis: [0, 0.475], pitch: 0, lean: 1, handR: [0.28, 1.135, 0.16], elR: [-0.79, 0.24, 0.56], bell: "racked" },
+        { name: "Lower to chin", t: 0.2, pelvis: [0, 0.475], pitch: 0, lean: 1, handR: [0.21, 1.015, 0.14], elR: [-0.94, 0.1, 0.32], bell: "racked" },
+        { name: "Lower to rack", t: 0.25, pelvis: [0, 0.475], pitch: 0, lean: 2, handR: "rack", elR: "rack", bell: "racked" },
+      ],
+    },
   },
   {
     id: "pushup_on_bell", name: "Push-up on the bell", tags: ["upper"], pattern: "Push",
@@ -558,6 +574,19 @@ const STANDARD = [
       FS({ hip: [112, 112], sh: [76, 102], elR: [80, 76], haR: [82, 52], elL: [82, 128], haL: [82, 158], knR: [118, 142], anR: [128, 176], knL: [92, 148], anL: [76, 176], bell: [84, 46] }),
       FS({ hip: [108, 110], sh: [88, 94], elR: [92, 66], haR: [94, 44], elL: [92, 116], haL: [94, 138], knR: [116, 142], anR: [124, 176], knL: [90, 146], anL: [78, 176], bell: [96, 38] }),
     ],
+    rig: {
+      feet: { footL: { at: [0.06, 0.08, -0.16] }, footR: { at: [-0.02, 0.08, 0.2] } },
+      on: "R", kneeOut: 0.04, sides: "right", views: ["front", "quarter"], still: "Windmill",
+      phases: [
+        { name: "Stand", t: 0.4, pelvis: [0, 0.94, 0], pitch: 0, lean: 2, twist: 0, roll: 0, handR: [0.017, 1.968, 0.18], handL: [0.057, 0.895, -0.246], elR: [-0.4, 0.9, 0.1], elL: [-0.15, 0.55, -0.85], bell: "racked", lock: ["R"] },
+        { name: "Shift", t: 0.55, pelvis: [-0.03, 0.9, 0.08], pitch: 0, lean: 12, twist: -6, roll: 22, handR: [0.078, 1.949, 0.067], handL: [0.069, 0.739, -0.178], elR: [-0.4, 0.9, 0.1], elL: [-0.15, 0.55, -0.85], bell: "racked", lock: ["R"] },
+        { name: "Hinge", t: 0.5, pelvis: [-0.05, 0.86, 0.14], pitch: 0, lean: 22, twist: -12, roll: 44, handR: [0.166, 1.828, -0.059], handL: [0.101, 0.518, -0.169], elR: [-0.4, 0.9, 0.1], elL: [-0.15, 0.55, -0.85], bell: "racked", lock: ["R"] },
+        { name: "Windmill", t: 0.45, pelvis: [-0.06, 0.82, 0.18], pitch: 0, lean: 28, twist: -16, roll: 62, handR: [0.203, 1.663, -0.146], handL: [0.121, 0.303, -0.166], elR: [-0.4, 0.9, 0.1], elL: [-0.15, 0.55, -0.85], bell: "racked", lock: ["R"] },
+        { name: "Hold", t: 0.5, pelvis: [-0.06, 0.82, 0.18], pitch: 0, lean: 28, twist: -16, roll: 62, handR: [0.203, 1.663, -0.146], handL: [0.121, 0.303, -0.166], elR: [-0.4, 0.9, 0.1], elL: [-0.15, 0.55, -0.85], bell: "racked", lock: ["R"] },
+        { name: "Unwind", t: 0.4, pelvis: [-0.05, 0.86, 0.14], pitch: 0, lean: 22, twist: -12, roll: 44, handR: [0.166, 1.828, -0.059], handL: [0.101, 0.518, -0.169], elR: [-0.4, 0.9, 0.1], elL: [-0.15, 0.55, -0.85], bell: "racked", lock: ["R"] },
+        { name: "Rise", t: 0.45, pelvis: [-0.03, 0.9, 0.08], pitch: 0, lean: 12, twist: -6, roll: 22, handR: [0.078, 1.949, 0.067], handL: [0.069, 0.739, -0.178], elR: [-0.4, 0.9, 0.1], elL: [-0.15, 0.55, -0.85], bell: "racked", lock: ["R"] },
+      ],
+    },
   },
   {
     id: "around_world", name: "Around the world", tags: ["core"], pattern: "Rotation",
@@ -604,6 +633,19 @@ const STANDARD = [
       { hip: [100, 148], sh: [100, 138], head: [100, 122], elR: [116, 150], haR: [118, 170], elL: [84, 150], haL: [82, 170], knR: [106, 148], anR: [108, 156], knL: [94, 148], anL: [92, 156], bell: [68, 166] },
       { hip: [100, 148], sh: [100, 138], head: [100, 122], elR: [96, 152], haR: [76, 164], elL: [84, 150], haL: [82, 170], knR: [106, 148], anR: [108, 156], knL: [94, 148], anL: [92, 156], bell: [68, 166] },
     ],
+    rig: {
+      feet: { footL: { at: [-0.87, 0.115, -0.24], toes: 1 }, footR: { at: [-0.87, 0.115, 0.24], toes: 1 } },
+      on: "floor", sides: "right", views: ["front", "quarter"], still: "Reach",
+      phases: [
+        { name: "Set", t: 0.28, pelvis: [-0.1, 0.46], pitch: 74, lean: 74, twist: 0, handR: [0.361, 0.04, 0.18], handL: [0.361, 0.04, -0.18], elR: [-1, 0.5, -0.3], elL: [-1, 0.5, -0.3], floorAt: [0.361, 0.08, 0.22] },
+        { name: "Reach", t: 0.32, pelvis: [-0.1, 0.46], pitch: 74, lean: 74, twist: 0, handR: [0.361, 0.04, 0.18], handL: [0.361, 0.21, 0.22], elR: [-1, 0.5, -0.3], elL: [-1, 0.5, -0.3], floorAt: [0.361, 0.08, 0.22] },
+        { name: "Across", t: 0.42, pelvis: [-0.1, 0.46], pitch: 74, lean: 74, twist: 0, handR: [0.361, 0.04, 0.18], handL: [0.361, 0.21, -0.22], elR: [-1, 0.5, -0.3], elL: [-1, 0.5, -0.3], floorAt: [0.361, 0.08, -0.22] },
+        { name: "Plant", t: 0.26, pelvis: [-0.1, 0.46], pitch: 74, lean: 74, twist: 0, handR: [0.361, 0.04, 0.18], handL: [0.361, 0.04, -0.18], elR: [-1, 0.5, -0.3], elL: [-1, 0.5, -0.3], floorAt: [0.361, 0.08, -0.22] },
+        { name: "Reach back", t: 0.32, pelvis: [-0.1, 0.46], pitch: 74, lean: 74, twist: 0, handR: [0.361, 0.21, -0.22], handL: [0.361, 0.04, -0.18], elR: [-1, 0.5, -0.3], elL: [-1, 0.5, -0.3], floorAt: [0.361, 0.08, -0.22] },
+        { name: "Return", t: 0.4, pelvis: [-0.1, 0.46], pitch: 74, lean: 74, twist: 0, handR: [0.361, 0.21, 0.22], handL: [0.361, 0.04, -0.18], elR: [-1, 0.5, -0.3], elL: [-1, 0.5, -0.3], floorAt: [0.361, 0.08, 0.22] },
+        { name: "Replant", t: 0.2, pelvis: [-0.1, 0.46], pitch: 74, lean: 74, twist: 0, handR: [0.361, 0.04, 0.18], handL: [0.361, 0.04, -0.18], elR: [-1, 0.5, -0.3], elL: [-1, 0.5, -0.3], floorAt: [0.361, 0.08, 0.22] },
+      ],
+    },
   },
   {
     id: "dead_bug", name: "Dead bug pullover", tags: ["core"], pattern: "Anti-extension",
