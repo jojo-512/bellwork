@@ -10,7 +10,11 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 3. **Battery and heat.** Still the open item in [punchlist.md](./punchlist.md). Needs a real gym session with the rig figures on screen, including time in the Library.
 4. Keep dropping gym bugs into [punchlist.md](./punchlist.md).
 
-## Last session (2026-11-19, Cursor, Grok 4.7 high fast — standing Standard rig pilot, 3 movements)
+## Last session (2026-11-23, Claude, AGENTS.md: Cursor's authoring model)
+
+- Joe asked Grok on Cursor to author the standing pilot (PR #13) to compare it with Opus and to use his Cursor allowance. `AGENTS.md` still required Opus for Cursor, so it now says Cursor authors on the model Joe picks, and records the Grok trial. Claude still checks every movement whoever authors it. Joe is running a larger Grok sample on the next round. Docs only.
+
+## Earlier (2026-11-19, Cursor, Grok 4.7 high fast — standing Standard rig pilot, 3 movements)
 
 - **How it was built:** one pass on a branch off `9e4ba0c` (PR #11). Reused the approved rack, squat, overhead-press, and RDL blocks. No `rig.js` or `blocks.js` changes. `npm run check` passes with the same five existing warnings, none of them on these three. 41 of 58 movements are on the rig (was 38).
 - **Front rack squat:** the rack from clean + squat (elbow in front, bell on the forearm) through the goblet squat's depth (`squat_bottom`, knees out). The free arm hangs. Card views: side + front.
