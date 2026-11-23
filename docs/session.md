@@ -17,7 +17,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 - **Windmill:** the bell stays locked overhead the whole rep (`lock: ["R"]`). The arm stays vertical, within 1°. Hips shift to the bell side. Roll reaches 62° toward the free leg, with a 28° hinge and a slight open-chest twist. The free hand slides down the front of the left leg to the lower shin, about 8 cm off the bone and 23 cm above the ankle. The arm is 0.56 m, so it does not reach the floor. The head follows the ribcage, so the gaze marker points along the hinge rather than up at the bell. Card views: front + three-quarter.
 - **Plank pull-through:** hips still, twist 0, pitch and lean 74, on the toes, feet wide. The bell stays on the floor and slides from one side to the other and back (`z` about ±0.22, `y` 0.08). The opposite hand tracks the handle at `y` 0.21, inside the arm's reach, then replants. Both sides are in one cycle, so `sides` stays `"right"`. The legs are a couple of centimeters short of straight, so the knees are slightly soft. Card views: front + three-quarter. The side view shows the plank line. The drag reads from the front.
 - **Tall-kneeling press:** pelvis at 0.475, pitch 0, lean 0 to 2. Both knees at about 0.04. Ankles behind, toes tucked, the toe on the floor and the heel up. The arm path is the approved overhead press, shifted down with the pelvis. From the chin through the lower, the elbow stays within about 1 cm of the hand in the forward direction. Card views: side + front.
-- `TO_REVIEW` lists the three. Not merged.
+- `TO_REVIEW` lists the three. Not merged. [PR #19](https://github.com/jojo-512/bellwork/pull/19).
 
 ## Earlier (2026-11-23, Cursor — floor rig batch)
 
