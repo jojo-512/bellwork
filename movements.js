@@ -196,6 +196,17 @@ const STANDARD = [
       { hip: [100, 164], sh: [100, 156], head: [100, 142], knR: [112, 136], anR: [112, 168], knL: [88, 136], anL: [88, 168], elR: [120, 142], haR: [120, 118], elL: [88, 156], haL: [86, 168], bell: [120, 110] },
       { hip: [100, 164], sh: [100, 156], head: [100, 142], knR: [112, 136], anR: [112, 168], knL: [88, 136], anL: [88, 168], elR: [120, 128], haR: [120, 98], elL: [88, 156], haL: [86, 168], bell: [120, 90] },
     ],
+    rig: {
+      feet: { footL: { at: [0.52, 0.08, -0.15] }, footR: { at: [0.52, 0.08, 0.15] } }, on: "R", sides: "right", views: ["front", "quarter"], still: "Elbow down",
+      phases: [
+        { name: "Elbow down", t: 0.18, pelvis: [0, 0.1], pitch: -90, lean: -90, handR: [-0.32, 0.28, 0.4], handL: [0.02, 0.05, -0.3], elR: "floor_press", elL: "floor_press", bell: "racked" },
+        { name: "Settle", t: 0.32, pelvis: [0, 0.1], pitch: -90, lean: -90, handR: [-0.32, 0.28, 0.4], handL: [0.02, 0.05, -0.3], elR: "floor_press", elL: "floor_press", bell: "racked" },
+        { name: "Press", t: 0.38, pelvis: [0, 0.1], pitch: -90, lean: -90, handR: [-0.4, 0.47, 0.29], handL: [0.02, 0.05, -0.3], elR: "floor_press", elL: "floor_press", bell: "racked" },
+        { name: "Lockout", t: 0.22, pelvis: [0, 0.1], pitch: -90, lean: -90, handR: [-0.48, 0.658, 0.18], handL: [0.02, 0.05, -0.3], elR: "floor_press", elL: "floor_press", bell: "racked", lock: ["R"] },
+        { name: "Hold", t: 0.28, pelvis: [0, 0.1], pitch: -90, lean: -90, handR: [-0.48, 0.658, 0.18], handL: [0.02, 0.05, -0.3], elR: "floor_press", elL: "floor_press", bell: "racked", lock: ["R"] },
+        { name: "Lower", t: 0.42, pelvis: [0, 0.1], pitch: -90, lean: -90, handR: [-0.4, 0.47, 0.29], handL: [0.02, 0.05, -0.3], elR: "floor_press", elL: "floor_press", bell: "racked" },
+      ],
+    },
   },
   {
     id: "tall_kneel_press", name: "Tall-kneeling press", tags: ["upper", "core"], pattern: "Push",
@@ -226,6 +237,14 @@ const STANDARD = [
       { hip: [100, 150], sh: [100, 136], head: [100, 118], elR: [114, 150], haR: [104, 164], elL: [86, 150], haL: [96, 164], knR: [106, 150], anR: [108, 158], knL: [94, 150], anL: [92, 158], bell: [100, 166] },
       { hip: [100, 154], sh: [100, 148], head: [100, 134], elR: [120, 152], haR: [104, 164], elL: [80, 152], haL: [96, 164], knR: [106, 152], anR: [108, 158], knL: [94, 152], anL: [92, 158], bell: [100, 166] },
     ],
+    rig: {
+      feet: { footL: { at: [-0.86, 0.115, -0.24], toes: 1 }, footR: { at: [-0.86, 0.115, 0.24], toes: 1 } }, on: "floor", sides: "right", views: ["side", "quarter"], still: "Bottom",
+      phases: [
+        { name: "Plank", t: 0.45, pelvis: [-0.145, 0.56], pitch: 70, lean: 70, handR: [0.3, 0.21, 0], handL: [0.3, 0.21, 0], elR: [-1, 0.55, -0.25], elL: [-1, 0.55, -0.25], floorAt: [0.3, 0.08, 0] },
+        { name: "Bottom", t: 0.25, pelvis: [-0.02, 0.22], pitch: 82, lean: 82, handR: [0.3, 0.21, 0], handL: [0.3, 0.21, 0], elR: [-1, 0.55, -0.25], elL: [-1, 0.55, -0.25], floorAt: [0.3, 0.08, 0] },
+        { name: "Hold", t: 0.5, pelvis: [-0.02, 0.22], pitch: 82, lean: 82, handR: [0.3, 0.21, 0], handL: [0.3, 0.21, 0], elR: [-1, 0.55, -0.25], elL: [-1, 0.55, -0.25], floorAt: [0.3, 0.08, 0] },
+      ],
+    },
   },
   {
     id: "halo", name: "Halo", tags: ["upper", "core"], pattern: "Rotation",
@@ -516,6 +535,15 @@ const STANDARD = [
       { hip: [100, 152], sh: [100, 112], elR: [116, 128], haR: [126, 138], elL: [106, 130], haL: [122, 140], knR: [114, 132], anR: [118, 154], knL: [86, 132], anL: [82, 154], bell: [130, 142] },
       { hip: [100, 152], sh: [100, 112], elR: [94, 130], haR: [78, 140], elL: [84, 128], haL: [74, 138], knR: [114, 132], anR: [118, 154], knL: [86, 132], anL: [82, 154], bell: [70, 142] },
     ],
+    rig: {
+      feet: { footL: { at: [0.52, 0.08, -0.15] }, footR: { at: [0.52, 0.08, 0.15] } }, on: "horns", sides: "right", views: ["front", "quarter"], still: "Tap right",
+      phases: [
+        { name: "Center", t: 0.28, pelvis: [0, 0.1], pitch: -90, lean: -38, twist: 0, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Tap right", t: 0.34, pelvis: [0, 0.1], pitch: -90, lean: -38, twist: -30, handR: [0.04, 0.32, 0.36], handL: [0.08, 0.34, 0.24], elR: "goblet", elL: "goblet" },
+        { name: "Through", t: 0.28, pelvis: [0, 0.1], pitch: -90, lean: -38, twist: 0, handR: "goblet", handL: "goblet", elR: "goblet", elL: "goblet" },
+        { name: "Tap left", t: 0.34, pelvis: [0, 0.1], pitch: -90, lean: -38, twist: 30, handR: [0.08, 0.34, -0.24], handL: [0.04, 0.32, -0.36], elR: "goblet", elL: "goblet" },
+      ],
+    },
   },
   {
     id: "windmill", name: "Windmill", tags: ["core"], pattern: "Hinge",
@@ -591,6 +619,16 @@ const STANDARD = [
       { hip: [100, 164], sh: [100, 156], head: [100, 142], elR: [112, 140], haR: [106, 122], elL: [88, 140], haL: [94, 122], knR: [112, 134], anR: [112, 164], knL: [88, 134], anL: [88, 164], bell: [100, 114] },
       { hip: [100, 164], sh: [100, 156], head: [100, 142], elR: [112, 132], haR: [106, 112], elL: [88, 132], haL: [94, 112], knR: [112, 134], anR: [112, 164], knL: [88, 148], anL: [88, 172], bell: [100, 104] },
     ],
+    rig: {
+      feet: { footL: { at: [0.42, 0.52, -0.1], air: 1 }, footR: { at: [0.42, 0.52, 0.1], air: 1 } }, on: "horns", sides: "alternate", views: ["side", "quarter"], still: "Reach",
+      phases: [
+        { name: "Over chest", t: 0.4, pelvis: [0, 0.1], pitch: -90, lean: -90, handR: [-0.44, 0.58, 0.065], handL: [-0.44, 0.58, -0.065], elR: [-0.1, 0.9, 0.4], elL: [-0.1, 0.9, 0.4] },
+        { name: "High", t: 0.35, pelvis: [0, 0.1], pitch: -90, lean: -90, handR: [-0.76, 0.52, 0.065], handL: [-0.76, 0.52, -0.065], elR: [-0.1, 0.9, 0.4], elL: [-0.1, 0.9, 0.4], footR: { at: [0.66, 0.38, 0.1], air: 1 } },
+        { name: "Reach", t: 0.35, pelvis: [0, 0.1], pitch: -90, lean: -90, handR: [-0.88, 0.38, 0.065], handL: [-0.88, 0.38, -0.065], elR: [-0.1, 0.9, 0.4], elL: [-0.1, 0.9, 0.4], footR: { at: [0.86, 0.2, 0.1], air: 1 } },
+        { name: "Hold", t: 0.3, pelvis: [0, 0.1], pitch: -90, lean: -90, handR: [-0.88, 0.38, 0.065], handL: [-0.88, 0.38, -0.065], elR: [-0.1, 0.9, 0.4], elL: [-0.1, 0.9, 0.4], footR: { at: [0.86, 0.2, 0.1], air: 1 } },
+        { name: "Return", t: 0.45, pelvis: [0, 0.1], pitch: -90, lean: -90, handR: [-0.76, 0.52, 0.065], handL: [-0.76, 0.52, -0.065], elR: [-0.1, 0.9, 0.4], elL: [-0.1, 0.9, 0.4], footR: { at: [0.66, 0.38, 0.1], air: 1 } },
+      ],
+    },
   },
   {
     id: "situp_press", name: "Sit-up to press", tags: ["core"], pattern: "Flexion",
