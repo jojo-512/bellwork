@@ -6,7 +6,7 @@ import { build, solve, draw, VIEW_LABELS } from "./rig.js";
    BELLWORK v4 — 20-minute kettlebell AMRAP generator
    - Standard mode: 32 single movements
    - Complex mode: hybrid pool (17 chained combos; 3 also in Standard)
-   - Dual side/front animated figures, grips, 2-bell badges
+   - Rig figures, two views per card, grips, 2-bell badges
    - Partial sessions save on reset; PRs scoped per mode+focus
    ============================================================ */
 
@@ -70,12 +70,6 @@ function normalizeMode(m) {
   return m === "complex" ? "complex" : "standard";
 }
 
-function hasPoses(ex) {
-  if (ex.rig) return true;
-  if (ex.frontOnly) return Array.isArray(ex.posesF) && ex.posesF.length > 0;
-  return Array.isArray(ex.poses) && ex.poses.length > 0 && Array.isArray(ex.posesF) && ex.posesF.length > 0;
-}
-
 function buildCircuit(focus, mode, salt, approved = []) {
   const today = localDate();
   // Seed with the pre-rename mode string so Complex days don't reshuffle
@@ -113,126 +107,6 @@ function buildCircuit(focus, mode, salt, approved = []) {
   }
   picked.sort((a, b) => PATTERN_ORDER.indexOf(a.pattern) - PATTERN_ORDER.indexOf(b.pattern));
   return picked;
-}
-
-function headFrom(pose) {
-  if (pose.head) return pose.head;
-  const [hx, hy] = pose.hip;
-  const [sx, sy] = pose.sh;
-  const dx = sx - hx, dy = sy - hy;
-  const len = Math.sqrt(dx * dx + dy * dy) || 1;
-  return [sx + (dx / len) * 13, sy + (dy / len) * 13];
-}
-
-const SIDE_SEGS = [
-  // Trail leg (kn2/an2) sits behind the stance leg. Dim it so a split reads as two legs.
-  ["hip", "kn2", 2.8, 0.28], ["kn2", "an2", 2.8, 0.28],
-  ["hip", "sh", 3.8, 1], ["hip", "kn", 3.4, 1], ["kn", "an", 3.4, 1],
-  ["sh", "el", 3.2, 1], ["el", "ha", 3.2, 1],
-];
-const FRONT_SEGS = [
-  ["hip", "sh", 3.8, 1],
-  ["hip", "knR", 3.4, 1], ["knR", "anR", 3.4, 1],
-  ["hip", "knL", 3.4, 1], ["knL", "anL", 3.4, 1],
-  ["sh", "elR", 3.2, 1], ["elR", "haR", 3.2, 1],
-  ["sh", "elL", 3.2, 1], ["elL", "haL", 3.2, 1],
-];
-
-/* Relative time from each frame to the next, including the loop back to frame 1.
-   Omitted `t` weighs 1. Equal weights stay evenly spaced, so the SVG matches
-   a pose that never set `t` (no keyTimes attribute). */
-function keyTimesFor(poses) {
-  const weights = poses.map((p) => (typeof p.t === "number" && p.t > 0 ? p.t : 1));
-  if (weights.every((w) => w === weights[0])) return null;
-  const total = weights.reduce((sum, w) => sum + w, 0);
-  const raw = [0];
-  let acc = 0;
-  for (const w of weights) {
-    acc += w;
-    raw.push(acc / total);
-  }
-  raw[raw.length - 1] = 1;
-  const times = raw.map((t, i) => (i === 0 ? 0 : i === raw.length - 1 ? 1 : Math.round(t * 10000) / 10000));
-  for (let i = 1; i < times.length; i++) {
-    if (times[i] <= times[i - 1]) times[i] = Math.min(1, Math.round((times[i - 1] + 0.0001) * 10000) / 10000);
-  }
-  times[times.length - 1] = 1;
-  return times.join(";");
-}
-
-export function Figure({ poses, dur, color, animate, bellFlip }) {
-  const svgRef = useRef(null);
-  useEffect(() => {
-    const svg = svgRef.current;
-    if (!svg) return;
-    try {
-      if (!animate && svg.pauseAnimations) svg.pauseAnimations();
-      else if (svg.unpauseAnimations) svg.unpauseAnimations();
-    } catch (e) {}
-  }, [animate]);
-
-  const durS = `${dur}s`;
-  const cyc = (getter) => {
-    const vals = poses.map(getter);
-    return [...vals, vals[0]];
-  };
-  const keyTimes = keyTimesFor(poses);
-  const anim = (name, vals) => (
-    <animate
-      attributeName={name}
-      values={vals.join(";")}
-      dur={durS}
-      repeatCount="indefinite"
-      calcMode="linear"
-      {...(keyTimes ? { keyTimes } : {})}
-    />
-  );
-  const segs = poses[0].elR ? FRONT_SEGS : SIDE_SEGS;
-  const heads = cyc(headFrom);
-  const bells = cyc((p) => p.bell || p.ha || p.haR);
-  const hOff = bellFlip ? 7 : -7;
-  /* hold: "none" hides the bell. Mixed frames fade it. Anything else draws
-     the authored bell point — hold tells the check which hand, not the pixels. */
-  const drawBell = poses.some((p) => p.hold !== "none");
-  const bellFades = drawBell && poses.some((p) => p.hold === "none");
-  const bellOp = bellFades ? cyc((p) => (p.hold === "none" ? 0 : 1)) : null;
-  return (
-    <svg ref={svgRef} viewBox="0 0 200 200" width="100%" height="100%" role="img" aria-hidden="true">
-      <line x1="18" y1="178" x2="182" y2="178" stroke={COLORS.panelEdge} strokeWidth="2" />
-      {segs.map(([aKey, bKey, w, op], i) => {
-        if (!poses[0][aKey] || !poses[0][bKey]) return null;
-        const A = cyc((p) => p[aKey]);
-        const B = cyc((p) => p[bKey]);
-        return (
-          <line key={i} x1={A[0][0]} y1={A[0][1]} x2={B[0][0]} y2={B[0][1]}
-            stroke={COLORS.chalk} strokeWidth={w} strokeLinecap="round" opacity={op}>
-            {anim("x1", A.map((v) => v[0]))}
-            {anim("y1", A.map((v) => v[1]))}
-            {anim("x2", B.map((v) => v[0]))}
-            {anim("y2", B.map((v) => v[1]))}
-          </line>
-        );
-      })}
-      <circle cx={heads[0][0]} cy={heads[0][1]} r="8" fill="none" stroke={COLORS.chalk} strokeWidth="3">
-        {anim("cx", heads.map((v) => v[0]))}
-        {anim("cy", heads.map((v) => v[1]))}
-      </circle>
-      {drawBell && (
-        <>
-          <circle cx={bells[0][0]} cy={bells[0][1]} r="7.5" fill={color} opacity={bellOp ? bellOp[0] : undefined}>
-            {anim("cx", bells.map((v) => v[0]))}
-            {anim("cy", bells.map((v) => v[1]))}
-            {bellOp && anim("opacity", bellOp)}
-          </circle>
-          <circle cx={bells[0][0]} cy={bells[0][1] + hOff} r="4.5" fill="none" stroke={color} strokeWidth="2.6" opacity={bellOp ? bellOp[0] : undefined}>
-            {anim("cx", bells.map((v) => v[0]))}
-            {anim("cy", bells.map((v) => v[1] + hOff))}
-            {bellOp && anim("opacity", bellOp)}
-          </circle>
-        </>
-      )}
-    </svg>
-  );
 }
 
 /* Rig figures (docs/proposals/rig-app-plan.md §3.3). One shared loop at 30 fps paints only the
@@ -443,13 +317,11 @@ function Library({ reduced, approved, onApprove }) {
     { title: "Standard", items: rotation.filter((e) => e.pools.includes("standard")) },
     { title: "Complex", items: rotation.filter((e) => e.pools.includes("complex")) },
   ];
-  const waitingFigures = EXERCISES.filter((e) => !hasPoses(e)).length;
   return (
     <div>
       <div style={{ color: COLORS.chalkDim, fontSize: 15, marginBottom: 12, lineHeight: 1.5 }}>
         {rotation.length} movements in rotation
         {pendingItems.length ? ` · ${pendingItems.length} pending` : ""}
-        {waitingFigures ? ` · ${waitingFigures} waiting on figures` : ""}
         . A few live in both Standard and Complex. Tap a focus to filter.
       </div>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
@@ -502,10 +374,6 @@ function Library({ reduced, approved, onApprove }) {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               {items.map((ex) => {
                 const exColor = FOCUS_META[ex.tags[0]].color;
-                const figured = hasPoses(ex);
-                const poses = figured && !ex.rig
-                  ? (ex.frontOnly ? ex.posesF : (showSide ? ex.poses : ex.posesF))
-                  : null;
                 const views = ex.rig ? rigViews(ex) : null;
                 const want = showSide ? "side" : "front";
                 const libView = views && (views.includes(want) ? want : showSide ? views[0] : views[views.length - 1]);
@@ -519,20 +387,11 @@ function Library({ reduced, approved, onApprove }) {
                       borderRadius: 12, padding: 10, cursor: "pointer",
                     }}
                   >
-                    {figured && (poses || views) ? (
+                    {views ? (
                       <div style={{ background: COLORS.bg, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 8, overflow: "hidden", marginBottom: 8 }}>
-                        {views
-                          ? <RigFigure ex={ex} view={libView} color={exColor} animate={!reduced} />
-                          : <Figure poses={poses} dur={ex.dur} color={exColor} animate={!reduced} bellFlip={ex.bellFlip} />}
+                        <RigFigure ex={ex} view={libView} color={exColor} animate={!reduced} />
                       </div>
-                    ) : (
-                      <div style={{
-                        background: COLORS.bg, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 8,
-                        padding: "14px 10px", marginBottom: 8, color: COLORS.chalkDim, fontSize: 13, lineHeight: 1.4,
-                      }}>
-                        No figure yet — tap for cue and grip.
-                      </div>
-                    )}
+                    ) : null}
                     <div style={{ fontFamily: displayFont, fontWeight: 800, fontSize: 16, letterSpacing: "0.03em", textTransform: "uppercase", lineHeight: 1.15 }}>
                       {ex.name}
                     </div>
@@ -1129,19 +988,6 @@ export default function Bellwork() {
                         <RigFigure ex={ex} view={view} color={exColor} animate={!reduced} />
                       </div>
                     ))}
-                  </div>
-                ) : hasPoses(ex) ? (
-                  <div style={{ display: "flex", gap: 10 }}>
-                    {!ex.frontOnly && (
-                      <div style={{ flex: 1, background: COLORS.bg, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 10, overflow: "hidden" }}>
-                        <div style={{ textAlign: "center", color: COLORS.chalkDim, fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", paddingTop: 6 }}>SIDE</div>
-                        <Figure poses={ex.poses} dur={ex.dur} color={exColor} animate={!reduced} bellFlip={ex.bellFlip} />
-                      </div>
-                    )}
-                    <div style={{ flex: ex.frontOnly ? "0 1 62%" : 1, margin: ex.frontOnly ? "0 auto" : 0, background: COLORS.bg, border: `1px solid ${COLORS.panelEdge}`, borderRadius: 10, overflow: "hidden" }}>
-                      <div style={{ textAlign: "center", color: COLORS.chalkDim, fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", paddingTop: 6 }}>FRONT</div>
-                      <Figure poses={ex.posesF} dur={ex.dur} color={exColor} animate={!reduced} bellFlip={ex.bellFlip} />
-                    </div>
                   </div>
                 ) : null}
                 <div style={{ fontSize: 17, lineHeight: 1.5, marginTop: 10, color: COLORS.chalk }}>
