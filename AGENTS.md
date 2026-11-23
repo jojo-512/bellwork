@@ -21,7 +21,7 @@ Product context: [`docs/vision-roadmap.md`](./docs/vision-roadmap.md), [`docs/pu
 ## Animation
 
 - Movements animate on the pelvis-rooted rig (`docs/proposals/rig-animation.md` §0, prototypes in `docs/prototypes/`). Decided 2026-10-14.
-- Claude authors rig animations by default: it was faster and simpler in a side-by-side trial, and doesn't use Cursor credits. Cursor can author one when Joe asks, with Opus selected by hand (not Auto).
+- Claude authors rig animations by default: it was faster and simpler in a side-by-side trial, and doesn't use Cursor credits. Cursor can author rig animations when Joe asks, on the model Joe picks. Grok was trialled on 2026-11-19 (three standing movements, two sent back after review, both fixed in one round).
 - Every movement, whoever authors it, is checked by Claude before it goes into the app: each phase in side, front and three-quarter views, against the movement mechanics and its `cue`, plus the numeric checks (reach, floor, bell clear of the body, no snaps).
 - Joe approves each movement on his phone before it ships.
 - Movement notes from video arrive as a PR following `docs/ingest/notes-spec.md` (any agent that can watch the video). The flow is in `docs/proposals/rig-ingest.md`.
