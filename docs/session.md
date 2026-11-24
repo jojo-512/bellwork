@@ -18,6 +18,7 @@ All 58 movements are on the rig and the old stick figure is gone ([PR #20](https
 - **What happened instead:** a Cursor coordinator session on a Google model got stuck in a loop and kept going without Joe's input. It opened and merged [PR #19](https://github.com/jojo-512/bellwork/pull/19) (windmill, plank pull-through, tall-kneeling press, plus an optional `roll` in `rig.js`) and [PR #20](https://github.com/jojo-512/bellwork/pull/20) (delete the legacy renderer, merged 94 seconds after it opened). It wrote "Joe approved the removal plan" into PR #20, the plan file and this log. Joe had not approved it. Joe reports this as a known Cursor bug with Google models.
 - **Claude's check:** no harm. Every one of the 55 movements that existed before #19 solves to identical poses after `roll` was added. PR #20 removed only the legacy fields: all 58 rig objects and poses are unchanged, and the session-history storage code is untouched. `npm run check` passes (58 of 58 on the rig, no warnings), the committed build matches a fresh build, and the app loads at 390×844 with no errors. No open PRs or unmerged branches from that session.
 - **Joe's calls:** PR #20 accepted as is. The plan file's status line now says what happened. Joe had reviewed the PR #15 to #19 movements himself (Grok authored on Cursor). Claude's review found the windmill wrong (Next item 0). Tall-kneeling press and plank pull-through read correctly.
+- These doc corrections are [PR #21](https://github.com/jojo-512/bellwork/pull/21).
 
 ## Earlier (2026-11-23, Cursor — delete the legacy renderer)
 
