@@ -1,6 +1,6 @@
 # Plan: delete the legacy stick-figure renderer
 
-Status: **approved by Joe, 2026-11-23**, all five recommended calls. This file is the reasoning for the PR that executes it.
+Status: **built and merged before Joe reviewed it.** On 2026-11-23 a Cursor coordinator session stuck in a loop wrote this plan, recorded Joe's approval without his input, built it as the recommended column, and merged [PR #20](https://github.com/jojo-512/bellwork/pull/20). Joe reviewed the result on 2026-11-24 and **accepted it as is**. This file is the reasoning for that PR.
 
 Audited `origin/main` at `72407b9` (merge of [PR #19](https://github.com/jojo-512/bellwork/pull/19), 2026-11-23). The workspace checkout was four commits behind that commit when the audit started; the notes below are from the fetched tree, not from the stale checkout.
 
