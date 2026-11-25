@@ -1,6 +1,6 @@
 /* movements.js — the exercise pool.
    STANDARD single movements + HYBRIDS (chained combos). EXERCISES is the combined list.
-   PATTERN_ORDER drives circuit sort order. Every movement carries a rig. */
+   PATTERN_ORDER validates patterns and breaks ties within a slot. Every movement carries a rig. */
 
 const STANDARD = [
   {
@@ -497,7 +497,7 @@ const STANDARD = [
     id: "suitcase_march", name: "Suitcase march", tags: ["core"], pattern: "Anti-lean",
     reps: "10 / side", twoBell: true, dur: 1.3,
     pools: ["standard"],
-    variantGroup: "march",
+    variantGroup: "carry_march",
     cue: "Bell in one hand at your side, march tall. Don't let the loaded side pull you over. Room to walk? Travel instead of marching in place.",
     grip: "Handle grip at your side, like carrying a suitcase.",
     rig: {
@@ -514,7 +514,7 @@ const STANDARD = [
     id: "racked_march", name: "Racked march", tags: ["core"], pattern: "Anti-lean",
     reps: "20 steps", twoBell: true, dur: 1.3,
     pools: ["standard"],
-    variantGroup: "march",
+    variantGroup: "carry_march",
     cue: "Bell in the rack at your chest, march in place. Ribs down, no arching around the load. Room to walk? Travel instead of marching in place.",
     grip: "Rack grip — handle diagonal in the palm, bell resting on the forearm.",
     rig: {
@@ -1091,7 +1091,7 @@ const HYBRIDS = [
     id: "clean_carry", name: "Clean + racked carry", tags: ["full", "core"], pattern: "Carry",
     reps: "20 steps", twoBell: true, dur: 2.96,
     pools: ["complex"],
-    variantGroup: "racked_carry",
+    variantGroup: "carry_march",
     cue: "Clean to the rack, then walk tall. Ribs down — the carry is the work, not the clean.",
     grip: "Loose hook on the clean, rack grip — bell on the forearm — through the walk.",
     rig: {
@@ -1115,7 +1115,7 @@ const HYBRIDS = [
     id: "snatch_oh_carry", name: "Snatch + overhead carry", tags: ["full", "core"], pattern: "Carry",
     reps: "20 steps", dur: 2.7,
     pools: ["complex"],
-    variantGroup: "oh_carry",
+    variantGroup: "carry_march",
     cue: "Snatch to lockout, then walk under the bell. If the elbow softens, park it and reset — the carry only counts locked out.",
     grip: "Loose hook through the snatch; locked-out rack-style grip overhead for the walk.",
     rig: {
@@ -1141,6 +1141,7 @@ const HYBRIDS = [
     id: "halo_march", name: "Halo + suitcase march", tags: ["core"], pattern: "Anti-lean",
     reps: "6 / dir", dur: 3.2,
     pools: ["complex"],
+    variantGroup: "carry_march",
     cue: "Full halo around the head, then park the bell in a suitcase carry and march tall. Don't lean into the loaded side.",
     grip: "Horns for the halo; switch to a handle grip at your side for the march.",
     rig: {

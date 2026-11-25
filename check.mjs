@@ -15,6 +15,22 @@ const require = createRequire(import.meta.url);
 const KNOWN_TAGS = new Set(["upper", "lower", "core", "full"]);
 const KNOWN_POOLS = new Set(["standard", "complex"]);
 const LEGACY_FIELDS = ["poses", "posesF", "frontOnly", "bellFlip"];
+const CARRY_MARCH_GROUP = "carry_march";
+const REQUIRED_CARRY_MARCH_IDS = [
+  "suitcase_march",
+  "racked_march",
+  "halo_march",
+  "clean_carry",
+  "snatch_oh_carry",
+];
+
+function isCarryOrMarch(ex) {
+  if (!ex || typeof ex !== "object") return false;
+  if (ex.pattern === "Carry") return true;
+  if (typeof ex.id === "string" && /(^|_)(march|carry)(_|$)/i.test(ex.id)) return true;
+  if (typeof ex.name === "string" && /\b(march|carry)\b/i.test(ex.name)) return true;
+  return false;
+}
 
 async function loadMovements() {
   const result = await esbuild.build({
@@ -103,6 +119,22 @@ async function main() {
 
     for (const key of LEGACY_FIELDS) {
       if (ex && key in ex) errors.push(`${label}: legacy field "${key}" is not allowed`);
+    }
+
+    const carryMarch = isCarryOrMarch(ex);
+    if (carryMarch && ex.variantGroup !== CARRY_MARCH_GROUP) {
+      errors.push(`${label}: carries and marches must use variantGroup "${CARRY_MARCH_GROUP}"`);
+    } else if (!carryMarch && ex.variantGroup === CARRY_MARCH_GROUP) {
+      errors.push(`${label}: only carries and marches may use variantGroup "${CARRY_MARCH_GROUP}"`);
+    }
+  }
+
+  for (const id of REQUIRED_CARRY_MARCH_IDS) {
+    const found = EXERCISES.find((e) => e && e.id === id);
+    if (!found) {
+      errors.push(`${id}: expected carry/march movement missing`);
+    } else if (found.variantGroup !== CARRY_MARCH_GROUP) {
+      errors.push(`${id}: must use variantGroup "${CARRY_MARCH_GROUP}"`);
     }
   }
 
