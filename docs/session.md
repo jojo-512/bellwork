@@ -4,13 +4,22 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Next
 
-0. **Legacy renderer removal is up for review.** Joe approved the plan, all recommended calls. `poses.js`, the stick-figure fields, `Figure`, and the pose checks are deleted on [PR #20](https://github.com/jojo-512/bellwork/pull/20). Every movement requires `rig`. Do not merge until Joe says so. Plan: [proposals/legacy-renderer-removal.md](./proposals/legacy-renderer-removal.md).
-1. **For Joe: thruster and lateral lunge + press.** Both still tip the forearm back about 16 degrees on the way down. Decide whether that fix rides with the next review or waits. The approved overhead press is the form to match.
-2. **For Joe: Vision Batch 3 slot template.** Nothing is pending, and Complex can fill a pull slot (renegade, swing + high pull, gorilla row + sumo), so the old "wait for pending approvals" blocker is gone. The five-slot template (hinge, squat-or-lunge, push, pull, core) is not built. The old figures are gone; [PR #20](https://github.com/jojo-512/bellwork/pull/20) is the open code change. Five slots stays the number.
+0. **Vision Batch 3 PR A (workout picker) is up for review.** Joe locked v1.0 of the plan (D1–D12) and approved building PR A on `cursor/batch-3-workout-picker-3e31`. Slot template (hinge, knee, push, pull, core) with three-pass fallback, `carry_march` group, 7-day recency + `exerciseIds`, swap-in-slot + `bellwork-swap-counts`, and `scripts/sim-circuit.mjs`. Do not merge until Joe approves on his phone. Plan: [proposals/vision-batch-3.md](./proposals/vision-batch-3.md).
+1. **Vision Batch 3 PR B (compact in-workout cards).** Next after PR A review; starts with 2–3 interactive 375px layout options in a Cursor Canvas for Joe to pick (D11).
+2. **For Joe: thruster and lateral lunge + press.** Both still tip the forearm back about 16 degrees on the way down. Decide whether that fix rides with the next review or waits. The approved overhead press is the form to match.
 3. **Battery and heat.** Still the open item in [punchlist.md](./punchlist.md). Needs a real gym session with the rig figures on screen, including time in the Library.
 4. Keep dropping gym bugs into [punchlist.md](./punchlist.md).
 
-## Last session (2026-11-23, Cursor — delete the legacy renderer)
+## Last session (2026-11-25, Cursor — Vision Batch 3 PR A: workout picker)
+
+- Built PR A (D1–D10, D12) on `cursor/batch-3-workout-picker-3e31` off `origin/main` (`8fb0c04`). `rig.js` and `blocks.js` were not touched; PR B (compact cards) is not in this branch.
+- **Slots, fallback, order, `carry_march`:** `buildCircuit` guarantees one movement per slot (`hinge`, `knee`, `push`, `pull`, `core`, with Carry in `core`) whenever every slot has an in-filter candidate, and falls back to the three-pass walk inside the focus chip otherwise. Cards sort by slot then `PATTERN_ORDER`. Seed string stays byte-for-byte (`Complex` still hashes as `"advanced"`). The five carries and marches (`suitcase_march`, `racked_march`, `halo_march`, `clean_carry`, `snatch_oh_carry`) now share `variantGroup: "carry_march"`, enforced by `check.mjs` and documented in `INGEST.md`.
+- **Recency + `exerciseIds`:** excludes the single latest logged session dated strictly before `today` only when within the last 7 calendar days (`1 <= daysBetween(entry.date, today) <= 7`, non-empty exercises, partials count, today ignored). Resolves `exerciseIds` when present and falls back to `exercises` names for older logs; newly saved sessions write `exerciseIds` alongside `exercises`. 1-deep slots and short pools relax recency rather than dropping a slot or violating `variantGroup`.
+- **Swap-in-slot + weights:** `pickSwap` stays in the card's slot, widens inside the focus filter while preserving `variantGroup` / `carry_march` exclusion, and no-ops if nothing is legal. Departing movements release their group and increment `bellwork-swap-counts` (capped at 5; draw weight `1 / (1 + min(count, 5))`).
+- **Verification:** `npm run check` passes (58 movements, 58 on the rig, 5 variant groups, 0 warnings); `node scripts/sim-circuit.mjs` passes all invariants (56,000 empty-count + 56,000 hostile-count draws, 1,400 consecutive-day recency checks, 7-day vs 8-day cutoff, golden fixture, 2,000-seed weight bias, and swap invariants); `npm run build` updated `index.html` and `contact.html`; phone smoke checks passed at 375px and 390px with zero console errors.
+- Copied locked v1.0 plan into [proposals/vision-batch-3.md](./proposals/vision-batch-3.md). Opened PR A for review; not merged.
+
+## Earlier (2026-11-23, Cursor — delete the legacy renderer)
 
 - Joe approved the removal plan, all five recommended calls. One change set on `cursor/remove-legacy-renderer-fa61`. `rig.js` and `blocks.js` were not touched.
 - Deleted `poses.js`. Stripped `poses`, `posesF`, `frontOnly`, `bellFlip`, and pose-frame `hold` / `t` from `movements.js`. Phase `t`, `on`, `fling`, and top-level `dur` stay. About 540 lines of stick-figure data left the pool.
@@ -18,7 +27,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 - The contact sheet no longer imports `bellwork.jsx`. The non-rig sheet, the "Before" loop (it was still on 56 of 58 review pages), and the empty "Old figures" group are gone. `TO_REVIEW` stays empty.
 - `npm run check` requires `rig` on every movement, rejects the four legacy fields, and still runs `validateRig` and `checkRig` with the same thresholds. Result: 58 movements, 58 on the rig, 0 warnings.
 - The workout and Library already drew the rig for all 58, so those screens should look the same. The review page loses the old SVG comparison.
-- Opened [PR #20](https://github.com/jojo-512/bellwork/pull/20) on `cursor/remove-legacy-renderer-fa61`. Not merged. Pushing `main` would deploy.
+- Opened [PR #20](https://github.com/jojo-512/bellwork/pull/20) on `cursor/remove-legacy-renderer-fa61`. Merged to `main` at `8fb0c04`.
 
 ## Earlier (2026-11-23, Cursor — final Standard rig batch)
 
@@ -301,7 +310,7 @@ Where we left off. Any agent (Cursor or Claude) updates this file at the end of 
 
 ## Open questions
 
-- None on product scope. No movement is `pending`. The open calls are the ones in Next: the old stick-figure deletion, the thruster and lateral lunge + press follow-up, and whether Vision Batch 3 waits for that deletion.
+- None on product scope. No movement is `pending`. The open calls are the ones in Next: phone review of Vision Batch 3 PR A, the Canvas layout pick for PR B, and the thruster / lateral lunge + press follow-up.
 
 ## Pointers
 

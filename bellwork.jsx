@@ -194,13 +194,46 @@ function weightedShuffle(items, weightOf, rand) {
   return out;
 }
 
+export const SWAP_COUNT_CAP = 5;
+
+export function swapWeight(id, swapCounts = {}) {
+  const raw = swapCounts && typeof swapCounts[id] === "number" && Number.isFinite(swapCounts[id])
+    ? swapCounts[id]
+    : 0;
+  const count = Math.min(SWAP_COUNT_CAP, Math.max(0, Math.floor(raw)));
+  return 1 / (1 + count);
+}
+
+export function pickSwap(circuit, idx, focus, mode, approved = [], rand = Math.random) {
+  const leaving = circuit[idx];
+  if (!leaving) return null;
+  const currentIds = new Set(circuit.map((e) => e.id));
+  const otherGroups = new Set(
+    circuit.filter((_, i) => i !== idx).map((e) => e.variantGroup).filter(Boolean)
+  );
+  const wantFull = focus.includes("full");
+  const tagOk = (e) => (wantFull ? true : e.tags.some((t) => focus.includes(t)));
+  const legal = poolFor(mode, approved).filter(
+    (e) =>
+      !currentIds.has(e.id) &&
+      tagOk(e) &&
+      !(e.variantGroup && otherGroups.has(e.variantGroup))
+  );
+  const targetSlot = slotFor(leaving.pattern);
+  const sameSlot = legal.filter((e) => slotFor(e.pattern) === targetSlot);
+  const candidates = sameSlot.length ? sameSlot : legal;
+  if (!candidates.length) return null;
+  return candidates[Math.floor(rand() * candidates.length)];
+}
+
 export function buildCircuit(focus, mode, salt, approved = [], opts = {}) {
   const today = opts.today || localDate();
   const rand = mulberry32(seedFrom(seedString(today, focus, mode, salt)));
   const wantFull = focus.includes("full");
   const pool = poolFor(mode, approved).filter((e) => (wantFull ? true : e.tags.some((t) => focus.includes(t))));
   const recentIds = lastSessionIds(opts.sessions, today);
-  const weightOf = () => 1;
+  const swapCounts = opts.swapCounts || {};
+  const weightOf = (ex) => swapWeight(ex.id, swapCounts);
 
   const bySlot = Object.fromEntries(SLOT_ORDER.map((s) => [s, []]));
   for (const ex of pool) bySlot[slotFor(ex.pattern)].push(ex);
@@ -329,6 +362,22 @@ const STORE_KEY = "bellwork-sessions";
 const PREFS_KEY = "bellwork-prefs";
 const RUN_KEY = "bellwork-run";
 const APPROVED_KEY = "bellwork-approved";
+const SWAP_COUNTS_KEY = "bellwork-swap-counts";
+
+function readSwapCounts() {
+  const raw = readJSON(SWAP_COUNTS_KEY);
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return {};
+  const clean = {};
+  for (const [k, v] of Object.entries(raw)) {
+    if (typeof v === "number" && Number.isFinite(v) && v > 0) {
+      clean[k] = Math.min(SWAP_COUNT_CAP, Math.floor(v));
+    }
+  }
+  return clean;
+}
+function writeSwapCounts(counts) {
+  writeJSON(SWAP_COUNTS_KEY, counts);
+}
 
 function readApproved() {
   const raw = readJSON(APPROVED_KEY);
@@ -633,6 +682,7 @@ export default function Bellwork() {
   const beeped60Ref = useRef(false);
   const beeped0Ref = useRef(false);
   const wakeLockRef = useRef(null);
+  const swapCountsRef = useRef(null);
 
   useEffect(() => {
     loadSessions().then(setSessions);
@@ -724,7 +774,12 @@ export default function Bellwork() {
       const resolved = frozenIds.map((id) => EXERCISES.find((e) => e.id === id)).filter(Boolean);
       if (resolved.length === frozenIds.length && resolved.length > 0) return resolved;
     }
-    return buildCircuit(focus, mode, salt, approved, { today, sessions });
+    if (!swapCountsRef.current) swapCountsRef.current = readSwapCounts();
+    return buildCircuit(focus, mode, salt, approved, {
+      today,
+      sessions,
+      swapCounts: swapCountsRef.current,
+    });
   }, [focus, mode, salt, approved, frozenIds, today, recentKey]);
   const circuit = useMemo(
     () => baseCircuit.map((ex, i) => (swaps[i] ? EXERCISES.find((e) => e.id === swaps[i]) || ex : ex)),
@@ -761,19 +816,17 @@ export default function Bellwork() {
   };
 
   const swapExercise = (idx) => {
-    const currentIds = circuit.map((e) => e.id);
-    const wantFull = focus.includes("full");
-    const otherGroups = new Set(
-      circuit.filter((_, i) => i !== idx).map((e) => e.variantGroup).filter(Boolean)
-    );
-    const tagOk = (e) => (wantFull ? true : e.tags.some((t) => focus.includes(t)));
-    const base = poolFor(mode, approved).filter(
-      (e) => !currentIds.includes(e.id) && tagOk(e)
-    );
-    let eligible = base.filter((e) => !(e.variantGroup && otherGroups.has(e.variantGroup)));
-    if (!eligible.length) eligible = base;
-    if (!eligible.length) return;
-    const pick = eligible[Math.floor(Math.random() * eligible.length)];
+    const leaving = circuit[idx];
+    if (!leaving) return;
+    const pick = pickSwap(circuit, idx, focus, mode, approved);
+    if (!pick) return;
+    const cur = swapCountsRef.current || readSwapCounts();
+    const next = {
+      ...cur,
+      [leaving.id]: Math.min(SWAP_COUNT_CAP, (cur[leaving.id] || 0) + 1),
+    };
+    swapCountsRef.current = next;
+    writeSwapCounts(next);
     setSwaps((s) => ({ ...s, [idx]: pick.id }));
   };
 
