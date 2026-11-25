@@ -120,7 +120,7 @@ function assertInvariants(circuit, { mode, focus, exercises, SLOT_ORDER, slotFor
 }
 
 async function main() {
-  const { buildCircuit, SLOT_ORDER, slotFor, seedString, EXERCISES, PATTERN_ORDER } = await loadApp();
+  const { buildCircuit, SLOT_ORDER, slotFor, seedString, daysBetween, lastSessionIds, EXERCISES, PATTERN_ORDER } = await loadApp();
   const dates = makeDates(4000);
 
   // 1. Seed contract: Complex still hashes as "advanced"
@@ -144,7 +144,152 @@ async function main() {
   const b = buildCircuit(["upper", "lower"], "complex", "salt1", [], { today: "2026-11-25" });
   assert.deepEqual(a.map((e) => e.id), b.map((e) => e.id), "determinism failed");
 
-  console.log(`sim-circuit ok (stage 1): ${totalDraws} draws checked across ${dates.length} dates x ${MODES.length} modes x ${FOCUSES.length} focuses`);
+  // 4. Recency invariants (D6)
+  assert.equal(daysBetween("2026-11-24", "2026-11-25"), 1);
+  assert.equal(daysBetween("2026-11-18", "2026-11-25"), 7);
+  assert.equal(daysBetween("2026-11-17", "2026-11-25"), 8);
+  assert.equal(daysBetween("2026-11-25", "2026-11-25"), 0);
+  assert.equal(daysBetween("2026-03-07", "2026-03-08"), 1, "DST boundary failed");
+
+  // 7-day cutoff vs 8-day cutoff (using Complex full body push slot: 2-deep)
+  const day = "2026-11-25";
+  const baseComplex = buildCircuit(["full"], "complex", "", [], { today: day });
+  const basePush = baseComplex.find((e) => slotFor(e.pattern) === "push");
+  const otherPush = basePush.id === "clean_press" ? "bottoms_up_press" : "clean_press";
+
+  // 7 days before today -> excluded (must pick the other push)
+  const with7Days = buildCircuit(["full"], "complex", "", [], {
+    today: day,
+    sessions: [{ date: "2026-11-18", exerciseIds: [basePush.id], exercises: [basePush.name], partial: false }],
+  });
+  assert.equal(
+    with7Days.find((e) => slotFor(e.pattern) === "push").id,
+    otherPush,
+    "7-day-old session should trigger recency exclusion"
+  );
+
+  // 8 days before today -> NOT excluded (must match no-history draw)
+  const with8Days = buildCircuit(["full"], "complex", "", [], {
+    today: day,
+    sessions: [{ date: "2026-11-17", exerciseIds: [basePush.id], exercises: [basePush.name], partial: false }],
+  });
+  assert.deepEqual(
+    with8Days.map((e) => e.id),
+    baseComplex.map((e) => e.id),
+    "8-day-old session must NOT trigger recency exclusion"
+  );
+
+  // Session saved today is ignored
+  const withToday = buildCircuit(["full"], "complex", "", [], {
+    today: day,
+    sessions: [{ date: day, exerciseIds: baseComplex.map((e) => e.id), exercises: baseComplex.map((e) => e.name) }],
+  });
+  assert.deepEqual(
+    withToday.map((e) => e.id),
+    baseComplex.map((e) => e.id),
+    "session dated today must NOT trigger recency exclusion"
+  );
+
+  // Partials count, and legacy name-only logs resolve
+  const withPartialLegacy = buildCircuit(["full"], "complex", "", [], {
+    today: day,
+    sessions: [{ date: "2026-11-24", exercises: [basePush.name], partial: true }],
+  });
+  assert.equal(
+    withPartialLegacy.find((e) => slotFor(e.pattern) === "push").id,
+    otherPush,
+    "partial legacy name-only session should trigger recency exclusion"
+  );
+
+  // Two sessions yesterday: only the later one counts, not the union
+  const idsFromTwo = lastSessionIds(
+    [
+      { date: "2026-11-24", exerciseIds: ["swing", "ohp"] },
+      { date: "2026-11-24", exerciseIds: ["clean_press"] },
+    ],
+    day
+  );
+  assert.deepEqual([...idsFromTwo], ["clean_press"], "only the later same-day session should count");
+
+  // Latest session empty exercises is skipped; non-empty earlier within 7d counts
+  const idsSkipEmpty = lastSessionIds(
+    [
+      { date: "2026-11-22", exerciseIds: ["clean_press"] },
+      { date: "2026-11-24", exercises: [] },
+    ],
+    day
+  );
+  assert.deepEqual([...idsSkipEmpty], ["clean_press"], "empty-exercise entry should be ignored");
+
+  // Cross-mode by id: Standard clean_press yesterday excludes Complex clean_press today
+  const crossMode = buildCircuit(["full"], "complex", "", [], {
+    today: day,
+    sessions: [{ date: "2026-11-24", mode: "standard", exerciseIds: ["clean_press", "swing"] }],
+  });
+  assert.equal(
+    crossMode.find((e) => slotFor(e.pattern) === "push").id,
+    "bottoms_up_press",
+    "cross-mode recency by id failed"
+  );
+
+  // 1-deep slot relaxation: Complex Upper hinge is only rdl_row; must still appear even if done yesterday
+  const complexUpper = buildCircuit(["upper"], "complex", "", [], {
+    today: day,
+    sessions: [{ date: "2026-11-24", exerciseIds: ["rdl_row"] }],
+  });
+  assertInvariants(complexUpper, { mode: "complex", focus: ["upper"], exercises: EXERCISES, SLOT_ORDER, slotFor, PATTERN_ORDER });
+  assert.equal(complexUpper.find((e) => slotFor(e.pattern) === "hinge").id, "rdl_row");
+
+  // Per-slot recency across consecutive days on all modes and focus chips
+  let recencyChecks = 0;
+  for (const mode of MODES) {
+    for (const focus of FOCUSES) {
+      const wantFull = focus.includes("full");
+      const filteredPool = EXERCISES.filter(
+        (e) => e.pools.includes(mode) && !e.pending && (wantFull || e.tags.some((t) => focus.includes(t)))
+      );
+      const bySlot = Object.fromEntries(SLOT_ORDER.map((s) => [s, []]));
+      for (const ex of filteredPool) bySlot[slotFor(ex.pattern)].push(ex);
+      const allSlotsFillable = SLOT_ORDER.every((s) => bySlot[s].length > 0);
+
+      for (let i = 1; i <= 100; i++) {
+        const yday = dates[i - 1];
+        const tday = dates[i];
+        const prev = buildCircuit(focus, mode, "", [], { today: yday });
+        const prevIds = new Set(prev.map((e) => e.id));
+        const curr = buildCircuit(focus, mode, "", [], {
+          today: tday,
+          sessions: [{ date: yday, exerciseIds: prev.map((e) => e.id), exercises: prev.map((e) => e.name) }],
+        });
+        assertInvariants(curr, { mode, focus, exercises: EXERCISES, SLOT_ORDER, slotFor, PATTERN_ORDER });
+        if (allSlotsFillable) {
+          for (const ex of curr) {
+            const slot = slotFor(ex.pattern);
+            const hasFreshAlt = bySlot[slot].some((c) => !prevIds.has(c.id));
+            if (hasFreshAlt) {
+              assert.ok(
+                !prevIds.has(ex.id),
+                `${mode} ${focus.join("+")} ${tday}: slot ${slot} repeated ${ex.id} despite fresh alternative`
+              );
+            }
+          }
+        }
+        recencyChecks++;
+      }
+    }
+  }
+
+  // Adversarial Complex Core recency (5 of 8 non-carry_march yesterday -> still no duplicate carry_march!)
+  const advCore = buildCircuit(["core"], "complex", "", [], {
+    today: day,
+    sessions: [{
+      date: "2026-11-24",
+      exerciseIds: ["halo_press", "figure8_hold", "atw_squat", "curl_halo", "situp_press"],
+    }],
+  });
+  assertInvariants(advCore, { mode: "complex", focus: ["core"], exercises: EXERCISES, SLOT_ORDER, slotFor, PATTERN_ORDER });
+
+  console.log(`sim-circuit ok (stage 2): ${totalDraws} base draws + ${recencyChecks} consecutive-day recency draws checked`);
 }
 
 main().catch((err) => {

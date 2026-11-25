@@ -96,6 +96,63 @@ export function seedString(today, focus, mode, salt = "") {
   return today + focus.join("+") + seedMode + salt;
 }
 
+const DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+export function daysBetween(earlierDate, laterDate) {
+  if (typeof earlierDate !== "string" || typeof laterDate !== "string") return NaN;
+  const m1 = DATE_RE.exec(earlierDate);
+  const m2 = DATE_RE.exec(laterDate);
+  if (!m1 || !m2) return NaN;
+  const y1 = Number(m1[1]), mo1 = Number(m1[2]), d1 = Number(m1[3]);
+  const y2 = Number(m2[1]), mo2 = Number(m2[2]), d2 = Number(m2[3]);
+  const t1 = Date.UTC(y1, mo1 - 1, d1);
+  const t2 = Date.UTC(y2, mo2 - 1, d2);
+  const dt1 = new Date(t1);
+  const dt2 = new Date(t2);
+  if (dt1.getUTCFullYear() !== y1 || dt1.getUTCMonth() !== mo1 - 1 || dt1.getUTCDate() !== d1) return NaN;
+  if (dt2.getUTCFullYear() !== y2 || dt2.getUTCMonth() !== mo2 - 1 || dt2.getUTCDate() !== d2) return NaN;
+  return Math.round((t2 - t1) / 86400000);
+}
+
+const NAME_TO_ID = new Map(EXERCISES.map((e) => [e.name, e.id]));
+
+function hasLoggedExercises(entry) {
+  if (!entry || typeof entry !== "object") return false;
+  if (Array.isArray(entry.exerciseIds) && entry.exerciseIds.length > 0) return true;
+  if (Array.isArray(entry.exercises) && entry.exercises.length > 0) return true;
+  return false;
+}
+
+function resolveSessionIds(entry) {
+  if (Array.isArray(entry.exerciseIds) && entry.exerciseIds.length > 0) {
+    return entry.exerciseIds.filter((id) => typeof id === "string" && id);
+  }
+  if (Array.isArray(entry.exercises) && entry.exercises.length > 0) {
+    return entry.exercises.map((name) => NAME_TO_ID.get(name)).filter(Boolean);
+  }
+  return [];
+}
+
+export const RECENCY_MAX_DAYS = 7;
+
+export function lastSessionIds(sessions, today = localDate()) {
+  if (!Array.isArray(sessions) || !sessions.length) return new Set();
+  let latest = null;
+  let latestDiff = Infinity;
+  for (const entry of sessions) {
+    if (!hasLoggedExercises(entry)) continue;
+    const diff = daysBetween(entry.date, today);
+    if (!Number.isFinite(diff) || diff < 1) continue;
+    // Prefer the most recent date; break same-day ties in favor of the later entry.
+    if (!latest || diff <= latestDiff) {
+      latest = entry;
+      latestDiff = diff;
+    }
+  }
+  if (!latest || latestDiff > RECENCY_MAX_DAYS) return new Set();
+  return new Set(resolveSessionIds(latest));
+}
+
 function compareCircuitOrder(a, b) {
   const sa = SLOT_ORDER.indexOf(slotFor(a.pattern));
   const sb = SLOT_ORDER.indexOf(slotFor(b.pattern));
@@ -142,6 +199,7 @@ export function buildCircuit(focus, mode, salt, approved = [], opts = {}) {
   const rand = mulberry32(seedFrom(seedString(today, focus, mode, salt)));
   const wantFull = focus.includes("full");
   const pool = poolFor(mode, approved).filter((e) => (wantFull ? true : e.tags.some((t) => focus.includes(t))));
+  const recentIds = lastSessionIds(opts.sessions, today);
   const weightOf = () => 1;
 
   const bySlot = Object.fromEntries(SLOT_ORDER.map((s) => [s, []]));
@@ -154,7 +212,9 @@ export function buildCircuit(focus, mode, salt, approved = [], opts = {}) {
     for (const slot of SLOT_ORDER) {
       const slotPool = bySlot[slot];
       const groupFree = slotPool.filter((e) => !(e.variantGroup && usedGroups.has(e.variantGroup)));
-      const candidates = groupFree.length ? groupFree : slotPool;
+      const legal = groupFree.length ? groupFree : slotPool;
+      const fresh = legal.filter((e) => !recentIds.has(e.id));
+      const candidates = fresh.length ? fresh : legal;
       const ex = weightedPick(candidates, weightOf, rand);
       if (ex) {
         picked.push(ex);
@@ -162,30 +222,44 @@ export function buildCircuit(focus, mode, salt, approved = [], opts = {}) {
       }
     }
   } else {
-    const ordered = weightedShuffle(pool, weightOf, rand);
+    const orderedFresh = weightedShuffle(pool.filter((e) => !recentIds.has(e.id)), weightOf, rand);
+    const orderedRecent = weightedShuffle(pool.filter((e) => recentIds.has(e.id)), weightOf, rand);
     const usedPatterns = new Set();
-    // Pass 1: unique pattern and unique variant group
-    for (const ex of ordered) {
-      if (picked.length >= 5) break;
-      if (usedPatterns.has(ex.pattern)) continue;
-      if (ex.variantGroup && usedGroups.has(ex.variantGroup)) continue;
-      picked.push(ex);
-      usedPatterns.add(ex.pattern);
-      if (ex.variantGroup) usedGroups.add(ex.variantGroup);
-    }
-    // Pass 2: unique group only (pattern may repeat)
-    for (const ex of ordered) {
-      if (picked.length >= 5) break;
-      if (picked.includes(ex)) continue;
-      if (ex.variantGroup && usedGroups.has(ex.variantGroup)) continue;
-      picked.push(ex);
-      if (ex.variantGroup) usedGroups.add(ex.variantGroup);
-    }
-    // Pass 3: anything not already picked — always return five when the pool can
-    for (const ex of ordered) {
-      if (picked.length >= 5) break;
-      if (!picked.includes(ex)) picked.push(ex);
-    }
+
+    const takeUniquePatternAndGroup = (list) => {
+      for (const ex of list) {
+        if (picked.length >= 5) break;
+        if (picked.includes(ex)) continue;
+        if (usedPatterns.has(ex.pattern)) continue;
+        if (ex.variantGroup && usedGroups.has(ex.variantGroup)) continue;
+        picked.push(ex);
+        usedPatterns.add(ex.pattern);
+        if (ex.variantGroup) usedGroups.add(ex.variantGroup);
+      }
+    };
+    const takeUniqueGroup = (list) => {
+      for (const ex of list) {
+        if (picked.length >= 5) break;
+        if (picked.includes(ex)) continue;
+        if (ex.variantGroup && usedGroups.has(ex.variantGroup)) continue;
+        picked.push(ex);
+        if (ex.variantGroup) usedGroups.add(ex.variantGroup);
+      }
+    };
+    const takeAny = (list) => {
+      for (const ex of list) {
+        if (picked.length >= 5) break;
+        if (!picked.includes(ex)) picked.push(ex);
+      }
+    };
+
+    // Fresh first (unique pattern+group, then unique group), then relax recency while keeping group uniqueness.
+    takeUniquePatternAndGroup(orderedFresh);
+    takeUniqueGroup(orderedFresh);
+    takeUniquePatternAndGroup(orderedRecent);
+    takeUniqueGroup(orderedRecent);
+    takeAny(orderedFresh);
+    takeAny(orderedRecent);
   }
 
   picked.sort(compareCircuitOrder);
@@ -639,13 +713,19 @@ export default function Bellwork() {
     });
   }, [hydrated, started, finished, focus, mode, salt, swaps, durationMin, weightLb, rounds, running, endAt, frozenIds]);
 
+  const today = localDate();
+  const recentKey = useMemo(
+    () => [...lastSessionIds(sessions, today)].sort().join(","),
+    [sessions, today]
+  );
+
   const baseCircuit = useMemo(() => {
     if (frozenIds && frozenIds.length) {
       const resolved = frozenIds.map((id) => EXERCISES.find((e) => e.id === id)).filter(Boolean);
       if (resolved.length === frozenIds.length && resolved.length > 0) return resolved;
     }
-    return buildCircuit(focus, mode, salt, approved);
-  }, [focus, mode, salt, approved, frozenIds]);
+    return buildCircuit(focus, mode, salt, approved, { today, sessions });
+  }, [focus, mode, salt, approved, frozenIds, today, recentKey]);
   const circuit = useMemo(
     () => baseCircuit.map((ex, i) => (swaps[i] ? EXERCISES.find((e) => e.id === swaps[i]) || ex : ex)),
     [baseCircuit, swaps]
@@ -779,6 +859,7 @@ export default function Bellwork() {
       minutes: elapsedMin,
       partial: !!partial,
       exercises: circuit.map((e) => e.name),
+      exerciseIds: circuit.map((e) => e.id),
     };
     setSessions((prev) => {
       const next = [...prev, entry];
