@@ -70,42 +70,125 @@ function normalizeMode(m) {
   return m === "complex" ? "complex" : "standard";
 }
 
-function buildCircuit(focus, mode, salt, approved = []) {
-  const today = localDate();
-  // Seed with the pre-rename mode string so Complex days don't reshuffle
-  // under everyone who already knows today's picks.
+export const SLOT_ORDER = ["hinge", "knee", "push", "pull", "core"];
+
+const PATTERN_SLOT = {
+  Hinge: "hinge",
+  Squat: "knee",
+  Lunge: "knee",
+  Push: "push",
+  Pull: "pull",
+  Rotation: "core",
+  "Anti-extension": "core",
+  "Anti-rotation": "core",
+  "Anti-lean": "core",
+  Flexion: "core",
+  Carry: "core",
+};
+
+export function slotFor(pattern) {
+  return PATTERN_SLOT[pattern] || "core";
+}
+
+export function seedString(today, focus, mode, salt = "") {
+  // Seed with the pre-rename mode string so Complex days keep the Batch 2 key.
   const seedMode = mode === "complex" ? "advanced" : mode;
-  const rand = mulberry32(seedFrom(today + focus.join("+") + seedMode + salt));
+  return today + focus.join("+") + seedMode + salt;
+}
+
+function compareCircuitOrder(a, b) {
+  const sa = SLOT_ORDER.indexOf(slotFor(a.pattern));
+  const sb = SLOT_ORDER.indexOf(slotFor(b.pattern));
+  if (sa !== sb) return sa - sb;
+  return PATTERN_ORDER.indexOf(a.pattern) - PATTERN_ORDER.indexOf(b.pattern);
+}
+
+function weightedPick(candidates, weightOf, rand) {
+  if (!candidates.length) return null;
+  let total = 0;
+  const weights = candidates.map((ex) => {
+    const w = weightOf(ex);
+    total += w;
+    return w;
+  });
+  let r = rand() * total;
+  for (let i = 0; i < candidates.length; i++) {
+    r -= weights[i];
+    if (r < 0) return candidates[i];
+  }
+  return candidates[candidates.length - 1];
+}
+
+function weightedShuffle(items, weightOf, rand) {
+  const remaining = [...items];
+  const out = [];
+  while (remaining.length > 0) {
+    let total = 0;
+    for (let i = 0; i < remaining.length; i++) total += weightOf(remaining[i]);
+    let r = rand() * total;
+    let idx = remaining.length - 1;
+    for (let i = 0; i < remaining.length; i++) {
+      r -= weightOf(remaining[i]);
+      if (r < 0) { idx = i; break; }
+    }
+    out.push(remaining[idx]);
+    remaining.splice(idx, 1);
+  }
+  return out;
+}
+
+export function buildCircuit(focus, mode, salt, approved = [], opts = {}) {
+  const today = opts.today || localDate();
+  const rand = mulberry32(seedFrom(seedString(today, focus, mode, salt)));
   const wantFull = focus.includes("full");
-  let pool = poolFor(mode, approved).filter((e) => (wantFull ? true : e.tags.some((t) => focus.includes(t))));
-  pool = [...pool].sort(() => rand() - 0.5);
+  const pool = poolFor(mode, approved).filter((e) => (wantFull ? true : e.tags.some((t) => focus.includes(t))));
+  const weightOf = () => 1;
+
+  const bySlot = Object.fromEntries(SLOT_ORDER.map((s) => [s, []]));
+  for (const ex of pool) bySlot[slotFor(ex.pattern)].push(ex);
+
   const picked = [];
-  const usedPatterns = new Set();
   const usedGroups = new Set();
 
-  // Pass 1: unique pattern and unique variant group
-  for (const ex of pool) {
-    if (picked.length >= 5) break;
-    if (usedPatterns.has(ex.pattern)) continue;
-    if (ex.variantGroup && usedGroups.has(ex.variantGroup)) continue;
-    picked.push(ex);
-    usedPatterns.add(ex.pattern);
-    if (ex.variantGroup) usedGroups.add(ex.variantGroup);
+  if (SLOT_ORDER.every((s) => bySlot[s].length > 0)) {
+    for (const slot of SLOT_ORDER) {
+      const slotPool = bySlot[slot];
+      const groupFree = slotPool.filter((e) => !(e.variantGroup && usedGroups.has(e.variantGroup)));
+      const candidates = groupFree.length ? groupFree : slotPool;
+      const ex = weightedPick(candidates, weightOf, rand);
+      if (ex) {
+        picked.push(ex);
+        if (ex.variantGroup) usedGroups.add(ex.variantGroup);
+      }
+    }
+  } else {
+    const ordered = weightedShuffle(pool, weightOf, rand);
+    const usedPatterns = new Set();
+    // Pass 1: unique pattern and unique variant group
+    for (const ex of ordered) {
+      if (picked.length >= 5) break;
+      if (usedPatterns.has(ex.pattern)) continue;
+      if (ex.variantGroup && usedGroups.has(ex.variantGroup)) continue;
+      picked.push(ex);
+      usedPatterns.add(ex.pattern);
+      if (ex.variantGroup) usedGroups.add(ex.variantGroup);
+    }
+    // Pass 2: unique group only (pattern may repeat)
+    for (const ex of ordered) {
+      if (picked.length >= 5) break;
+      if (picked.includes(ex)) continue;
+      if (ex.variantGroup && usedGroups.has(ex.variantGroup)) continue;
+      picked.push(ex);
+      if (ex.variantGroup) usedGroups.add(ex.variantGroup);
+    }
+    // Pass 3: anything not already picked — always return five when the pool can
+    for (const ex of ordered) {
+      if (picked.length >= 5) break;
+      if (!picked.includes(ex)) picked.push(ex);
+    }
   }
-  // Pass 2: unique group only (pattern may repeat)
-  for (const ex of pool) {
-    if (picked.length >= 5) break;
-    if (picked.includes(ex)) continue;
-    if (ex.variantGroup && usedGroups.has(ex.variantGroup)) continue;
-    picked.push(ex);
-    if (ex.variantGroup) usedGroups.add(ex.variantGroup);
-  }
-  // Pass 3: anything not already picked — always return five when the pool can
-  for (const ex of pool) {
-    if (picked.length >= 5) break;
-    if (!picked.includes(ex)) picked.push(ex);
-  }
-  picked.sort((a, b) => PATTERN_ORDER.indexOf(a.pattern) - PATTERN_ORDER.indexOf(b.pattern));
+
+  picked.sort(compareCircuitOrder);
   return picked;
 }
 

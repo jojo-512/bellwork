@@ -70,10 +70,10 @@ Same pattern and same basic shape as an existing movement → share its
 `variantGroup` so they never land in one circuit. The picker enforces **at
 most one per group per circuit**, including on Swap.
 
-Groups already in use: `swing`, `press`, `goblet_squat`, `march`, `row`,
-`racked_carry`, `oh_carry`. New families get a new snake_case group id. Leave
-the field off when the movement has no near-sibling. Carries do **not** share
-the `march` group — a day can hand both a march and a carry.
+Groups already in use: `swing`, `press`, `goblet_squat`, `row`, `carry_march`.
+New families get a new snake_case group id. Leave the field off when the
+movement has no near-sibling. Every carry and every march shares `carry_march`,
+so a circuit never contains both (enforced by `npm run check`).
 
 ---
 
@@ -201,7 +201,7 @@ already on `clean_carry` in `movements.js`. Match that shape. Do not add
   reps: "20 steps",
   dur: 2.8,
   pools: ["complex"],
-  variantGroup: "racked_carry",
+  variantGroup: "carry_march",
   pending: true,
   cue: "Clean to the rack, then walk tall. Ribs down — the carry is the work, not the clean.",
   grip: "Loose hook on the clean, rack grip — bell on the forearm — through the walk.",
@@ -216,8 +216,8 @@ already on `clean_carry` in `movements.js`. Match that shape. Do not add
 ```
 
 Why these choices: it's a two-part chain → Complex only; Carry is the pattern
-that matters for the day, not Hinge; it shares no group with the marches
-(`march`) so a Lower/Core day can still hand both a march and a carry;
+that matters for the day, not Hinge; it shares `carry_march` with the marches
+and other carries so a circuit never contains both;
 `pending: true` so it stays out of the workout until the figure is approved.
 The sketch above is not a shippable `rig`. `validateRig` requires `feet`,
 `on`, and at least two phases. Use the entry in `movements.js`.
@@ -255,8 +255,9 @@ Things that bit once, so they shouldn't bite again:
 4. **Compose from the blocks.** If you need a position that isn't in
    `blocks.js`, say so and keep the override on that phase. Do not invent a
    stick figure.
-5. **Carries get their own variant groups** (`racked_carry`, `oh_carry`), not
-   `march`. Marches stay Anti-lean.
+5. **All carries and marches share `variantGroup: "carry_march"`.** Marches
+   stay Anti-lean, carries stay Carry, and `npm run check` fails if any carry
+   or march sits outside `carry_march`.
 6. **Look at the sheet before Joe does.** `npm run check` does not know whether
    a figure reads as the lift. Swing + high pull can pass the rig checks and
    still look like an upright row. The contact sheet is the review.
